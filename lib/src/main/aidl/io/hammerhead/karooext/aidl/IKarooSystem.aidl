@@ -4,7 +4,7 @@ import io.hammerhead.karooext.aidl.IHandler;
 
 interface IKarooSystem {
     String libVersion();
-    Bundle hardwareType();
+    Bundle info();
 
     oneway void dispatchEffect(in Bundle bundle);
 
