@@ -7,6 +7,7 @@ plugins {
 }
 
 val moduleName = "karoo-ext"
+val version = "1.0.4"
 
 android {
     namespace = "io.hammerhead.karooext"
@@ -14,7 +15,6 @@ android {
 
     defaultConfig {
         minSdk = 23
-        targetSdk = 28
     }
 
     buildTypes {
@@ -44,7 +44,7 @@ android {
 
 tasks.dokkaHtml.configure {
     moduleName = "karoo-ext"
-    moduleVersion = libs.versions.library.get()
+    moduleVersion = version
     outputDirectory.set(rootDir.resolve("docs"))
 
     dokkaSourceSets {
@@ -82,7 +82,7 @@ publishing {
         register<MavenPublication>("karoo-ext") {
             artifactId = moduleName
             groupId = "io.hammerhead"
-            version = libs.versions.library.get()
+            version = version
 
             afterEvaluate {
                 from(components["release"])

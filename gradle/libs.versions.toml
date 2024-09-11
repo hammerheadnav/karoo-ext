@@ -7,7 +7,6 @@ coreKtx = "1.5.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 appcompat = "1.2.0"
-library = "1.0.3"
 lifecycle = "2.8.1"
 glance = "1.1.0-rc01"
 
@@ -20,7 +19,6 @@ androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-view
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-hammerhead-karoo-ext = { group = "io.hammerhead", name = "karoo-ext", version.ref = "library" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.3" }
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
