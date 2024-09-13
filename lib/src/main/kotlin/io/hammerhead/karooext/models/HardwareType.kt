@@ -34,5 +34,4 @@ enum class HardwareType {
      * Unknown device
      */
     UNKNOWN,
-    ;
 }

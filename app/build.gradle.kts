@@ -43,9 +43,6 @@ dependencies {
     // Source lib dependency (use this while developing):
     implementation(project(":lib"))
 
-    // use this for published library:
-//    implementation(libs.hammerhead.karoo.ext)
-
     // Other dependencies
     implementation(libs.timber)
 

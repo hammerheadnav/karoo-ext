@@ -93,7 +93,7 @@ class KarooSystemService(private val context: Context) {
         get() = controller != null
 
     /**
-     * Get the version of ext lib service is running
+     * Get the version of ext lib service is running.
      */
     val libVersion: String?
         get() = controller?.libVersion()
@@ -107,13 +107,16 @@ class KarooSystemService(private val context: Context) {
         get() = controller?.info()?.serializableFromBundle<KarooInfo>()
 
     /**
-     * Get the hardware type running the Karoo System
-     *
-     * @see [HardwareType]
+     * Get the serial of the connected Karoo System.
      */
-    @Deprecated("superseded", ReplaceWith("info"))
+    val serial: String?
+        get() = info?.serial
+
+    /**
+     * Get the hardware type of the connected Karoo System.
+     */
     val hardwareType: HardwareType?
-        get() = controller?.hardwareType()?.serializableFromBundle<HardwareType>()
+        get() = info?.hardwareType
 
     /**
      * Send a [KarooEffect] to the Karoo System service for handling.
