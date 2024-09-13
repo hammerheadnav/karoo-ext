@@ -29,10 +29,4 @@ enum class HardwareType {
      * New Karoo device
      */
     KAROO,
-
-    /**
-     * Unknown device
-     */
-    UNKNOWN,
-    ;
 }
