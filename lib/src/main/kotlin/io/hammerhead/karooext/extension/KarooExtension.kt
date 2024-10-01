@@ -21,7 +21,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.IBinder
 import io.hammerhead.karooext.EXT_LIB_VERSION
-import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.aidl.IHandler
 import io.hammerhead.karooext.aidl.IKarooExtension
 import io.hammerhead.karooext.internal.Emitter
@@ -49,7 +48,6 @@ abstract class KarooExtension(
      */
     val version: String,
 ) : Service() {
-    val karooSystem by lazy { KarooSystemService(this) }
     private val emitters = ConcurrentHashMap<String, Emitter<*>>()
 
     /**
@@ -95,7 +93,7 @@ abstract class KarooExtension(
                     val emitter = Emitter.create<StreamState>(handler)
                     emitters[id] = emitter
                     Timber.d("$TAG: startStream $id $typeId")
-                    it.startStream(this@KarooExtension, emitter)
+                    it.startStream(emitter)
                 }
             }
 

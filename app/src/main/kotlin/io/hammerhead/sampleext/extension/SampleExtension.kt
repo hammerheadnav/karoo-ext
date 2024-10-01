@@ -16,20 +16,36 @@
 
 package io.hammerhead.sampleext.extension
 
+import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.extension.KarooExtension
 import io.hammerhead.karooext.internal.Emitter
+import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
+import io.hammerhead.karooext.models.InRideAlert
+import io.hammerhead.karooext.models.StreamState
+import io.hammerhead.karooext.models.SystemNotification
+import io.hammerhead.sampleext.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class SampleExtension : KarooExtension("sample", "1.0") {
+    private val karooSystem by lazy { KarooSystemService(this) }
+
+    private var serviceJob: Job? = null
+
     override val types by lazy {
         listOf(
-            PowerHrDataType(extension),
-            CustomSpeedDataType(extension),
+            PowerHrDataType(karooSystem, extension),
+            CustomSpeedDataType(karooSystem, extension),
         )
     }
 
@@ -49,5 +65,48 @@ class SampleExtension : KarooExtension("sample", "1.0") {
 
     override fun connectDevice(uid: String, emitter: Emitter<DeviceEvent>) {
         StaticHrSource.fromUid(extension, uid)?.connect(emitter)
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        serviceJob = CoroutineScope(Dispatchers.IO).launch {
+            karooSystem.waitForConnection()
+            Timber.d("BRENT: now do it")
+            karooSystem.dispatch(
+                SystemNotification(
+                    "sample-started",
+                    "Sample extension started",
+                    action = "Let's Go",
+                    actionIntent = "io.hammerhead.sampleext.MAIN",
+                ),
+            )
+            karooSystem.streamDataFlow(DataType.Type.DISTANCE)
+                .mapNotNull { (it as? StreamState.Streaming)?.dataPoint?.singleValue }
+                // meters to kilometers
+                .map { it.div(1000) }
+                // each unique kilometer
+                .distinctUntilChanged()
+                // exclude 0 (could be drop(1) unless starting with existing ride)
+                .filter { it > 0 }
+                .collect {
+                    karooSystem.dispatch(
+                        InRideAlert(
+                            id = "km-marker",
+                            icon = R.drawable.ic_sample,
+                            title = getString(R.string.alert_title),
+                            detail = getString(R.string.alert_detail, it),
+                            autoDismissMs = 10_000,
+                            backgroundColor = R.color.green,
+                            textColor = R.color.light_green,
+                        ),
+                    )
+                }
+        }
+    }
+
+    override fun onDestroy() {
+        serviceJob?.cancel()
+        serviceJob = null
+        super.onDestroy()
     }
 }

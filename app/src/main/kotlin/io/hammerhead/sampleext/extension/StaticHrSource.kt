@@ -23,7 +23,6 @@ import io.hammerhead.karooext.models.DataPoint
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
-import io.hammerhead.karooext.models.Field
 import io.hammerhead.karooext.models.ManufacturerInfo
 import io.hammerhead.karooext.models.OnBatteryStatus
 import io.hammerhead.karooext.models.OnConnectionStatus
@@ -40,7 +39,7 @@ class StaticHrSource(extension: String, private val hr: Int) {
         Device(
             extension,
             "static-hr-$hr",
-            listOf(DataType.HEART_RATE),
+            listOf(DataType.Source.HEART_RATE),
             "Static HR $hr",
         )
     }
@@ -70,7 +69,7 @@ class StaticHrSource(extension: String, private val hr: Int) {
                     OnDataPoint(
                         DataPoint(
                             source.dataTypes.first(),
-                            values = mapOf(Field.HEART_RATE to hr.toDouble() + it % 3),
+                            values = mapOf(DataType.Field.HEART_RATE to hr.toDouble() + it % 3),
                             sourceId = source.uid,
                         ),
                     ),

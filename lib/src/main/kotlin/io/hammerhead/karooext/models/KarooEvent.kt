@@ -103,3 +103,92 @@ data class OnStreamState(val state: StreamState) : KarooEvent() {
     @Serializable
     data class StartStreaming(val dataTypeId: String) : KarooEventParams()
 }
+
+/**
+ * Listen to the currently configured user profile.
+ *
+ * A consumer will be provided with the current value and then subsequently called on changes.
+ */
+@Serializable
+data class UserProfile(
+    /**
+     * Rider's configured weight in kilograms
+     */
+    val weight: Float,
+    /**
+     * Rider's configured unit system
+     *
+     * @see PreferredUnit
+     */
+    val preferredUnit: PreferredUnit,
+    /**
+     * Rider's configured max heart rate
+     */
+    val maxHr: Int,
+    /**
+     * Rider's configured resting heart rate
+     */
+    val restingHr: Int,
+    /**
+     * Rider's configured heart rate zones
+     *
+     * @see Zone
+     */
+    val heartRateZones: List<Zone>,
+    /**
+     * Rider's configured functional threshold power
+     */
+    val ftp: Int,
+    /**
+     * Rider's configured power zones
+     *
+     * @see Zone
+     */
+    val powerZones: List<Zone>,
+) : KarooEvent() {
+
+    /**
+     * Preferred units split by specific types.
+     *
+     * When an overall type is selected, all will match.
+     */
+    @Serializable
+    data class PreferredUnit(
+        /**
+         * Unit used for distance-related information.
+         */
+        val distance: UnitType,
+        /**
+         * Unit used for elevation-related information.
+         */
+        val elevation: UnitType,
+        /**
+         * Unit used for temperature-related information.
+         */
+        val temperature: UnitType,
+        /**
+         * Unit used for weight-related information.
+         */
+        val weight: UnitType,
+    ) {
+        /**
+         * Choice of units for metric or imperial systems.
+         */
+        enum class UnitType {
+            METRIC,
+            IMPERIAL,
+        }
+    }
+
+    /**
+     * Definition of a zone used by power or HR zones
+     */
+    @Serializable
+    data class Zone(val min: Int, val max: Int)
+
+    /**
+     * Default params for [UserProfile] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}

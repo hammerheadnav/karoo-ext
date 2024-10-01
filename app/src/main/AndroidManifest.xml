@@ -8,11 +8,15 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="io.hammerhead.sampleext.MainActivity"
-            android:exported="true">
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
+                <action android:name="io.hammerhead.sampleext.MAIN" />
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 

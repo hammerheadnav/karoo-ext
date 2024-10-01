@@ -16,6 +16,8 @@
 
 package io.hammerhead.karooext.models
 
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import kotlinx.serialization.Serializable
 
 /**
@@ -98,3 +100,76 @@ data object TurnScreenOff : KarooEffect()
  */
 @Serializable
 data object TurnScreenOn : KarooEffect()
+
+/**
+ * Request host BT be turned on for use by this app.
+ *
+ * When finished (if applicable), follow with [ReleaseBluetooth]
+ */
+@Serializable
+data class RequestBluetooth(
+    /**
+     * Unique string identifier for this BT resource, used later in [ReleaseBluetooth]
+     */
+    val resourceId: String,
+) : KarooEffect()
+
+/**
+ * Release a previous [RequestBluetooth] call
+ */
+@Serializable
+data class ReleaseBluetooth(
+    /**
+     * Unique string identifier for this BT resource used in [RequestBluetooth]
+     */
+    val resourceId: String,
+) : KarooEffect()
+
+/**
+ * Mark at lap at the current position in ride
+ */
+@Serializable
+data object MarkLap : KarooEffect()
+
+/**
+ * Pause the currently recording ride (only applicable when [RideState.Recording])
+ */
+@Serializable
+data object PauseRide : KarooEffect()
+
+/**
+ * Resume the currently recording ride (only applicable when [RideState.Paused] and [RideState.Paused.auto] is false)
+ */
+@Serializable
+data object ResumeRide : KarooEffect()
+
+@Serializable
+data class SystemNotification(
+    val id: String,
+    val message: String,
+    val subText: String? = null,
+    val header: String? = null,
+    val style: Style = Style.EVENT,
+    val action: String? = null,
+    val actionIntent: String? = null,
+) : KarooEffect() {
+
+    enum class Style {
+        EVENT,
+        ERROR,
+        UPDATE,
+        EDUCATION,
+        SETUP,
+    }
+}
+
+@Serializable
+data class InRideAlert(
+    val id: String,
+    @DrawableRes val icon: Int,
+    val title: String,
+    val detail: String?,
+    val autoDismissMs: Long?,
+    @ColorRes val backgroundColor: Int,
+    @ColorRes val textColor: Int,
+) : KarooEffect()

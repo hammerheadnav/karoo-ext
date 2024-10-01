@@ -49,7 +49,7 @@ abstract class DataTypeImpl(
      * Streaming will start as soon as a UI element or another streaming data type
      * subscribes to this data type's stream.
      */
-    open fun startStream(context: Context, emitter: Emitter<StreamState>) {}
+    open fun startStream(emitter: Emitter<StreamState>) {}
 
     /**
      * Start emitting [ViewEvent] events and [RemoteViews] for this data type's custom view.

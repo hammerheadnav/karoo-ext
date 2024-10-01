@@ -5,4 +5,6 @@
     <string name="custom_speed_description">Graphical representation of speed</string>
     <string name="power_hr">Power x HR</string>
     <string name="power_hr_description">Ratio of power / heart rate</string>
+    <string name="alert_title">Another KM!</string>
+    <string name="alert_detail">You\'re at %1$s now.</string>
 </resources>

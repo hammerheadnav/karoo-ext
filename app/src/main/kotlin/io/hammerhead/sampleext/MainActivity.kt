@@ -33,6 +33,8 @@ import io.hammerhead.karooext.models.PerformHardwareAction
 import io.hammerhead.karooext.models.PlayBeepPattern
 import io.hammerhead.karooext.models.RideState
 import io.hammerhead.karooext.models.StreamState
+import io.hammerhead.karooext.models.SystemNotification
+import io.hammerhead.karooext.models.UserProfile
 import io.hammerhead.sampleext.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -67,6 +69,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.notificationButton.setOnClickListener {
+            karooSystem.dispatch(
+                SystemNotification(
+                    "sample-clicked",
+                    "You did it!",
+                    "You clicked the notify button in the sample.",
+                ),
+            )
+        }
+
         binding.beepButton.setOnClickListener {
             playBeeps()
         }
@@ -77,7 +89,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         listenerIds.add(
-            karooSystem.addConsumer(OnStreamState.StartStreaming(DataType.POWER)) { event: OnStreamState ->
+            karooSystem.addConsumer(OnStreamState.StartStreaming(DataType.Type.POWER)) { event: OnStreamState ->
                 viewModel.updatePower(event.state)
             },
         )
@@ -92,8 +104,13 @@ class MainActivity : AppCompatActivity() {
             },
         )
         listenerIds.add(
+            karooSystem.addConsumer { user: UserProfile ->
+                Timber.i("User profile loaded as $user")
+            },
+        )
+        listenerIds.add(
             karooSystem.registerConnectionListener { connected ->
-                Timber.d("Karoo System connected=$connected")
+                Timber.i("Karoo System connected=$connected")
                 viewModel.updateConnected(connected)
             },
         )
