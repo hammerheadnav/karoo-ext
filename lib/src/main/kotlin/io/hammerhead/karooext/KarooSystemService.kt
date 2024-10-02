@@ -36,6 +36,7 @@ import io.hammerhead.karooext.models.Lap
 import io.hammerhead.karooext.models.RideState
 import io.hammerhead.karooext.models.UserProfile
 import timber.log.Timber
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -100,7 +101,7 @@ class KarooSystemService(private val context: Context) {
         intent.putExtra(BUNDLE_PACKAGE, packageName)
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
         onConnection?.let {
-            addConsumer(object : KarooSystemListener() {
+            addConsumer(object : KarooSystemListener("onConnection") {
                 override fun register(controller: IKarooSystem?) {
                     onConnection(controller != null)
                 }
@@ -183,8 +184,17 @@ class KarooSystemService(private val context: Context) {
         noinline onComplete: (() -> Unit)? = null,
         noinline onEvent: (T) -> Unit,
     ): String {
-        val consumer = createConsumer<T>(onEvent, onError, onComplete)
-        return addConsumer(object : KarooSystemListener() {
+        val consumerId = UUID.randomUUID().toString()
+        val onErrorWrapper = { msg: String ->
+            onError?.invoke(msg) ?: Timber.i("$TAG: Unhandled error: $msg")
+            removeConsumer(consumerId)
+        }
+        val onCompleteWrapper = {
+            onComplete?.invoke() ?: Timber.i("$TAG: Unhandled complete")
+            removeConsumer(consumerId)
+        }
+        val consumer = createConsumer<T>(onEvent, onErrorWrapper, onCompleteWrapper)
+        return addConsumer(object : KarooSystemListener(consumerId) {
             override fun register(controller: IKarooSystem?) {
                 controller?.addEventConsumer(id, params.bundleWithSerializable(packageName), consumer)
             }
@@ -241,6 +251,6 @@ class KarooSystemService(private val context: Context) {
      * @suppress
      */
     companion object {
-        private const val TAG = "KarooSystem"
+        const val TAG = "KarooSystem"
     }
 }

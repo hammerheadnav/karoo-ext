@@ -192,3 +192,46 @@ data class UserProfile(
     @Serializable
     data object Params : KarooEventParams()
 }
+
+/**
+ * Make an HTTP request via Karoo's best network connection.
+ *
+ * A wifi connection will be used if connected, otherwise, if supported, the request
+ * can be performed via BT to a connected companion app. Because of this, HTTP calls
+ * made via this method should be:
+ *   1. limited in size (uploading or downloading large files will take a long time)
+ *   2. targeted to an in-ride experience that is important to the current ride state
+ *
+ * Require params [MakeHttpRequest].
+ */
+@Serializable
+data class OnHttpResponse(val state: HttpResponseState) : KarooEvent() {
+    /**
+     * Params for [OnHttpResponse] event listener
+     *
+     * @see [HttpResponseState]
+     */
+    @Serializable
+    data class MakeHttpRequest(
+        /**
+         * HTTP request method: GET, POST, PUT, etc.
+         */
+        val method: String,
+        /**
+         * URL to send the request to
+         */
+        val url: String,
+        /**
+         * Any custom headers to include
+         */
+        val headers: Map<String, String> = emptyMap(),
+        /**
+         * Body of the request
+         */
+        val body: ByteArray? = null,
+        /**
+         * Queue this request until a connection becomes available
+         */
+        val waitForConnection: Boolean = true,
+    ) : KarooEventParams()
+}

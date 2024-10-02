@@ -51,6 +51,17 @@
         tools:text="Power: 500w" />
 
     <Button
+        android:id="@+id/httpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#FF781A"
+        android:text="HTTP"
+        android:textColor="#FFF"
+        app:layout_constraintBottom_toTopOf="@id/backgroundButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/backgroundButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

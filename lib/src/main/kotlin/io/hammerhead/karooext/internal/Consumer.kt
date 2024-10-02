@@ -19,6 +19,7 @@ package io.hammerhead.karooext.internal
 import android.os.Bundle
 import io.hammerhead.karooext.BUNDLE_VALUE
 import io.hammerhead.karooext.aidl.IHandler
+import timber.log.Timber
 
 /**
  * @suppress
@@ -34,20 +35,24 @@ inline fun <reified T> Bundle.serializableFromBundle(): T? {
  */
 inline fun <reified T> createConsumer(
     crossinline onNextCallback: (T) -> Unit,
-    noinline onErrorCallback: ((String) -> Unit)?,
-    noinline onCompleteCallback: (() -> Unit)?,
+    noinline onErrorCallback: (String) -> Unit,
+    noinline onCompleteCallback: () -> Unit,
 ): IHandler {
     return object : IHandler.Stub() {
         override fun onNext(bundle: Bundle) {
-            bundle.serializableFromBundle<T>()?.let { onNextCallback(it) }
+            bundle.serializableFromBundle<T>()?.let {
+                onNextCallback(it)
+            } ?: run {
+                Timber.w("onNext got [${bundle.getString(BUNDLE_VALUE)}] in bundle but couldn't deserialize")
+            }
         }
 
         override fun onError(msg: String) {
-            onErrorCallback?.invoke(msg)
+            onErrorCallback.invoke(msg)
         }
 
         override fun onComplete() {
-            onCompleteCallback?.invoke()
+            onCompleteCallback.invoke()
         }
     }
 }

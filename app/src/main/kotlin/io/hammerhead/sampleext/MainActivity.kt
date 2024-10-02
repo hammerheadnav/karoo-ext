@@ -28,7 +28,9 @@ import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.models.ApplyLauncherBackground
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.HardwareType
+import io.hammerhead.karooext.models.HttpResponseState
 import io.hammerhead.karooext.models.Lap
+import io.hammerhead.karooext.models.OnHttpResponse
 import io.hammerhead.karooext.models.OnStreamState
 import io.hammerhead.karooext.models.PerformHardwareAction
 import io.hammerhead.karooext.models.PlayBeepPattern
@@ -38,7 +40,16 @@ import io.hammerhead.karooext.models.SystemNotification
 import io.hammerhead.karooext.models.UserProfile
 import io.hammerhead.sampleext.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import timber.log.Timber
+
+@Serializable
+data class HttpBinResponse(val data: String)
+
+val json = Json {
+    ignoreUnknownKeys = true
+}
 
 @SuppressLint("SetTextI18n")
 class MainActivity : AppCompatActivity() {
@@ -65,6 +76,36 @@ class MainActivity : AppCompatActivity() {
                     } ?: "Unknown"
                     binding.powerData.text = "Power: $powerStr"
                     binding.rideState.text = "Ride State: ${state.rideState?.toString()}"
+                }
+            }
+        }
+
+        binding.httpButton.setOnClickListener {
+            karooSystem.addConsumer(
+                OnHttpResponse.MakeHttpRequest(
+                    "POST",
+                    "https://httpbin.org/anything",
+                    headers = mapOf(
+                        "Content-Type" to "text/plain",
+                    ),
+                    body = "Hello World!".toByteArray(),
+                    // Don't queue this
+                    waitForConnection = false,
+                )
+            ) { event: OnHttpResponse ->
+                Timber.i("Http response event $event")
+                val message = when (val state = event.state) {
+                    is HttpResponseState.Complete -> {
+                        val resp = state.body?.decodeToString()?.let {
+                            json.decodeFromString<HttpBinResponse>(it)
+                        }
+                        "Status ${state.statusCode}: ${state.error ?: resp?.data}"
+                    }
+                    is HttpResponseState.InProgress -> "In Progress"
+                    is HttpResponseState.Queued -> "Queued"
+                }
+                runOnUiThread {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -109,7 +150,9 @@ class MainActivity : AppCompatActivity() {
             viewModel.updateRideState(rideState)
         }
         karooSystem.addConsumer { lap: Lap ->
-            Toast.makeText(this, "Lap ${lap.number}!", Toast.LENGTH_SHORT).show()
+            runOnUiThread {
+                Toast.makeText(this, "Lap ${lap.number}!", Toast.LENGTH_SHORT).show()
+            }
         }
         karooSystem.addConsumer { user: UserProfile ->
             Timber.i("User profile loaded as $user")

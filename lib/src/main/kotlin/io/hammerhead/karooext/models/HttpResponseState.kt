@@ -14,15 +14,28 @@
  * limitations under the License.
  */
 
-package io.hammerhead.karooext.internal
+package io.hammerhead.karooext.models
 
-import io.hammerhead.karooext.aidl.IKarooSystem
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
 /**
- * @suppress
+ * HTTP response state.
+ *
+ * @see [OnHttpResponse]
  */
-abstract class KarooSystemListener(val id: String) {
-    abstract fun register(controller: IKarooSystem?)
-    abstract fun unregister(controller: IKarooSystem?)
+@Serializable
+sealed class HttpResponseState {
+    @Serializable
+    data object Queued : HttpResponseState()
+
+    @Serializable
+    data object InProgress : HttpResponseState()
+
+    @Serializable
+    data class Complete(
+        val statusCode: Int,
+        val headers: Map<String, String>,
+        val body: ByteArray?,
+        val error: String?,
+    ) : HttpResponseState()
 }
