@@ -84,6 +84,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                     )
                 }
             }
+            // Mark a lap and show an in-ride alert every mile/km
             val userProfile = karooSystem.consumerFlow<UserProfile>().first()
             karooSystem.streamDataFlow(DataType.Type.DISTANCE)
                 .mapNotNull { (it as? StreamState.Streaming)?.dataPoint?.singleValue }
