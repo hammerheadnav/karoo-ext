@@ -47,7 +47,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val karooSystem = KarooSystemService(this)
-    private val listenerIds = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,39 +98,26 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        listenerIds.add(
-            karooSystem.addConsumer(OnStreamState.StartStreaming(DataType.Type.POWER)) { event: OnStreamState ->
-                viewModel.updatePower(event.state)
-            },
-        )
-        listenerIds.add(
-            karooSystem.addConsumer { rideState: RideState ->
-                viewModel.updateRideState(rideState)
-            },
-        )
-        listenerIds.add(
-            karooSystem.addConsumer { lap: Lap ->
-                Toast.makeText(this, "Lap ${lap.number}!", Toast.LENGTH_SHORT).show()
-            },
-        )
-        listenerIds.add(
-            karooSystem.addConsumer { user: UserProfile ->
-                Timber.i("User profile loaded as $user")
-            },
-        )
-        listenerIds.add(
-            karooSystem.registerConnectionListener { connected ->
-                Timber.i("Karoo System connected=$connected")
-                viewModel.updateConnected(connected)
-            },
-        )
+        karooSystem.connect { connected ->
+            Timber.i("Karoo System connected=$connected")
+            viewModel.updateConnected(connected)
+        }
+        karooSystem.addConsumer(OnStreamState.StartStreaming(DataType.Type.POWER)) { event: OnStreamState ->
+            viewModel.updatePower(event.state)
+        }
+        karooSystem.addConsumer { rideState: RideState ->
+            viewModel.updateRideState(rideState)
+        }
+        karooSystem.addConsumer { lap: Lap ->
+            Toast.makeText(this, "Lap ${lap.number}!", Toast.LENGTH_SHORT).show()
+        }
+        karooSystem.addConsumer { user: UserProfile ->
+            Timber.i("User profile loaded as $user")
+        }
     }
 
     override fun onStop() {
-        listenerIds.forEach {
-            karooSystem.removeConsumer(it)
-        }
-        listenerIds.clear()
+        karooSystem.disconnect()
         super.onStop()
     }
 

@@ -44,20 +44,14 @@ import java.util.concurrent.ConcurrentHashMap
 class KarooSystemService(private val context: Context) {
     private val listeners = ConcurrentHashMap<String, KarooSystemListener>()
     private var controller: IKarooSystem? = null
-        get() {
-            // Bind service when controller is used and not already connected
-            if (!bindCalled) {
-                bindService()
-            } else if (field == null) {
-                Timber.d("$TAG: Already waiting for KarooSystem to bind")
-            }
-            return field
-        }
+
+    /**
+     * @suppress
+     */
     val packageName: String by lazy { context.packageName }
 
-    private var bindCalled = false
     private val serviceConnection = object : ServiceConnection {
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
             val controller = IKarooSystem.Stub.asInterface(service)
             try {
                 Timber.i("$TAG: connected with libVersion=${controller.libVersion()}")
@@ -70,9 +64,19 @@ class KarooSystemService(private val context: Context) {
             }
         }
 
-        override fun onServiceDisconnected(className: ComponentName) {
-            unbindService()
+        override fun onServiceDisconnected(name: ComponentName) {
             Timber.i("$TAG: disconnected")
+            clearController()
+        }
+
+        override fun onBindingDied(name: ComponentName) {
+            Timber.w("$TAG: binding died")
+            clearController()
+            context.unbindService(this)
+            connect()
+        }
+
+        private fun clearController() {
             this@KarooSystemService.controller = null
             listeners.forEach { (_, listener) ->
                 listener.register(null)
@@ -80,20 +84,42 @@ class KarooSystemService(private val context: Context) {
         }
     }
 
-    private fun bindService() {
-        Timber.d("$TAG: binding to KarooSystem")
-        bindCalled = true
+    /**
+     * Connect to KarooSystem
+     */
+    fun connect(
+        /**
+         * Callback for when Karoo system connects and disconnects
+         */
+        onConnection: ((Boolean) -> Unit)? = null,
+    ) {
+        Timber.i("$TAG: binding to KarooSystem")
         val intent = Intent()
         intent.component = ComponentName.createRelative("io.hammerhead.appstore", ".service.AppStoreService")
         intent.action = "KarooSystem"
         intent.putExtra(BUNDLE_PACKAGE, packageName)
         context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+        onConnection?.let {
+            addConsumer(object : KarooSystemListener() {
+                override fun register(controller: IKarooSystem?) {
+                    onConnection(controller != null)
+                }
+
+                override fun unregister(controller: IKarooSystem?) {
+                }
+            })
+        }
     }
 
-    private fun unbindService() {
+    /**
+     * Disconnect from KarooSystem and unregister all consumers
+     */
+    fun disconnect() {
+        listeners.forEach { (id, _) ->
+            removeConsumer(id)
+        }
         context.unbindService(serviceConnection)
-        // Allow binding again
-        bindCalled = false
+        controller = null
     }
 
     /**
@@ -190,23 +216,6 @@ class KarooSystemService(private val context: Context) {
             else -> throw IllegalArgumentException("No default KarooEventParams for ${T::class}")
         }
         return addConsumer<T>(params, onError, onComplete, onEvent)
-    }
-
-    /**
-     * Register to be called when the Karoo System connects.
-     *
-     * @return `consumerId` to be removed on teardown
-     * @see [removeConsumer]
-     */
-    fun registerConnectionListener(onConnection: (Boolean) -> Unit): String {
-        return addConsumer(object : KarooSystemListener() {
-            override fun register(controller: IKarooSystem?) {
-                onConnection(controller != null)
-            }
-
-            override fun unregister(controller: IKarooSystem?) {
-            }
-        })
     }
 
     /**

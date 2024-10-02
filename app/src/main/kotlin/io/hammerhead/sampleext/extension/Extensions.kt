@@ -8,19 +8,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
-
-suspend fun KarooSystemService.waitForConnection() {
-    callbackFlow {
-        val listenerId = registerConnectionListener {
-            trySend(it)
-        }
-        awaitClose {
-            removeConsumer(listenerId)
-        }
-    }.filter { it }.first()
-}
 
 fun KarooSystemService.streamDataFlow(dataTypeId: String): Flow<StreamState> {
     return callbackFlow {

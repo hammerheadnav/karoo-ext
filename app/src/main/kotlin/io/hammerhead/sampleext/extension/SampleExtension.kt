@@ -23,6 +23,7 @@ import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
 import io.hammerhead.karooext.models.InRideAlert
+import io.hammerhead.karooext.models.MarkLap
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.SystemNotification
 import io.hammerhead.karooext.models.UserProfile
@@ -32,13 +33,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class SampleExtension : KarooExtension("sample", "1.0") {
     private val karooSystem by lazy { KarooSystemService(this) }
@@ -73,16 +72,18 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     override fun onCreate() {
         super.onCreate()
         serviceJob = CoroutineScope(Dispatchers.IO).launch {
-            karooSystem.waitForConnection()
-            Timber.d("BRENT: now do it")
-            karooSystem.dispatch(
-                SystemNotification(
-                    "sample-started",
-                    "Sample extension started",
-                    action = "Let's Go",
-                    actionIntent = "io.hammerhead.sampleext.MAIN",
-                ),
-            )
+            karooSystem.connect { connected ->
+                if (connected) {
+                    karooSystem.dispatch(
+                        SystemNotification(
+                            "sample-started",
+                            "Sample extension started",
+                            action = "See it",
+                            actionIntent = "io.hammerhead.sampleext.MAIN",
+                        ),
+                    )
+                }
+            }
             val userProfile = karooSystem.consumerFlow<UserProfile>().first()
             karooSystem.streamDataFlow(DataType.Type.DISTANCE)
                 .mapNotNull { (it as? StreamState.Streaming)?.dataPoint?.singleValue }
@@ -93,13 +94,10 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                         UserProfile.PreferredUnit.UnitType.IMPERIAL -> it / 1609.345
                     }.toInt()
                 }
-                .onEach {
-                    Timber.d("BRENT: out now $it")
-                }
                 // each unique kilometer
                 .distinctUntilChanged()
-                // exclude 0 (could be drop(1) unless starting with existing ride)
-                .filter { it > 0 }
+                // only emit on change (exclude initial value)
+                .drop(1)
                 .collect {
                     karooSystem.dispatch(
                         InRideAlert(
@@ -112,6 +110,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                             textColor = R.color.light_green,
                         ),
                     )
+                    karooSystem.dispatch(MarkLap)
                 }
         }
     }
@@ -119,6 +118,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     override fun onDestroy() {
         serviceJob?.cancel()
         serviceJob = null
+        karooSystem.disconnect()
         super.onDestroy()
     }
 }

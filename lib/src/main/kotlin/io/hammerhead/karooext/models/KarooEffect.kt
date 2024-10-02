@@ -143,14 +143,40 @@ data object PauseRide : KarooEffect()
 @Serializable
 data object ResumeRide : KarooEffect()
 
+/**
+ * Add a Karoo-style notification to Control Center with optional ability to
+ * launch an activity on click.
+ */
 @Serializable
 data class SystemNotification(
+    /**
+     * Unique ID for this notification, can be used in subsequent calls to update the existing notification.
+     */
     val id: String,
+    /**
+     * First line of messaging for the notification
+     */
     val message: String,
+    /**
+     * Optional second line of detailed messaging for the notification
+     */
     val subText: String? = null,
+    /**
+     * Optional header text to display in top-left of notification
+     */
     val header: String? = null,
+    /**
+     * Specific style to apply to this notification
+     */
     val style: Style = Style.EVENT,
+    /**
+     * Action that the user should take.
+     * If null, "Open" will be use when there is an action or "Dismiss" otherwise.
+     */
     val action: String? = null,
+    /**
+     * Optional intent that maps to an activity to launch on click
+     */
     val actionIntent: String? = null,
 ) : KarooEffect() {
 
@@ -163,6 +189,10 @@ data class SystemNotification(
     }
 }
 
+/**
+ * Display an important alert in ride app.
+ * This should be used for critical messaging related to the current ride.
+ */
 @Serializable
 data class InRideAlert(
     val id: String,
@@ -174,6 +204,9 @@ data class InRideAlert(
     @ColorRes val textColor: Int,
 ) : KarooEffect()
 
+/**
+ * Set or clear the custom image URL used in the launcher background.
+ */
 @Serializable
 data class ApplyLauncherBackground(
     /**
