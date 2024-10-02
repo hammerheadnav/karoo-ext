@@ -25,6 +25,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import io.hammerhead.karooext.KarooSystemService
+import io.hammerhead.karooext.models.ApplyLauncherBackground
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.HardwareType
 import io.hammerhead.karooext.models.Lap
@@ -69,6 +70,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.backgroundButton.setOnClickListener {
+            karooSystem.dispatch(
+                ApplyLauncherBackground(
+                    "https://images.unsplash.com/photo-1590146758147-74a80644616a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w1MDI2Mjh8MHwxfHNlYXJjaHw4fHxwdXp6bGV8ZW58MHwwfHx8MTcyNzg3NjMwMnww&ixlib=rb-4.0.3&q=80&w=1080",
+                ),
+            )
+        }
+
         binding.notificationButton.setOnClickListener {
             karooSystem.dispatch(
                 SystemNotification(
@@ -83,7 +92,9 @@ class MainActivity : AppCompatActivity() {
             playBeeps()
         }
 
-        setupHardwareActionListeners()
+        binding.ccButton.setOnClickListener {
+            karooSystem.dispatch(PerformHardwareAction.ControlCenterComboPress)
+        }
     }
 
     override fun onStart() {
@@ -170,13 +181,5 @@ class MainActivity : AppCompatActivity() {
         }
         val dispatched = karooSystem.dispatch(PlayBeepPattern(tones))
         Timber.d("Karoo System dispatched beeps=$dispatched")
-    }
-
-    private fun setupHardwareActionListeners() {
-        binding.topLeftButton.setOnClickListener { karooSystem.dispatch(PerformHardwareAction.TopLeftPress) }
-        binding.topRightButton.setOnClickListener { karooSystem.dispatch(PerformHardwareAction.TopRightPress) }
-        binding.bottomLeftButton.setOnClickListener { karooSystem.dispatch(PerformHardwareAction.BottomLeftPress) }
-        binding.bottomRightButton.setOnClickListener { karooSystem.dispatch(PerformHardwareAction.BottomRightPress) }
-        binding.ccButton.setOnClickListener { karooSystem.dispatch(PerformHardwareAction.ControlCenterComboPress) }
     }
 }

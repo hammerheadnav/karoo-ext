@@ -25,6 +25,7 @@ import io.hammerhead.karooext.models.DeviceEvent
 import io.hammerhead.karooext.models.InRideAlert
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.SystemNotification
+import io.hammerhead.karooext.models.UserProfile
 import io.hammerhead.sampleext.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,8 +33,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -80,10 +83,19 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                     actionIntent = "io.hammerhead.sampleext.MAIN",
                 ),
             )
+            val userProfile = karooSystem.consumerFlow<UserProfile>().first()
             karooSystem.streamDataFlow(DataType.Type.DISTANCE)
                 .mapNotNull { (it as? StreamState.Streaming)?.dataPoint?.singleValue }
-                // meters to kilometers
-                .map { it.div(1000) }
+                // meters to user's preferred unit system (mi or km)
+                .map {
+                    when (userProfile.preferredUnit.distance) {
+                        UserProfile.PreferredUnit.UnitType.METRIC -> it / 1000
+                        UserProfile.PreferredUnit.UnitType.IMPERIAL -> it / 1609.345
+                    }.toInt()
+                }
+                .onEach {
+                    Timber.d("BRENT: out now $it")
+                }
                 // each unique kilometer
                 .distinctUntilChanged()
                 // exclude 0 (could be drop(1) unless starting with existing ride)
@@ -91,7 +103,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                 .collect {
                     karooSystem.dispatch(
                         InRideAlert(
-                            id = "km-marker",
+                            id = "distance-marker",
                             icon = R.drawable.ic_sample,
                             title = getString(R.string.alert_title),
                             detail = getString(R.string.alert_detail, it),

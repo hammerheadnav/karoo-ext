@@ -18,6 +18,7 @@ package io.hammerhead.karooext.internal
 
 import android.os.Bundle
 import android.widget.RemoteViews
+import io.hammerhead.karooext.BUNDLE_PACKAGE
 import io.hammerhead.karooext.BUNDLE_VALUE
 import io.hammerhead.karooext.aidl.IHandler
 import io.hammerhead.karooext.models.ViewEvent
@@ -38,9 +39,10 @@ val DefaultJson = Json {
 /**
  * @suppress
  */
-inline fun <reified T> T.bundleWithSerializable(): Bundle {
+inline fun <reified T> T.bundleWithSerializable(packageName: String): Bundle {
     return Bundle().also {
         it.putString(BUNDLE_VALUE, DefaultJson.encodeToString(this))
+        it.putString(BUNDLE_PACKAGE, packageName)
     }
 }
 
@@ -77,11 +79,11 @@ interface Emitter<T> {
      * @suppress
      */
     companion object {
-        inline fun <reified T> create(handler: IHandler): Emitter<T> {
+        inline fun <reified T> create(packageName: String, handler: IHandler): Emitter<T> {
             return object : Emitter<T> {
                 private var cancellable: (() -> Unit)? = null
                 override fun onNext(t: T) {
-                    handler.onNext(t.bundleWithSerializable())
+                    handler.onNext(t.bundleWithSerializable(packageName))
                 }
 
                 override fun onError(t: Throwable) {
@@ -109,12 +111,14 @@ interface Emitter<T> {
  * to [ViewEvent]s.
  */
 class ViewEmitter(
+    private val packageName: String,
     private val handler: IHandler,
-    private val eventEmitter: Emitter<ViewEvent> = Emitter.create<ViewEvent>(handler),
+    private val eventEmitter: Emitter<ViewEvent> = Emitter.create<ViewEvent>(packageName, handler),
 ) : Emitter<ViewEvent> by eventEmitter {
     fun updateView(view: RemoteViews) {
         val bundle = Bundle()
         bundle.putParcelable("view", view)
+        bundle.putString(BUNDLE_PACKAGE, packageName)
         handler.onNext(bundle)
     }
 }

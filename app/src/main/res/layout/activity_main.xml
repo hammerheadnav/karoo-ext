@@ -45,45 +45,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/topLeftButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rideState"
         tools:text="Power: 500w" />
 
     <Button
-        android:id="@+id/topLeftButton"
+        android:id="@+id/backgroundButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Top Left"
-        app:layout_constraintBottom_toTopOf="@id/bottomLeftButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/powerData" />
-
-    <Button
-        android:id="@+id/topRightButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Top Right"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/topLeftButton" />
-
-    <Button
-        android:id="@+id/bottomLeftButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bottom Left"
+        android:backgroundTint="#AF00E4"
+        android:text="Background"
+        android:textColor="#FFF"
         app:layout_constraintBottom_toTopOf="@id/notificationButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topLeftButton" />
-
-    <Button
-        android:id="@+id/bottomRightButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bottom Right"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/bottomLeftButton" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/notificationButton"

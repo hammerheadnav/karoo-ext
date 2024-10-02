@@ -51,3 +51,8 @@ const val EXTENSION_INFO_META_KEY = "io.hammerhead.karooext.EXTENSION_INFO"
  * @suppress
  */
 const val BUNDLE_VALUE = "value"
+
+/**
+ * @suppress
+ */
+const val BUNDLE_PACKAGE = "package"

@@ -173,3 +173,12 @@ data class InRideAlert(
     @ColorRes val backgroundColor: Int,
     @ColorRes val textColor: Int,
 ) : KarooEffect()
+
+@Serializable
+data class ApplyLauncherBackground(
+    /**
+     * Fully qualified image URL to load as the custom launcher background or
+     * null to clear and revert to default.
+     */
+    val url: String?,
+) : KarooEffect()
