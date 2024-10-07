@@ -126,7 +126,7 @@ data class ReleaseBluetooth(
 ) : KarooEffect()
 
 /**
- * Mark at lap at the current position in ride
+ * Mark a lap at the current position in ride
  */
 @Serializable
 data object MarkLap : KarooEffect()
@@ -195,12 +195,33 @@ data class SystemNotification(
  */
 @Serializable
 data class InRideAlert(
+    /**
+     * Unique string identifier for this alert.
+     */
     val id: String,
+    /**
+     * Icon to show along with the message for this alert.
+     */
     @DrawableRes val icon: Int,
+    /**
+     * The title line of this alert
+     */
     val title: String,
+    /**
+     * Additional information about this alert
+     */
     val detail: String?,
+    /**
+     * Duration (in ms) that this alert should show for
+     */
     val autoDismissMs: Long?,
+    /**
+     * Background color resource
+     */
     @ColorRes val backgroundColor: Int,
+    /**
+     * Text color resource
+     */
     @ColorRes val textColor: Int,
 ) : KarooEffect()
 

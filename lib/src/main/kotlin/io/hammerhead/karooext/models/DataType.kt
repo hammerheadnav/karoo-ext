@@ -861,70 +861,6 @@ data class DataType(
         const val SHIFTING_COUNT_REAR = "TYPE_SHIFTING_COUNT_REAR_ID"
 
         /**
-         * Category: Workout
-         */
-
-        /**
-         * Target Power - Workout interval's current target power
-         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE]
-         */
-        const val WORKOUT_POWER_TARGET = "TYPE_WORKOUT_POWER_TARGET_ID"
-
-        /**
-         * Target Cadence - Workout interval's current target cadence
-         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE]
-         */
-        const val WORKOUT_CADENCE_TARGET = "TYPE_WORKOUT_CADENCE_TARGET_ID"
-
-        /**
-         * Target Heart Rate - Workout interval's current target heart rate
-         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE]
-         */
-        const val WORKOUT_HEART_RATE_TARGET = "TYPE_WORKOUT_HEART_RATE_TARGET_ID"
-
-        /**
-         * Interval Time Remaining - Time remaining to end of interval
-         * Fields: [Field.WORKOUT_TIME_TO_STEP_FINISH], [Field.WORKOUT_STATE]
-         */
-        const val WORKOUT_REMAINING_INTERVAL_DURATION = "TYPE_WORKOUT_REMAINING_INTERVAL_DURATION_ID"
-
-        /**
-         * Workout Time Remaining - Time remaining to end of Workout
-         * Fields: [Field.WORKOUT_REMAINING_TIME], [Field.WORKOUT_STATE]
-         */
-        const val WORKOUT_REMAINING_TOTAL_DURATION = "TYPE_WORKOUT_REMAINING_TOTAL_DURATION_ID"
-
-        /**
-         * Interval Number - Current Interval number + total this Workout
-         * Fields: [Field.WORKOUT_CURRENT_STEP], [Field.WORKOUT_STEP_COUNT], [Field.WORKOUT_STATE]
-         */
-        const val WORKOUT_INTERVAL_COUNT = "TYPE_WORKOUT_INTERVAL_COUNT_ID"
-
-        /**
-         * Primary Target - Primary Target shows your target HR or PWR based on the loaded workout.
-         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_TYPE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE], [Field.WORKOUT_TARGET_MIN_RAMP_VALUE], [Field.WORKOUT_TARGET_MAX_RAMP_VALUE], [Field.WORKOUT_TARGET_RAMP_TYPE]
-         */
-        const val WORKOUT_PRIMARY_TARGET = "TYPE_WORKOUT_PRIMARY_TARGET_ID"
-
-        /**
-         * Secondary Target - Secondary Target shows your target HR, PWR, or CAD based on the loaded workout.
-         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_TYPE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE], [Field.WORKOUT_TARGET_MIN_RAMP_VALUE], [Field.WORKOUT_TARGET_MAX_RAMP_VALUE], [Field.WORKOUT_TARGET_RAMP_TYPE]
-         */
-        const val WORKOUT_SECONDARY_TARGET = "TYPE_WORKOUT_SECONDARY_TARGET_ID"
-
-        /**
-         * Primary Output - Primary Output shows your output HR or PWR based on the loaded workout.
-         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_OUTPUT_VALUE], [Field.WORKOUT_TARGET_TYPE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_RAMP_TYPE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE], [Field.WORKOUT_TARGET_OUTPUT_VALUE_SMOOTHED]
-         */
-        const val WORKOUT_PRIMARY_TARGET_OUTPUT_VALUE = "TYPE_WORKOUT_PRIMARY_TARGET_OUTPUT_VALUE_ID"
-
-        /**
-         * Secondary Output - Secondary Output shows your output HR, PWR, or CAD based on the loaded workout.
-         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_OUTPUT_VALUE], [Field.WORKOUT_TARGET_TYPE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_RAMP_TYPE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE], [Field.WORKOUT_TARGET_OUTPUT_VALUE_SMOOTHED]
-         */
-        const val WORKOUT_SECONDARY_TARGET_OUTPUT_VALUE = "TYPE_WORKOUT_SECONDARY_TARGET_OUTPUT_VALUE_ID"
-
-        /**
          * Category: Miscellaneous
          */
 
@@ -957,10 +893,6 @@ data class DataType(
          * Fields: [Field.TEMPERATURE]
          */
         const val TEMPERATURE = "TYPE_TEMPERATURE_ID"
-
-        /**
-         * Category: Progress
-         */
 
         /**
          * Category: eBike
@@ -1053,870 +985,131 @@ data class DataType(
      * Field constants generated from pre-existing fields used by Karoo.
      */
     object Field {
-        /**
-         * LAT_VALIDATOR
-         */
         const val LOC_LATITUDE = "FIELD_LOC_LATITUDE_ID"
-
-        /**
-         * LNG_VALIDATOR
-         */
         const val LOC_LONGITUDE = "FIELD_LOC_LONGITUDE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val LOC_ACCURACY = "FIELD_LOC_ACCURACY_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val LOC_BEARING = "FIELD_LOC_BEARING_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val LOC_SPEED = "FIELD_LOC_SPEED_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val LOC_ALTITUDE = "FIELD_LOC_ALTITUDE_ID"
-
-        /**
-         * SPEED_VALIDATOR
-         */
         const val SPEED = "FIELD_SPEED_ID"
-
-        /**
-         * LONG_POSITIVE_OR_ZERO
-         */
-        const val REVOLUTIONS = "FIELD_REVOLUTIONS_ID"
-
-        /**
-         * HR_VALIDATOR
-         */
         const val HEART_RATE = "FIELD_HEART_RATE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val HEART_RATE_VISUAL = "FIELD_HEART_RATE_VISUAL_ID"
-
-        /**
-         * CADENCE_VALIDATOR
-         */
         const val CADENCE = "FIELD_CADENCE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val AVERAGE_CADENCE = "FIELD_AVERAGE_CADENCE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val MAX_CADENCE = "FIELD_MAX_CADENCE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val DISTANCE = "FIELD_DISTANCE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val AVERAGE_SPEED = "FIELD_AVERAGE_SPEED_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
-        const val MOVING = "FIELD_MOVING_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val MOVING_THRESHOLD = "FIELD_MOVING_THRESHOLD_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_IN_ZONE_ONE = "FIELD_TIME_IN_ZONE_ONE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_IN_ZONE_TWO = "FIELD_TIME_IN_ZONE_TWO_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_IN_ZONE_THREE = "FIELD_TIME_IN_ZONE_THREE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_IN_ZONE_FOUR = "FIELD_TIME_IN_ZONE_FOUR_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_IN_ZONE_FIVE = "FIELD_TIME_IN_ZONE_FIVE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_IN_ZONE_SIX = "FIELD_TIME_IN_ZONE_SIX_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_IN_ZONE_SEVEN = "FIELD_TIME_IN_ZONE_SEVEN_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_IN_ZONE_EIGHT = "FIELD_TIME_IN_ZONE_EIGHT_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_IN_ZONE_NINE = "FIELD_TIME_IN_ZONE_NINE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_IN_ZONE_TEN = "FIELD_TIME_IN_ZONE_TEN_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val ELAPSED_TIME = "FIELD_ELAPSED_TIME_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val RIDE_TIME = "FIELD_RIDE_TIME_ID"
-
-        /**
-         * DOUBLE
-         */
         const val POWER_TO_WEIGHT = "FIELD_POWER_TO_WEIGHT_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val WEIGHT = "FIELD_WEIGHT_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
-        const val ZERO_PREFERENCE = "FIELD_ZERO_PREFERENCE_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val ELEVATION_CORRECTION = "FIELD_ELEVATION_CORRECTION_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val CLOCK_TIME = "FIELD_CLOCK_TIME_ID"
-
-        /**
-         * POWER_VALIDATOR
-         */
         const val POWER = "FIELD_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val POWER_VISUAL = "FIELD_POWER_VISUAL_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val PEDAL_POWER_BALANCE_LEFT = "FIELD_PEDAL_POWER_BALANCE_LEFT_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val PEDAL_SMOOTHNESS_LEFT = "FIELD_PEDAL_SMOOTHNESS_LEFT_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val PEDAL_SMOOTHNESS_RIGHT = "FIELD_PEDAL_SMOOTHNESS_RIGHT_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TORQUE_EFFECTIVENESS_LEFT = "FIELD_TORQUE_EFFECTIVENESS_LEFT_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TORQUE_EFFECTIVENESS_RIGHT = "FIELD_TORQUE_EFFECTIVENESS_RIGHT_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val AVERAGE_POWER = "FIELD_AVERAGE_POWER_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val SDK = "FIELD_SDK_ID"
-
-        /**
-         * DOUBLE
-         */
         const val SINGLE = "FIELD_SINGLE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val ENERGY_OUTPUT = "FIELD_ENERGY_OUTPUT_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val CALORIES = "FIELD_CALORIES_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val CALORIES_PER_HOUR = "FIELD_CALORIES_PER_HOUR_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TORQUE = "FIELD_TORQUE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val MAX_POWER = "FIELD_MAX_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val MAX_SPEED = "FIELD_MAX_SPEED_ID"
-
-        /**
-         * DOUBLE
-         */
         const val PERCENT_HRR = "FIELD_PERCENT_HRR_ID"
-
-        /**
-         * DOUBLE
-         */
         const val AVERAGE_PERCENT_HRR = "FIELD_AVERAGE_PERCENT_HRR_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val AVG_HR = "FIELD_AVG_HR_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val MAX_HR = "FIELD_MAX_HR_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val PRESSURE_HPA = "FIELD_PRESSURE_HPA_ID"
-
-        /**
-         * DOUBLE
-         */
         const val PRESSURE_ELEVATION = "FIELD_PRESSURE_ELEVATION_ID"
-
-        /**
-         * DOUBLE
-         */
         const val ELEVATION_GAIN = "FIELD_ELEVATION_GAIN_ID"
-
-        /**
-         * DOUBLE
-         */
         const val ELEVATION_LOSS = "FIELD_ELEVATION_LOSS_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val ELEVATION_REMAINING = "FIELD_ELEVATION_REMAINING_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val ON_ROUTE = "FIELD_ON_ROUTE_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val REROUTING_ENABLED = "FIELD_REROUTING_ENABLED_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val NAVIGATION_STATE = "FIELD_NAVIGATION_STATE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_3S_AVERAGE_CADENCE = "FIELD_3S_AVERAGE_CADENCE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_5S_AVERAGE_CADENCE = "FIELD_5S_AVERAGE_CADENCE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_10S_AVERAGE_CADENCE = "FIELD_10S_AVERAGE_CADENCE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_3S_AVERAGE_POWER = "FIELD_3S_AVERAGE_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_5S_AVERAGE_POWER = "FIELD_5S_AVERAGE_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_10S_AVERAGE_POWER = "FIELD_10S_AVERAGE_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_30S_AVERAGE_POWER = "FIELD_30S_AVERAGE_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_20M_AVERAGE_POWER = "FIELD_20M_AVERAGE_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_1HR_AVERAGE_POWER = "FIELD_1HR_AVERAGE_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_3S_AVERAGE_SPEED = "FIELD_3S_AVERAGE_SPEED_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_5S_AVERAGE_SPEED = "FIELD_5S_AVERAGE_SPEED_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_10S_AVERAGE_SPEED = "FIELD_10S_AVERAGE_SPEED_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SMOOTHED_1HR_AVERAGE_SPEED = "FIELD_1HR_AVERAGE_SPEED_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val ACTIVE_TIME_COUNT = "FIELD_ACTIVE_TIME_COUNT_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val COUNT = "FIELD_COUNT_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val DISTANCE_TO_DESTINATION = "FIELD_DISTANCE_TO_DESTINATION_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val DISTANCE_TO_NEXT_TURN = "FIELD_DISTANCE_TO_NEXT_TURN_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val DISTANCE_FROM_BOTTOM = "FIELD_DISTANCE_FROM_BOTTOM_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val DISTANCE_TO_TOP = "FIELD_DISTANCE_TO_TOP_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val ELEVATION_FROM_BOTTOM = "FIELD_ELEVATION_FROM_BOTTOM_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val ELEVATION_TO_TOP = "FIELD_ELEVATION_TO_TOP_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
-        const val CLIMB_NUMBER = "FIELD_CLIMB_NUMBER_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
-        const val TOTAL_CLIMBS = "FIELD_TOTAL_CLIMBS_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TIME_TO_DESTINATION = "FIELD_TIME_TO_DESTINATION_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TIME_OF_ARRIVAL = "FIELD_TIME_OF_ARRIVAL_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SUNRISE = "FIELD_SUNRISE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val SUNSET = "FIELD_SUNSET_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val CIVIL_DAWN = "FIELD_CIVIL_DAWN_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val CIVIL_DUSK = "FIELD_CIVIL_DUSK_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TIME_TO_SUNRISE = "FIELD_TIME_TO_SUNRISE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TIME_TO_SUNSET = "FIELD_TIME_TO_SUNSET_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TIME_TO_CIVIL_DAWN = "FIELD_TIME_TO_CIVIL_DAWN_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TIME_TO_CIVIL_DUSK = "FIELD_TIME_TO_CIVIL_DUSK_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val TIME_STAMP = "FIELD_TIME_STAMP_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val HR_ZONE = "FIELD_HR_ZONE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val POWER_ZONE = "FIELD_POWER_ZONE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val VARIABILITY_INDEX = "FIELD_VARIABILITY_INDEX_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val PAUSED_TIME = "FIELD_PAUSED_TIME_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val PERCENT_MAX_HR = "FIELD_PERCENT_MAX_HR_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val PERCENT_MAX_FTP = "FIELD_PERCENT_MAX_FTP_ID"
-
-        /**
-         * DOUBLE
-         */
         const val TEMPERATURE = "FIELD_TEMPERATURE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val LUX = "FIELD_LUX_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
-        const val SCREEN_BRIGHTNESS = "FIELD_SCREEN_BRIGHTNESS_ID"
-
-        /**
-         * DOUBLE
-         */
         const val CORE_TEMP = "FIELD_CORE_TEMP_ID"
-
-        /**
-         * DOUBLE
-         */
         const val SKIN_TEMP = "FIELD_SKIN_TEMP_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val CORE_DATA_QUALITY = "FIELD_CORE_DATA_QUALITY_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val CORE_RESERVED = "FIELD_CORE_RESERVED_ID"
-
-        /**
-         * DOUBLE
-         */
         const val ELEVATION_GRADE = "FIELD_ELEVATION_GRADE_ID"
-
-        /**
-         * DOUBLE
-         */
         const val VERTICAL_SPEED = "FIELD_VERTICAL_SPEED_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val NORMALIZED_POWER = "FIELD_NORMALIZED_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TRAINING_STRESS_SCORE = "FIELD_TRAINING_STRESS_SCORE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val INTENSITY_FACTOR = "FIELD_INTENSITY_FACTOR_ID"
-
-        /**
-         * DOUBLE
-         */
         const val MAX_ELEVATION = "FIELD_MAX_ELEVATION_ID"
-
-        /**
-         * DOUBLE
-         */
         const val MIN_ELEVATION = "FIELD_MIN_ELEVATION_ID"
-
-        /**
-         * DOUBLE
-         */
         const val AVERAGE_ELEVATION = "FIELD_AVERAGE_ELEVATION_ID"
-
-        /**
-         * DOUBLE
-         */
         const val LAP_NUMBER = "FIELD_LAP_NUMBER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val BATTERY_PERCENT = "FIELD_BATTERY_PERCENT_ID"
-
-        /**
-         * INT
-         */
         const val HEADING = "FIELD_HEADING_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val USER_FTP = "FIELD_USER_FTP_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val SHIFTING_BATTERY_STATUS = "FIELD_SHIFTING_BATTERY_STATUS_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR = "FIELD_SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR = "FIELD_SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR_ID"
-
-        /**
-         * STRING
-         */
         const val SHIFTING_MODE = "FIELD_SHIFTING_MODE_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val SHIFTING_FRONT_GEAR = "FIELD_SHIFTING_FRONT_GEAR_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val SHIFTING_FRONT_GEAR_TEETH = "FIELD_SHIFTING_FRONT_GEAR_TEETH_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val SHIFTING_FRONT_GEAR_MAX = "FIELD_SHIFTING_FRONT_GEAR_MAX_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val SHIFTING_REAR_GEAR = "FIELD_SHIFTING_REAR_GEAR_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val SHIFTING_REAR_GEAR_TEETH = "FIELD_SHIFTING_REAR_GEAR_TEETH_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val SHIFTING_REAR_GEAR_MAX = "FIELD_SHIFTING_REAR_GEAR_MAX_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val SHIFTING_COUNT = "FIELD_SHIFTING_COUNT_ID"
-
-        /**
-         * DOUBLE
-         */
         const val TIRE_PRESSURE = "FIELD_TIRE_PRESSURE_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val TIRE_PRESSURE_POSITION = "FIELD_TIRE_PRESSURE_POSITION_ID"
-
-        /**
-         * DOUBLE
-         */
         const val TIRE_PRESSURE_TARGET = "FIELD_TIRE_PRESSURE_TARGET_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val TIRE_PRESSURE_RANGE = "FIELD_TIRE_PRESSURE_RANGE_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val RADAR_THREAT_LEVEL = "FIELD_RADAR_THREAT_LEVEL_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val RADAR_TARGET_1_RANGE = "FIELD_RADAR_TARGET_1_RANGE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val RADAR_TARGET_2_RANGE = "FIELD_RADAR_TARGET_2_RANGE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val RADAR_TARGET_3_RANGE = "FIELD_RADAR_TARGET_3_RANGE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val RADAR_TARGET_4_RANGE = "FIELD_RADAR_TARGET_4_RANGE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val RADAR_TARGET_5_RANGE = "FIELD_RADAR_TARGET_5_RANGE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val RADAR_TARGET_6_RANGE = "FIELD_RADAR_TARGET_6_RANGE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val RADAR_TARGET_7_RANGE = "FIELD_RADAR_TARGET_7_RANGE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val RADAR_TARGET_8_RANGE = "FIELD_RADAR_TARGET_8_RANGE_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val RADAR_ERROR = "FIELD_RADAR_ERROR_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
-        const val WORKOUT_STATE = "FIELD_WORKOUT_STATE_ID"
-
-        /**
-         * LONG_POSITIVE_OR_ZERO
-         */
-        const val WORKOUT_ELAPSED_TIME = "FIELD_WORKOUT_ELAPSED_TIME_ID"
-
-        /**
-         * LONG_POSITIVE_OR_ZERO
-         */
-        const val WORKOUT_REMAINING_TIME = "FIELD_WORKOUT_REMAINING_TIME_ID"
-
-        /**
-         * INT
-         */
-        const val WORKOUT_TIME_TO_STEP_FINISH = "FIELD_WORKOUT_TIME_TO_STEP_FINISH_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val WORKOUT_TARGET_VALUE = "FIELD_WORKOUT_TARGET_VALUE_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
-        const val WORKOUT_CURRENT_STEP = "FIELD_WORKOUT_CURRENT_STEP_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
-        const val WORKOUT_STEP_COUNT = "FIELD_WORKOUT_STEP_COUNT_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
-        const val WORKOUT_TARGET_TYPE = "FIELD_WORKOUT_TARGET_TYPE_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val WORKOUT_TARGET_MIN_VALUE = "FIELD_WORKOUT_TARGET_MIN_VALUE_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val WORKOUT_TARGET_MIN_RAMP_VALUE = "FIELD_WORKOUT_TARGET_MIN_RAMP_VALUE_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val WORKOUT_TARGET_MAX_VALUE = "FIELD_WORKOUT_TARGET_MAX_VALUE_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val WORKOUT_TARGET_MAX_RAMP_VALUE = "FIELD_WORKOUT_TARGET_MAX_RAMP_VALUE_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val WORKOUT_TARGET_OUTPUT_VALUE = "FIELD_WORKOUT_TARGET_OUTPUT_VALUE_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val WORKOUT_TARGET_OUTPUT_VALUE_SMOOTHED = "FIELD_WORKOUT_TARGET_OUTPUT_VALUE_SMOOTHED_ID"
-
-        /**
-         * DOUBLE
-         */
-        const val WORKOUT_TARGET_OUTPUT_AVG_VALUE = "FIELD_WORKOUT_TARGET_OUTPUT_AVG_VALUE_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
-        const val WORKOUT_TARGET_RAMP_TYPE = "FIELD_WORKOUT_TARGET_RAMP_TYPE_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val LEV_BATTERY_STATUS = "FIELD_LEV_BATTERY_STATUS_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val LEV_ASSIST_MODE = "FIELD_LEV_ASSIST_MODE_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val LEV_SUPPORTED_ASSIST_MODES = "FIELD_LEV_SUPPORTED_ASSIST_MODES_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val LEV_ENERGY_CONSUMPTION = "FIELD_LEV_ENERGY_CONSUMPTION_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val LEV_20MIN_ENERGY_CONSUMPTION = "FIELD_LEV_20MIN_ENERGY_CONSUMPTION_ID"
-
-        /**
-         * INT_POSITIVE_OR_ZERO
-         */
         const val LEV_MOTOR_ASSIST_PERCENTAGE = "FIELD_LEV_MOTOR_ASSIST_PERCENTAGE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val LEV_MOTOR_POWER = "FIELD_LEV_MOTOR_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val LEV_COMBINED_POWER = "FIELD_LEV_COMBINED_POWER_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
         const val LEV_ESTIMATED_RANGE = "FIELD_LEV_ESTIMATED_RANGE_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val PROGRESS = "FIELD_PROGRESS_ID"
-
-        /**
-         * DOUBLE_POSITIVE_OR_ZERO
-         */
-        const val PROGRESS_MAX = "FIELD_PROGRESS_MAX_ID"
     }
 
     companion object {
