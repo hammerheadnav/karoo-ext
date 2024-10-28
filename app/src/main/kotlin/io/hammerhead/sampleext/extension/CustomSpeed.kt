@@ -12,9 +12,13 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import androidx.glance.unit.ColorProvider
 import io.hammerhead.sampleext.R
 
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview(widthDp = 200, heightDp = 150)
 @Composable
 fun CustomSpeed(speed: Int) {
     Box(

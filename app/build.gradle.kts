@@ -71,6 +71,7 @@ dependencies {
     // glance for extension views
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.preview)
+    implementation(libs.androidx.glance.appwidget.preview)
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     // allows retrieving viewmodels from within a composable
