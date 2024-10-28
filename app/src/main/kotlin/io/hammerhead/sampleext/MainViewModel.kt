@@ -45,7 +45,6 @@ import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import timber.log.Timber
@@ -122,19 +121,15 @@ class MainViewModel @Inject constructor(
                         }
                         trySend(message)
                     }
-                    Timber.d("BRENT: request consumer $listenerId")
                     awaitClose {
-                        Timber.d("BRENT: remove consumer $listenerId")
                         karooSystem.removeConsumer(listenerId)
                     }
                 }
                     .timeout(10.seconds)
                     .collect { message ->
-                        Timber.d("BRENT: consumer $message")
                         mutableState.update { it.copy(httpStatus = message) }
                     }
             } catch (e: TimeoutCancellationException) {
-                Timber.d("BRENT: consumer timeout")
                 mutableState.update { it.copy(httpStatus = null) }
             }
         }
@@ -142,9 +137,7 @@ class MainViewModel @Inject constructor(
 
     private fun initializeEvents() {
         viewModelScope.launch {
-            Timber.i("launch1")
             suspendCancellableCoroutine { cont ->
-                Timber.i("launch2")
                 karooSystem.connect { connected ->
                     Timber.i("Karoo System connected=$connected")
                     mutableState.update { it.copy(connected = connected) }

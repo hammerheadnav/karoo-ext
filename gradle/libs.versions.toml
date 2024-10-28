@@ -1,12 +1,11 @@
 [versions]
 activity = "1.9.3"
 agp = "8.4.2"
-glanceAppwidgetPreview = "1.0-rc01"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 coroutines = "1.8.0"
 lifecycle = "2.8.6"
-glance = "1.1.0-rc01"
+glance = "1.1.1"
 hilt = "2.52"
 
 [libraries]
