@@ -16,6 +16,7 @@
 
 package io.hammerhead.sampleext.extension
 
+import dagger.hilt.android.AndroidEntryPoint
 import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.extension.KarooExtension
 import io.hammerhead.karooext.internal.Emitter
@@ -38,9 +39,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SampleExtension : KarooExtension("sample", "1.0") {
-    private val karooSystem by lazy { KarooSystemService(this) }
+    @Inject
+    lateinit var karooSystem: KarooSystemService
 
     private var serviceJob: Job? = null
 

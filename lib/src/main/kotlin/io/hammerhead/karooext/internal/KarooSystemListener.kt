@@ -17,7 +17,6 @@
 package io.hammerhead.karooext.internal
 
 import io.hammerhead.karooext.aidl.IKarooSystem
-import java.util.UUID
 
 /**
  * @suppress
