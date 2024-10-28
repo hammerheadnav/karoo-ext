@@ -154,7 +154,7 @@ fun RequestsTab(
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        TextField(requestPayload, { requestPayload = it })
+        TextField(requestPayload, { requestPayload = it }, singleLine = true)
         Button(onClick = {
             makeHttpRequest(requestPayload)
         }) {
@@ -166,7 +166,7 @@ fun RequestsTab(
             }
         }
         Spacer(modifier = Modifier.height(12.dp))
-        TextField(notificationMessage, { notificationMessage = it })
+        TextField(notificationMessage, { notificationMessage = it }, singleLine = true)
         Button(
             onClick = {
                 dispatchEffect(
