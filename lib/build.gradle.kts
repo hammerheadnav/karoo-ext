@@ -11,7 +11,7 @@ val libVersion = "1.1.0"
 
 android {
     namespace = "io.hammerhead.karooext"
-    compileSdk = 28
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 23

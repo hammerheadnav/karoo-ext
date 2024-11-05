@@ -6,9 +6,10 @@ on:
       - actions # Only run on pushes to the master branch (todo, replace with master)
 
 jobs:
-  release:
+  check:
     runs-on: ubuntu-latest
-
+    outputs:
+      VERSION: ${{ steps.detect_version.outputs.VERSION }}
     steps:
       - name: Checking out branch
         uses: actions/checkout@v3
@@ -26,12 +27,16 @@ jobs:
           # Check for existing tag for this version
           if git tag -l | grep -q "$current_version"; then
             echo "Version $current_version already tagged. No new release will be created."
-            exit 0
           else
             echo "Version $current_version is new."
             echo "::set-output name=VERSION::$current_version"
           fi
 
+  build:
+    runs-on: ubuntu-latest
+    needs: check
+    if: needs.check.outputs.VERSION
+    steps:
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
