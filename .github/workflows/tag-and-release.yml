@@ -50,6 +50,8 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Build Release bundle
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ./gradlew lib:assembleRelease
           ./gradlew app:assembleRelease
