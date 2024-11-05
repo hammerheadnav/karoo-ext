@@ -21,7 +21,7 @@ package io.hammerhead.karooext
 /**
  * Current version of the karoo-ext library dependency.
  */
-const val EXT_LIB_VERSION = BuildConfig.LIB_VERSION
+const val EXT_LIB_VERSION: String = BuildConfig.LIB_VERSION
 
 /**
  * The filter used by the Karoo System to find extensions.
