@@ -43,9 +43,12 @@ jobs:
           prerelease: true
 
       - name: Build and Publish with Android Build Box
-        uses: docker://mingc/android-build-box:1.26.0
-        run: |
-          ./gradlew clean
-          ./gradlew lib:assembleRelease
-          ./gradlew app:assembleRelease
-          ./gradlew publish
+        container:
+          image: mingc/android-build-box:1.26.0
+        steps:
+          - name: Build stuff?
+            run: |
+              ./gradlew clean
+              ./gradlew lib:assembleRelease
+              ./gradlew app:assembleRelease
+              ./gradlew publish
