@@ -7,7 +7,7 @@ plugins {
 }
 
 val moduleName = "karoo-ext"
-val libVersion = "1.1.1"
+val libVersion = "1.1.2"
 
 android {
     namespace = "io.hammerhead.karooext"
