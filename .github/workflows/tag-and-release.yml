@@ -51,10 +51,10 @@ jobs:
 
       - name: Build Release bundle
         env:
+          GITHUB_USERNAME: actions
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ./gradlew lib:assembleRelease
-          ./gradlew app:assembleRelease
+          ./gradlew assembleRelease
           ./gradlew publish
 
       - name: Create Release
