@@ -10,8 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checking out branch
         uses: actions/checkout@v3
+
       - name: Detect Version Change
         id: detect_version
         run: |
@@ -31,6 +32,15 @@ jobs:
             echo "::set-output name=VERSION::$current_version"
           fi
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
@@ -42,13 +52,8 @@ jobs:
           draft: false
           prerelease: true
 
-      - name: Build and Publish with Android Build Box
-        container:
-          image: mingc/android-build-box:1.26.0
-        steps:
-          - name: Build stuff?
-            run: |
-              ./gradlew clean
-              ./gradlew lib:assembleRelease
-              ./gradlew app:assembleRelease
-              ./gradlew publish
+      - name: Build Release bundle
+        run: |
+          ./gradlew lib:assembleRelease
+          ./gradlew app:assembleRelease
+          ./gradlew publish
