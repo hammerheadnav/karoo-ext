@@ -13,12 +13,12 @@ jobs:
       - name: Checking out branch
         uses: actions/checkout@v3
 
+      - name: Get tags
+        run: git fetch --tags origin
+
       - name: Detect Version Change
         id: detect_version
         run: |
-          # Check out the last commit on master branch
-          git fetch origin master --depth=1
-          
           # Get current and previous versions
           current_version=$(grep 'libVersion' lib/build.gradle.kts | sed -e 's/.*"\(.*\)".*/\1/' | head -n 1)
           echo "Current version in the repository: $current_version"
@@ -41,6 +41,12 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Build Release bundle
+        run: |
+          ./gradlew lib:assembleRelease
+          ./gradlew app:assembleRelease
+          ./gradlew publish
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@latest
@@ -51,9 +57,3 @@ jobs:
           release_name: Release ${{ steps.detect_version.outputs.VERSION }}
           draft: false
           prerelease: true
-
-      - name: Build Release bundle
-        run: |
-          ./gradlew lib:assembleRelease
-          ./gradlew app:assembleRelease
-          ./gradlew publish
