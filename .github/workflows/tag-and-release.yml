@@ -11,6 +11,14 @@ concurrency:
   group: "release"
   cancel-in-progress: false
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+  id-token: write
+  packages: write
+  pages: write
+  statuses: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
