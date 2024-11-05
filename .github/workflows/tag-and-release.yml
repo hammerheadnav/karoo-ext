@@ -1,0 +1,51 @@
+name: Release on Version Change
+
+on:
+  push:
+    branches:
+      - actions # Only run on pushes to the master branch (todo, replace with master)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Detect Version Change
+        id: detect_version
+        run: |
+          # Check out the last commit on master branch
+          git fetch origin master --depth=1
+          
+          # Get current and previous versions
+          current_version=$(grep 'libVersion' lib/build.gradle.kts | sed -e 's/.*"\(.*\)".*/\1/' | head -n 1)
+          echo "Current version in the repository: $current_version"
+
+          # Check for existing tag for this version
+          if git tag -l | grep -q "$current_version"; then
+            echo "Version $current_version already tagged. No new release will be created."
+            exit 0
+          else
+            echo "Version $current_version is new."
+            echo "::set-output name=VERSION::$current_version"
+          fi
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.detect_version.outputs.VERSION }}
+          release_name: Release ${{ steps.detect_version.outputs.VERSION }}
+          draft: false
+          prerelease: true
+
+      - name: Build and Publish with Android Build Box
+        uses: docker://mingc/android-build-box:1.26.0
+        run: |
+          ./gradlew clean
+          ./gradlew lib:assembleRelease
+          ./gradlew app:assembleRelease
+          ./gradlew publish
