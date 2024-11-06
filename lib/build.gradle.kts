@@ -45,10 +45,14 @@ android {
     }
 }
 
+//tasks.dokkaHtmlPartial.configure {
+//}
+
 tasks.dokkaHtml.configure {
     moduleName = "karoo-ext"
     moduleVersion = libVersion
     outputDirectory.set(rootDir.resolve("docs"))
+    suppressInheritedMembers = true
 
     dokkaSourceSets {
         configureEach {

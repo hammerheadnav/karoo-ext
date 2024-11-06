@@ -42,6 +42,7 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * Karoo System Service for interaction with Karoo-specific state and hardware.
  */
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class KarooSystemService(private val context: Context) {
     private val listeners = ConcurrentHashMap<String, KarooSystemListener>()
     private var controller: IKarooSystem? = null
