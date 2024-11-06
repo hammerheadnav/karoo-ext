@@ -7,7 +7,7 @@ plugins {
 }
 
 val moduleName = "karoo-ext"
-val libVersion = "1.1.4"
+val libVersion = "1.1.0"
 
 android {
     namespace = "io.hammerhead.karooext"
@@ -44,9 +44,6 @@ android {
         }
     }
 }
-
-//tasks.dokkaHtmlPartial.configure {
-//}
 
 tasks.dokkaHtml.configure {
     moduleName = "karoo-ext"
