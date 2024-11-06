@@ -3,7 +3,7 @@ name: Release on Version Change
 on:
   push:
     branches:
-      - actions # Only run on pushes to the master branch (todo, replace with master)
+      - master
 
 concurrency:
   group: "release"

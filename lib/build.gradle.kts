@@ -59,6 +59,7 @@ tasks.dokkaHtml.configure {
             skipEmptyPackages.set(true)
             includeNonPublic.set(false)
             includes.from("Module.md")
+            samples.from("src/test/kotlin/samples.kt")
         }
     }
 }

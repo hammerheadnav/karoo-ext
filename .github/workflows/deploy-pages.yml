@@ -3,7 +3,7 @@ name: Deploy Github Page
 on:
   push:
     branches:
-      - actions # Only run on pushes to the master branch (todo, replace with master)
+      - master
   workflow_dispatch:
 
 concurrency:
