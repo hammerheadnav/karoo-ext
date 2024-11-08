@@ -1,0 +1,21 @@
+/* --- override dokka styles --- */
+:root {
+    --dokka-logo-height: 60px;
+    --dokka-logo-width: 225px;
+    --color-dark: #231f20;
+    --active-section-color: #202020;
+    --active-tab-border-color: #202020;
+    --sidemenu-section-active-color: #666;
+}
+
+.library-name--link::before {
+    background-size: var(--dokka-logo-width)
+        var(--dokka-logo-height);
+    width: var(--dokka-logo-width);
+    height: var(--dokka-logo-height);
+    margin-end: 0px;
+}
+
+.navigation {
+    padding: 0px var(--horizontal-spacing-for-content);
+}

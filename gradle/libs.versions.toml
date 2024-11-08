@@ -1,6 +1,7 @@
 [versions]
 activity = "1.9.3"
 agp = "8.4.2"
+dokka = "1.9.20"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"
 coroutines = "1.8.0"
@@ -51,6 +52,8 @@ kotlinx-coroutines-rx2 = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-rx
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.3" }
 timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 
+jetbrains-dokka-android = { module = "org.jetbrains.dokka:android-documentation-plugin", version.ref = "dokka" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
@@ -59,4 +62,4 @@ google-devtools-ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.23"
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-jetbrains-dokka-android = { id = "org.jetbrains.dokka", version = "1.9.20" }
+jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

@@ -5,7 +5,7 @@ exclude:
   app/build:
 block_comment: true
 header:
-  - 'Copyright (c) [year] Hammerhead Navigation Inc.'
+  - 'Copyright (c) [year] SRAM LLC.'
   - ''
   - 'Licensed under the Apache License, Version 2.0 (the "License");'
   - 'you may not use this file except in compliance with the License.'

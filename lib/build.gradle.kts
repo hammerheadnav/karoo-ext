@@ -1,13 +1,24 @@
+import org.jetbrains.dokka.base.DokkaBase
+import org.jetbrains.dokka.base.DokkaBaseConfiguration
+import java.net.URL
+import java.time.LocalDateTime
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.jetbrains.dokka.android)
+    alias(libs.plugins.jetbrains.dokka)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     `maven-publish`
 }
 
 val moduleName = "karoo-ext"
 val libVersion = "1.1.0"
+
+buildscript {
+    dependencies {
+        classpath(libs.jetbrains.dokka.android)
+    }
+}
 
 android {
     namespace = "io.hammerhead.karooext"
@@ -51,8 +62,24 @@ tasks.dokkaHtml.configure {
     outputDirectory.set(rootDir.resolve("docs"))
     suppressInheritedMembers = true
 
+    pluginConfiguration<DokkaBase, DokkaBaseConfiguration> {
+        val assetsDir = rootDir.resolve("assets")
+        homepageLink = "https://github.com/hammerheadnav/karoo-ext1"
+
+        footerMessage = "© ${LocalDateTime.now().year} SRAM LLC."
+        customAssets = listOf(assetsDir.resolve("logo-icon.svg"))
+        customStyleSheets = listOf(assetsDir.resolve("hammerhead-style.css"))
+    }
+
     dokkaSourceSets {
         configureEach {
+            // A bug exists in dokka for Android libraries that prevents this from being generated
+            // https://github.com/Kotlin/dokka/issues/2876
+            sourceLink {
+                localDirectory.set(projectDir.resolve("lib/src/main/kotlin"))
+                remoteUrl.set(URL("https://github.com/hammerheadnav/karoo-ext/blob/${libVersion}/lib"))
+                remoteLineSuffix.set("#L")
+            }
             skipEmptyPackages.set(true)
             includeNonPublic.set(false)
             includes.from("Module.md")
@@ -66,6 +93,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.timber)
+
+    dokkaPlugin(libs.jetbrains.dokka.android)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
