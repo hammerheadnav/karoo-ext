@@ -64,7 +64,7 @@ tasks.dokkaHtml.configure {
 
     pluginConfiguration<DokkaBase, DokkaBaseConfiguration> {
         val assetsDir = rootDir.resolve("assets")
-        homepageLink = "https://github.com/hammerheadnav/karoo-ext1"
+        homepageLink = "https://github.com/hammerheadnav/karoo-ext"
 
         footerMessage = "© ${LocalDateTime.now().year} SRAM LLC."
         customAssets = listOf(assetsDir.resolve("logo-icon.svg"))
