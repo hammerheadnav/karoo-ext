@@ -79,6 +79,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app/build/outputs/apk/release/app-release-unsigned.apk
+          asset_path: ./app/build/outputs/apk/release/app-release.apk
           asset_name: karoo-ext-sample.apk
           asset_content_type: application/vnd.android.package-archive
+
+      - name: Upload Manifest
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./app/manifest.json
+          asset_name: manifest.json
+          asset_content_type: application/json

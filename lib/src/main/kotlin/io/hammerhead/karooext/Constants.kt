@@ -48,6 +48,23 @@ const val KAROO_EXTENSION_INTENT_FILTER = "io.hammerhead.karooext.KAROO_EXTENSIO
 const val EXTENSION_INFO_META_KEY = "io.hammerhead.karooext.EXTENSION_INFO"
 
 /**
+ * The meta-data on your extension that Karoo System uses to provide richer details
+ * about your application and easier side-loading and updates.
+ *
+ * This should be included in the `<application>` block of your AndroidManifest.xml.
+ *
+ * ```xml
+ * <meta-data
+ *    android:name="io.hammerhead.karooext.MANIFEST_URL"
+ *    android:value="https://github.com/org/repo/releases/latest/download/manifest.json" />
+ * ```
+ *
+ * @see [io.hammerhead.karooext.models.KarooAppManifest]
+ * @since 1.1.1
+ */
+const val MANIFEST_URL_META = "io.hammerhead.karooext.MANIFEST_URL"
+
+/**
  * @suppress
  */
 const val BUNDLE_VALUE = "value"
