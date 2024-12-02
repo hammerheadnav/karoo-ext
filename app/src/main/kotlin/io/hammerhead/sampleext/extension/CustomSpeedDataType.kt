@@ -69,7 +69,7 @@ class CustomSpeedDataType(
     }
 
     override fun startView(context: Context, config: ViewConfig, emitter: ViewEmitter) {
-        Timber.d("Starting speed view with $emitter")
+        Timber.d("Starting speed view with $emitter and config $config")
         val configJob = CoroutineScope(Dispatchers.IO).launch {
             // Show numeric speed data numerically
             emitter.onNext(UpdateGraphicConfig(formatDataTypeId = DataType.Type.SPEED))
@@ -85,7 +85,7 @@ class CustomSpeedDataType(
                 val speed = (it as? StreamState.Streaming)?.dataPoint?.singleValue?.toInt() ?: 0
                 Timber.d("Updating speed view ($emitter) with $speed")
                 val result = glance.compose(context, DpSize.Unspecified) {
-                    CustomSpeed(speed)
+                    CustomSpeed(speed, config.alignment)
                 }
                 emitter.updateView(result.remoteViews)
             }

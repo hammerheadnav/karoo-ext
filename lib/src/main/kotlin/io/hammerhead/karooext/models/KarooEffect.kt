@@ -126,6 +126,34 @@ data class ReleaseBluetooth(
 ) : KarooEffect()
 
 /**
+ * Request ANT radio be turned on for use by this app.
+ *
+ * When finished (if applicable), follow with [ReleaseAnt]
+ *
+ * @since 1.1.2
+ */
+@Serializable
+data class RequestAnt(
+    /**
+     * Unique string identifier for this resource, used later in [ReleaseAnt]
+     */
+    val resourceId: String,
+) : KarooEffect()
+
+/**
+ * Release a previous [RequestAnt] call
+ *
+ * @since 1.1.2
+ */
+@Serializable
+data class ReleaseAnt(
+    /**
+     * Unique string identifier for this resource used in [RequestAnt]
+     */
+    val resourceId: String,
+) : KarooEffect()
+
+/**
  * Mark a lap at the current position in ride
  */
 @Serializable
@@ -235,4 +263,47 @@ data class ApplyLauncherBackground(
      * null to clear and revert to default.
      */
     val url: String?,
+) : KarooEffect()
+
+/**
+ * Switch the currently visible in-ride page to the map, optionally changing zoom if already on map
+ */
+@Serializable
+data class ShowMapPage(
+    /**
+     * If already on the map page, should the map zoom level be toggled
+     */
+    val zoom: Boolean = true,
+) : KarooEffect()
+
+/**
+ * Adjust zoom on currently visible in-ride elements that respond to zoom
+ */
+@Serializable
+data class ZoomPage(
+    /**
+     * Direction of zoom
+     *   true - zoom in
+     *   false - zoom out
+     */
+    val zoomIn: Boolean,
+) : KarooEffect()
+
+/**
+ * Open the "pin drop" activity at this selected location, allowing the user to navigate to or create a POI
+ *
+ * Replicates the functionality of sharing a location from companion app or long-pressing the map
+ *
+ * @since 1.1.2
+ */
+@Serializable
+data class LaunchPinActivity(
+    /**
+     * Latitude of pin
+     */
+    val lat: Double,
+    /**
+     * Longitude of pin
+     */
+    val lng: Double,
 ) : KarooEffect()

@@ -15,17 +15,24 @@ import androidx.glance.layout.size
 import androidx.glance.preview.ExperimentalGlancePreviewApi
 import androidx.glance.preview.Preview
 import androidx.glance.unit.ColorProvider
+import io.hammerhead.karooext.models.ViewConfig
 import io.hammerhead.sampleext.R
 
 @OptIn(ExperimentalGlancePreviewApi::class)
 @Preview(widthDp = 200, heightDp = 150)
 @Composable
-fun CustomSpeed(speed: Int) {
+fun CustomSpeed(speed: Int, dataAlignment: ViewConfig.Alignment) {
     Box(
         modifier = GlanceModifier.fillMaxSize().padding(start = 10.dp),
         contentAlignment = Alignment(
             vertical = Alignment.Vertical.CenterVertically,
-            horizontal = Alignment.Horizontal.Start,
+            // Align circle opposite of data
+            horizontal = when (dataAlignment) {
+                ViewConfig.Alignment.LEFT -> Alignment.Horizontal.End
+                ViewConfig.Alignment.CENTER,
+                ViewConfig.Alignment.RIGHT,
+                    -> Alignment.Horizontal.Start
+            },
         ),
     ) {
         Image(

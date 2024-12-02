@@ -36,6 +36,11 @@ data class DataType(
      */
     object Source {
         /**
+         * Location: includes required fields [Field.LOC_LATITUDE] [Field.LOC_LONGITUDE] and optional fields [Field.LOC_BEARING] [Field.LOC_ACCURACY]
+         */
+        const val LOCATION = "TYPE_LOCATION_ID"
+
+        /**
          * Heart rate: includes a single required numeric field [Field.HEART_RATE]
          */
         const val HEART_RATE = "TYPE_HEART_RATE_ID"
@@ -61,19 +66,19 @@ data class DataType(
         const val RADAR = "TYPE_RADAR_ID"
 
         /**
-         * Shifting battery: includes optional fields [Field.SHIFTING_BATTERY_STATUS] [Field.SHIFTING_BATTERY_STATUS_FD] [Field.SHIFTING_BATTERY_STATUS_RD]
+         * Shifting battery: includes optional fields [Field.SHIFTING_BATTERY_STATUS] [Field.SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR] [Field.SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR]
          */
         const val SHIFTING_BATTERY = "TYPE_SHIFTING_BATTERY_ID"
 
         /**
-         * Shifting front gear: includes required field [Field.FRONT_GEAR] and optional fields [Field.FRONT_GEAR_TEETH] [Field.FRONT_GEAR_MAX]
+         * Shifting front gear: includes required field [Field.SHIFTING_FRONT_GEAR] and optional fields [Field.SHIFTING_FRONT_GEAR_TEETH] [Field.SHIFTING_FRONT_GEAR_MAX]
          */
         const val SHIFTING_FRONT_GEAR = "TYPE_SHIFTING_FRONT_GEAR_ID"
 
         /**
-         * Shifting rear gear: includes required field [Field.REAR_GEAR] and optional fields [Field.REAR_GEAR_TEETH] [Field.REAR_GEAR_MAX]
+         * Shifting rear gear: includes required field [Field.SHIFTING_REAR_GEAR] and optional fields [Field.SHIFTING_REAR_GEAR_TEETH] [Field.SHIFTING_REAR_GEAR_MAX]
          */
-        const val SHIFTING_REAR_GEAR = "TYPE_SHIFTING_FRONT_GEAR_ID"
+        const val SHIFTING_REAR_GEAR = "TYPE_SHIFTING_REAR_GEAR_ID"
     }
 
     /**
@@ -1079,7 +1084,6 @@ data class DataType(
         const val SHIFTING_BATTERY_STATUS = "FIELD_SHIFTING_BATTERY_STATUS_ID"
         const val SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR = "FIELD_SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR_ID"
         const val SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR = "FIELD_SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR_ID"
-        const val SHIFTING_MODE = "FIELD_SHIFTING_MODE_ID"
         const val SHIFTING_FRONT_GEAR = "FIELD_SHIFTING_FRONT_GEAR_ID"
         const val SHIFTING_FRONT_GEAR_TEETH = "FIELD_SHIFTING_FRONT_GEAR_TEETH_ID"
         const val SHIFTING_FRONT_GEAR_MAX = "FIELD_SHIFTING_FRONT_GEAR_MAX_ID"
