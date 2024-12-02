@@ -38,9 +38,12 @@ class StaticHrSource(extension: String, private val hr: Int) {
     val source by lazy {
         Device(
             extension,
-            "static-hr-$hr",
-            listOf(DataType.Source.HEART_RATE),
-            "Static HR $hr",
+            "static-shift-$hr",
+            listOf(
+                DataType.Source.SHIFTING_FRONT_GEAR,
+                DataType.Source.SHIFTING_REAR_GEAR,
+            ),
+            "Static Shift $hr",
         )
     }
 
@@ -68,11 +71,26 @@ class StaticHrSource(extension: String, private val hr: Int) {
                 emitter.onNext(
                     OnDataPoint(
                         DataPoint(
-                            source.dataTypes.first(),
-                            values = mapOf(DataType.Field.HEART_RATE to hr.toDouble() + it % 3),
+                            DataType.Type.SHIFTING_FRONT_GEAR,
+                            values = mapOf(
+                                DataType.Field.SHIFTING_FRONT_GEAR to 1 + it % 2.0,
+                                DataType.Field.SHIFTING_FRONT_GEAR_MAX to 2.0,
+                            ),
                             sourceId = source.uid,
                         ),
-                    ),
+                    )
+                )
+                emitter.onNext(
+                    OnDataPoint(
+                        DataPoint(
+                            DataType.Type.SHIFTING_REAR_GEAR,
+                            values = mapOf(
+                                DataType.Field.SHIFTING_REAR_GEAR to 1 + it % 12.0,
+                                DataType.Field.SHIFTING_REAR_GEAR_MAX to 12.0,
+                            ),
+                            sourceId = source.uid,
+                        ),
+                    )
                 )
                 delay(1000)
             }

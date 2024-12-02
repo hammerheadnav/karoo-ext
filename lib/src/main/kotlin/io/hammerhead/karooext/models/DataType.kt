@@ -73,7 +73,7 @@ data class DataType(
         /**
          * Shifting rear gear: includes required field [Field.REAR_GEAR] and optional fields [Field.REAR_GEAR_TEETH] [Field.REAR_GEAR_MAX]
          */
-        const val SHIFTING_REAR_GEAR = "TYPE_SHIFTING_FRONT_GEAR_ID"
+        const val SHIFTING_REAR_GEAR = "TYPE_SHIFTING_REAR_GEAR_ID"
     }
 
     /**
