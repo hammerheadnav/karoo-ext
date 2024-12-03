@@ -1071,6 +1071,8 @@ data class DataType(
 
         /**
          * Alternate type: INT_POSITIVE_OR_ZERO
+         *   - 0: off route
+         *   - 1: on route
          */
         const val ON_ROUTE = "FIELD_ON_ROUTE_ID"
 
@@ -1190,24 +1192,33 @@ data class DataType(
 
         /**
          * Alternate type: INT
-         * Optional
+         *   - 0: north
+         *   - 1: northeast
+         *   - 2: east
+         *   - 3: southeast
+         *   - 4: south
+         *   - 5: southwest
+         *   - 6: west
+         *   - 7: northwest
+         *
+         * Preferable to use [LOC_BEARING] value from [Type.LOCATION]
          */
         const val HEADING = "FIELD_HEADING_ID"
 
         /**
-         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Alternate type: INT - ordinal of [BatteryStatus]
          * Optional
          */
         const val SHIFTING_BATTERY_STATUS = "FIELD_SHIFTING_BATTERY_STATUS_ID"
 
         /**
-         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Alternate type: INT - ordinal of [BatteryStatus]
          * Optional
          */
         const val SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR = "FIELD_SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR_ID"
 
         /**
-         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Alternate type: INT - ordinal of [BatteryStatus]
          * Optional
          */
         const val SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR = "FIELD_SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR_ID"
@@ -1254,6 +1265,9 @@ data class DataType(
 
         /**
          * Alternate type: INT_POSITIVE_OR_ZERO
+         *   - 0: Unknown
+         *   - 1: Front
+         *   - 2: Rear
          */
         const val TIRE_PRESSURE_POSITION = "FIELD_TIRE_PRESSURE_POSITION_ID"
 
@@ -1319,11 +1333,15 @@ data class DataType(
 
         /**
          * Alternate type: INT_POSITIVE_OR_ZERO
+         *
+         * Percentage of LEV charge (out of 100)
          */
         const val LEV_BATTERY_STATUS = "FIELD_LEV_BATTERY_STATUS_ID"
 
         /**
          * Alternate type: INT_POSITIVE_OR_ZERO
+         *
+         * Index of assist mode (out of [LEV_SUPPORTED_ASSIST_MODES]) which are manufacturer specific.
          */
         const val LEV_ASSIST_MODE = "FIELD_LEV_ASSIST_MODE_ID"
 
