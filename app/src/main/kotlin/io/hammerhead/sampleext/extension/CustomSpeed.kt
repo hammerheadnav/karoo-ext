@@ -31,7 +31,7 @@ fun CustomSpeed(speed: Int, dataAlignment: ViewConfig.Alignment) {
                 ViewConfig.Alignment.LEFT -> Alignment.Horizontal.End
                 ViewConfig.Alignment.CENTER,
                 ViewConfig.Alignment.RIGHT,
-                    -> Alignment.Horizontal.Start
+                -> Alignment.Horizontal.Start
             },
         ),
     ) {

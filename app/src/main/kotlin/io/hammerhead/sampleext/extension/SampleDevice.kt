@@ -20,7 +20,6 @@ import io.hammerhead.karooext.internal.Emitter
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
 
-
 sealed interface SampleDevice {
     val source: Device
     fun connect(emitter: Emitter<DeviceEvent>)

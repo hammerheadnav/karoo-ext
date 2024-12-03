@@ -71,7 +71,7 @@ class IncrementalShiftingSource(extension: String, private val id: Int) : Sample
                             ),
                             sourceId = source.uid,
                         ),
-                    )
+                    ),
                 )
                 emitter.onNext(
                     OnDataPoint(
@@ -83,7 +83,7 @@ class IncrementalShiftingSource(extension: String, private val id: Int) : Sample
                             ),
                             sourceId = source.uid,
                         ),
-                    )
+                    ),
                 )
                 delay(1000)
             }
