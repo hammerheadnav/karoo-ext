@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
@@ -84,6 +85,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
 
     override fun connectDevice(uid: String, emitter: Emitter<DeviceEvent>) {
         val id = uid.substringAfterLast("-").toIntOrNull() ?: return
+        Timber.d("Connect to $id")
         devices.getOrPut(uid) {
             if (uid.contains(IncrementalShiftingSource.PREFIX)) {
                 IncrementalShiftingSource(extension, id)

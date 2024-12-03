@@ -52,6 +52,12 @@ data class ViewConfig(
      * @since 1.1.2
      */
     val boundariesEnabled: Boolean = false,
+    /**
+     * Whether the view is in preview mode (page editing) or in ride
+     *
+     * @since 1.1.2
+     */
+    val preview: Boolean = false,
 ) {
     /**
      * Alignment of data fields in-ride profiles
