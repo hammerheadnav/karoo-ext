@@ -17,17 +17,13 @@
 package io.hammerhead.sampleext.extension
 
 import io.hammerhead.karooext.internal.Emitter
-import io.hammerhead.karooext.models.BatteryStatus
 import io.hammerhead.karooext.models.ConnectionStatus
 import io.hammerhead.karooext.models.DataPoint
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
-import io.hammerhead.karooext.models.ManufacturerInfo
-import io.hammerhead.karooext.models.OnBatteryStatus
 import io.hammerhead.karooext.models.OnConnectionStatus
 import io.hammerhead.karooext.models.OnDataPoint
-import io.hammerhead.karooext.models.OnManufacturerInfo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
@@ -35,19 +31,22 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
- * This class demonstrates providing a sensor data for a HR sensor.
+ * This class demonstrates providing a shifting data which increments each
+ * front/rear gear within the max range.
  *
- * The HR data points are provided based on the device ID, though in practice,
- * the ID should be used to actually connect/fetch data from a device based on that identifier
- * rather than just providing mock data in a loop.
+ * This is an example of providing more than one data type for the device along with multiple
+ * values in each data point.
  */
-class StaticHrSource(extension: String, private val hr: Int) : SampleDevice {
+class IncrementalShiftingSource(extension: String, private val id: Int) : SampleDevice {
     override val source by lazy {
         Device(
             extension,
-            "$PREFIX-$hr",
-            listOf(DataType.Source.HEART_RATE),
-            "Static HR $hr",
+            "$PREFIX-$id",
+            listOf(
+                DataType.Source.SHIFTING_FRONT_GEAR,
+                DataType.Source.SHIFTING_REAR_GEAR,
+            ),
+            "Inc. Shifting $id",
         )
     }
 
@@ -58,28 +57,33 @@ class StaticHrSource(extension: String, private val hr: Int) : SampleDevice {
      */
     override fun connect(emitter: Emitter<DeviceEvent>) {
         val job = CoroutineScope(Dispatchers.IO).launch {
-            // 2s searching
-            emitter.onNext(OnConnectionStatus(ConnectionStatus.SEARCHING))
-            delay(2000)
             // Update device is now connected
             emitter.onNext(OnConnectionStatus(ConnectionStatus.CONNECTED))
-            delay(1000)
-            // Update battery status
-            emitter.onNext(OnBatteryStatus(BatteryStatus.GOOD))
-            delay(1000)
-            // Send manufacturer info
-            emitter.onNext(OnManufacturerInfo(ManufacturerInfo("Hammerhead", "1234", "HR-EXT-1")))
-            delay(1000)
             // Start streaming data
             repeat(Int.MAX_VALUE) {
                 emitter.onNext(
                     OnDataPoint(
                         DataPoint(
-                            source.dataTypes.first(),
-                            values = mapOf(DataType.Field.HEART_RATE to hr.toDouble() + it % 3),
+                            DataType.Type.SHIFTING_FRONT_GEAR,
+                            values = mapOf(
+                                DataType.Field.SHIFTING_FRONT_GEAR to 1 + it % 2.0,
+                                DataType.Field.SHIFTING_FRONT_GEAR_MAX to 2.0,
+                            ),
                             sourceId = source.uid,
                         ),
-                    ),
+                    )
+                )
+                emitter.onNext(
+                    OnDataPoint(
+                        DataPoint(
+                            DataType.Type.SHIFTING_REAR_GEAR,
+                            values = mapOf(
+                                DataType.Field.SHIFTING_REAR_GEAR to 1 + it % 12.0,
+                                DataType.Field.SHIFTING_REAR_GEAR_MAX to 12.0,
+                            ),
+                            sourceId = source.uid,
+                        ),
+                    )
                 )
                 delay(1000)
             }
@@ -91,6 +95,6 @@ class StaticHrSource(extension: String, private val hr: Int) : SampleDevice {
     }
 
     companion object {
-        const val PREFIX = "static-hr"
+        const val PREFIX = "shift"
     }
 }

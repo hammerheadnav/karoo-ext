@@ -7,4 +7,6 @@
     <string name="power_hr_description">Ratio of power / heart rate</string>
     <string name="alert_title">Another one!</string>
     <string name="alert_detail">You\'re at %1$s now.</string>
+    <string name="bespoke">Bespoke</string>
+    <string name="bespoke_description">Bespoke type from sample</string>
 </resources>

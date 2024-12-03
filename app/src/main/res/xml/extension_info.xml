@@ -11,6 +11,12 @@
         icon="@drawable/ic_speed"
         typeId="custom-speed" />
     <DataType
+        description="@string/bespoke_description"
+        displayName="@string/bespoke"
+        graphical="false"
+        icon="@drawable/ic_sample"
+        typeId="bespoke" />
+    <DataType
         description="@string/power_hr_description"
         displayName="@string/power_hr"
         graphical="false"

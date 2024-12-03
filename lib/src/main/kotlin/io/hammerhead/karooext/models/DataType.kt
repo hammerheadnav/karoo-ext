@@ -36,11 +36,6 @@ data class DataType(
      */
     object Source {
         /**
-         * Location: includes required fields [Field.LOC_LATITUDE] [Field.LOC_LONGITUDE] and optional fields [Field.LOC_BEARING] [Field.LOC_ACCURACY]
-         */
-        const val LOCATION = "TYPE_LOCATION_ID"
-
-        /**
          * Heart rate: includes a single required numeric field [Field.HEART_RATE]
          */
         const val HEART_RATE = "TYPE_HEART_RATE_ID"
@@ -134,18 +129,6 @@ data class DataType(
          * Fields: [Field.DISTANCE]
          */
         const val DISTANCE = "TYPE_DISTANCE_ID"
-
-        /**
-         * Distance to Destination - Distance to end of route
-         * Fields: [Field.DISTANCE_TO_DESTINATION], [Field.NAVIGATION_STATE], [Field.REROUTING_ENABLED], [Field.ON_ROUTE]
-         */
-        const val DISTANCE_TO_DESTINATION = "TYPE_DISTANCE_TO_DESTINATION_ID"
-
-        /**
-         * Distance to Next Turn - Distance till next navigation turn
-         * Fields: [Field.DISTANCE_TO_NEXT_TURN]
-         */
-        const val DISTANCE_TO_NEXT_TURN = "TYPE_DISTANCE_TO_NEXT_TURN_ID"
 
         /**
          * Category: Heart Rate
@@ -440,34 +423,16 @@ data class DataType(
         const val ELAPSED_TIME_LAP = "TYPE_ELAPSED_TIME_LAP_ID"
 
         /**
-         * Last Lap Time - Recording duration of previous lap
-         * Fields: [Field.ELAPSED_TIME]
-         */
-        const val ELAPSED_TIME_LAST_LAP = "TYPE_ELAPSED_TIME_LAST_LAP_ID"
-
-        /**
          * Lap Distance - Distance traveled this lap
          * Fields: [Field.DISTANCE]
          */
         const val DISTANCE_LAP = "TYPE_DISTANCE_LAP_ID"
 
         /**
-         * Last Lap Distance - Distance traveled in previous lap
-         * Fields: [Field.DISTANCE]
-         */
-        const val DISTANCE_LAP_LAST_LAP = "TYPE_DISTANCE_LAP_LAST_LAP_ID"
-
-        /**
          * Lap Speed - Avg. speed this lap
          * Fields: [Field.AVERAGE_SPEED]
          */
         const val AVERAGE_SPEED_LAP = "TYPE_AVERAGE_SPEED_LAP_ID"
-
-        /**
-         * Last Lap Speed - Avg. speed of previous lap
-         * Fields: [Field.AVERAGE_SPEED]
-         */
-        const val AVERAGE_SPEED_LAST_LAP = "TYPE_AVERAGE_SPEED_LAST_LAP_ID"
 
         /**
          * Lap Max Speed - Max. speed this lap
@@ -482,12 +447,6 @@ data class DataType(
         const val AVERAGE_LAP_HR = "TYPE_AVERAGE_LAP_HR_ID"
 
         /**
-         * Last Lap Heart Rate - Avg. heart rate of previous lap
-         * Fields: [Field.AVG_HR]
-         */
-        const val AVERAGE_HR_LAST_LAP = "TYPE_AVERAGE_HR_LAST_LAP_ID"
-
-        /**
          * Lap Max Heart Rate - Max. heart rate this lap
          * Fields: [Field.MAX_HR]
          */
@@ -498,12 +457,6 @@ data class DataType(
          * Fields: [Field.AVERAGE_CADENCE]
          */
         const val CADENCE_LAP = "TYPE_CADENCE_LAP_ID"
-
-        /**
-         * Last Lap Cadence - Avg. cadence of previous lap
-         * Fields: [Field.AVERAGE_CADENCE]
-         */
-        const val AVERAGE_CADENCE_LAST_LAP = "TYPE_AVERAGE_CADENCE_LAST_LAP_ID"
 
         /**
          * Lap Max Cadence - Max. cadence this lap
@@ -518,34 +471,16 @@ data class DataType(
         const val POWER_LAP = "TYPE_POWER_LAP_ID"
 
         /**
-         * Last Lap Power - Avg. power output in previous lap
-         * Fields: [Field.AVERAGE_POWER]
-         */
-        const val AVERAGE_POWER_LAST_LAP = "TYPE_AVERAGE_POWER_LAST_LAP_ID"
-
-        /**
          * Lap Normalized Power® - Normalized Power® this lap
          * Fields: [Field.NORMALIZED_POWER]
          */
         const val NORMALIZED_POWER_LAP = "TYPE_NORMALIZED_POWER_LAP_ID"
 
         /**
-         * Last Lap Normalized Power® - Normalized Power® of previous lap
-         * Fields: [Field.NORMALIZED_POWER]
-         */
-        const val NORMALIZED_POWER_LAST_LAP = "TYPE_NORMALIZED_POWER_LAST_LAP_ID"
-
-        /**
          * Lap Power Balance - Avg. left/right power balance this lap
          * Fields: [Field.PEDAL_POWER_BALANCE_LEFT]
          */
         const val AVERAGE_PEDAL_POWER_BALANCE_LAP = "TYPE_AVERAGE_PEDAL_POWER_BALANCE_LAP_ID"
-
-        /**
-         * Last Lap Power Balance - Avg. left/right power balance of previous lap
-         * Fields: [Field.PEDAL_POWER_BALANCE_LEFT]
-         */
-        const val AVERAGE_PEDAL_POWER_BALANCE_LAST_LAP = "TYPE_AVERAGE_PEDAL_POWER_BALANCE_LAST_LAP_ID"
 
         /**
          * Lap Max Power - Max. power output this lap
@@ -578,22 +513,10 @@ data class DataType(
         const val ELEVATION_GAIN_LAP = "TYPE_ELEVATION_GAIN_LAP_ID"
 
         /**
-         * Last Lap Ascent - Total elevation gain of previous lap
-         * Fields: [Field.ELEVATION_GAIN]
-         */
-        const val ELEVATION_GAIN_LAST_LAP = "TYPE_ELEVATION_GAIN_LAST_LAP_ID"
-
-        /**
          * Lap Descent - Total elevation descended this lap
          * Fields: [Field.ELEVATION_LOSS]
          */
         const val ELEVATION_LOSS_LAP = "TYPE_ELEVATION_LOSS_LAP_ID"
-
-        /**
-         * Last Lap Descent - Total elevation descended in previous lap
-         * Fields: [Field.ELEVATION_LOSS]
-         */
-        const val ELEVATION_LOSS_LAST_LAP = "TYPE_ELEVATION_LOSS_LAST_LAP_ID"
 
         /**
          * Lap Min Elevation - Min. altitude this lap
@@ -636,6 +559,70 @@ data class DataType(
          * Fields: [Field.SKIN_TEMP]
          */
         const val MAX_SKIN_TEMP_LAP = "TYPE_MAX_SKIN_TEMP_LAP_ID"
+
+        /**
+         * Category: Last Lap
+         */
+
+        /**
+         * Last Lap Time - Recording duration of previous lap
+         * Fields: [Field.ELAPSED_TIME]
+         */
+        const val ELAPSED_TIME_LAST_LAP = "TYPE_ELAPSED_TIME_LAST_LAP_ID"
+
+        /**
+         * Last Lap Distance - Distance traveled in previous lap
+         * Fields: [Field.DISTANCE]
+         */
+        const val DISTANCE_LAP_LAST_LAP = "TYPE_DISTANCE_LAP_LAST_LAP_ID"
+
+        /**
+         * Last Lap Speed - Avg. speed of previous lap
+         * Fields: [Field.AVERAGE_SPEED]
+         */
+        const val AVERAGE_SPEED_LAST_LAP = "TYPE_AVERAGE_SPEED_LAST_LAP_ID"
+
+        /**
+         * Last Lap Heart Rate - Avg. heart rate of previous lap
+         * Fields: [Field.AVG_HR]
+         */
+        const val AVERAGE_HR_LAST_LAP = "TYPE_AVERAGE_HR_LAST_LAP_ID"
+
+        /**
+         * Last Lap Cadence - Avg. cadence of previous lap
+         * Fields: [Field.AVERAGE_CADENCE]
+         */
+        const val AVERAGE_CADENCE_LAST_LAP = "TYPE_AVERAGE_CADENCE_LAST_LAP_ID"
+
+        /**
+         * Last Lap Power - Avg. power output in previous lap
+         * Fields: [Field.AVERAGE_POWER]
+         */
+        const val AVERAGE_POWER_LAST_LAP = "TYPE_AVERAGE_POWER_LAST_LAP_ID"
+
+        /**
+         * Last Lap Normalized Power® - Normalized Power® of previous lap
+         * Fields: [Field.NORMALIZED_POWER]
+         */
+        const val NORMALIZED_POWER_LAST_LAP = "TYPE_NORMALIZED_POWER_LAST_LAP_ID"
+
+        /**
+         * Last Lap Power Balance - Avg. left/right power balance of previous lap
+         * Fields: [Field.PEDAL_POWER_BALANCE_LEFT]
+         */
+        const val AVERAGE_PEDAL_POWER_BALANCE_LAST_LAP = "TYPE_AVERAGE_PEDAL_POWER_BALANCE_LAST_LAP_ID"
+
+        /**
+         * Last Lap Ascent - Total elevation gain of previous lap
+         * Fields: [Field.ELEVATION_GAIN]
+         */
+        const val ELEVATION_GAIN_LAST_LAP = "TYPE_ELEVATION_GAIN_LAST_LAP_ID"
+
+        /**
+         * Last Lap Descent - Total elevation descended in previous lap
+         * Fields: [Field.ELEVATION_LOSS]
+         */
+        const val ELEVATION_LOSS_LAST_LAP = "TYPE_ELEVATION_LOSS_LAST_LAP_ID"
 
         /**
          * Category: Climb
@@ -726,12 +713,6 @@ data class DataType(
         const val ELEVATION_FROM_BOTTOM = "TYPE_ELEVATION_FROM_BOTTOM_ID"
 
         /**
-         * Elevation Remaining - Total remaining ascent on current route
-         * Fields: [Field.ELEVATION_REMAINING], [Field.NAVIGATION_STATE], [Field.REROUTING_ENABLED], [Field.ON_ROUTE]
-         */
-        const val ELEVATION_REMAINING = "TYPE_ELEVATION_REMAINING_ID"
-
-        /**
          * Category: Time
          */
 
@@ -758,18 +739,6 @@ data class DataType(
          * Fields: [Field.PAUSED_TIME]
          */
         const val PAUSED_TIME = "TYPE_PAUSED_TIME_ID"
-
-        /**
-         * Time to Destination - Estimated time to reach navigation destination
-         * Fields: [Field.TIME_TO_DESTINATION]
-         */
-        const val TIME_TO_DESTINATION = "TYPE_TIME_TO_DESTINATION_ID"
-
-        /**
-         * Time of Arrival - Estimated time of arrival to navigation destination
-         * Fields: [Field.TIME_OF_ARRIVAL]
-         */
-        const val TIME_OF_ARRIVAL = "TYPE_TIME_OF_ARRIVAL_ID"
 
         /**
          * Sunrise - Time of Sunrise at current location
@@ -888,16 +857,56 @@ data class DataType(
         const val TIRE_PRESSURE_REAR = "TYPE_TIRE_PRESSURE_REAR_ID"
 
         /**
-         * Heading - Current compass direction of travel
-         * Fields: [Field.HEADING]
-         */
-        const val HEADING = "TYPE_HEADING_ID"
-
-        /**
          * Temperature - Current air temperature
          * Fields: [Field.TEMPERATURE]
          */
         const val TEMPERATURE = "TYPE_TEMPERATURE_ID"
+
+        /**
+         * Location
+         * Fields: [Field.LOC_LATITUDE], [Field.LOC_LONGITUDE], [Field.LOC_BEARING], [Field.LOC_ACCURACY]
+         */
+        const val LOCATION = "TYPE_LOCATION_ID"
+
+        /**
+         * Category: Navigation
+         */
+
+        /**
+         * Distance to Destination - Distance to end of route
+         * Fields: [Field.DISTANCE_TO_DESTINATION], [Field.NAVIGATION_STATE], [Field.REROUTING_ENABLED], [Field.ON_ROUTE]
+         */
+        const val DISTANCE_TO_DESTINATION = "TYPE_DISTANCE_TO_DESTINATION_ID"
+
+        /**
+         * Distance to Next Turn - Distance till next navigation turn
+         * Fields: [Field.DISTANCE_TO_NEXT_TURN]
+         */
+        const val DISTANCE_TO_NEXT_TURN = "TYPE_DISTANCE_TO_NEXT_TURN_ID"
+
+        /**
+         * Elevation Remaining - Total remaining ascent on current route
+         * Fields: [Field.ELEVATION_REMAINING], [Field.NAVIGATION_STATE], [Field.REROUTING_ENABLED], [Field.ON_ROUTE]
+         */
+        const val ELEVATION_REMAINING = "TYPE_ELEVATION_REMAINING_ID"
+
+        /**
+         * Time to Destination - Estimated time to reach navigation destination
+         * Fields: [Field.TIME_TO_DESTINATION]
+         */
+        const val TIME_TO_DESTINATION = "TYPE_TIME_TO_DESTINATION_ID"
+
+        /**
+         * Time of Arrival - Estimated time of arrival to navigation destination
+         * Fields: [Field.TIME_OF_ARRIVAL]
+         */
+        const val TIME_OF_ARRIVAL = "TYPE_TIME_OF_ARRIVAL_ID"
+
+        /**
+         * Heading - Current compass direction of travel
+         * Fields: [Field.HEADING]
+         */
+        const val HEADING = "TYPE_HEADING_ID"
 
         /**
          * Category: eBike
@@ -992,7 +1001,15 @@ data class DataType(
     object Field {
         const val LOC_LATITUDE = "FIELD_LOC_LATITUDE_ID"
         const val LOC_LONGITUDE = "FIELD_LOC_LONGITUDE_ID"
+
+        /**
+         * Optional
+         */
         const val LOC_ACCURACY = "FIELD_LOC_ACCURACY_ID"
+
+        /**
+         * Optional
+         */
         const val LOC_BEARING = "FIELD_LOC_BEARING_ID"
         const val SPEED = "FIELD_SPEED_ID"
         const val HEART_RATE = "FIELD_HEART_RATE_ID"
@@ -1006,10 +1023,30 @@ data class DataType(
         const val POWER_TO_WEIGHT = "FIELD_POWER_TO_WEIGHT_ID"
         const val CLOCK_TIME = "FIELD_CLOCK_TIME_ID"
         const val POWER = "FIELD_POWER_ID"
+
+        /**
+         * Optional
+         */
         const val PEDAL_POWER_BALANCE_LEFT = "FIELD_PEDAL_POWER_BALANCE_LEFT_ID"
+
+        /**
+         * Optional
+         */
         const val PEDAL_SMOOTHNESS_LEFT = "FIELD_PEDAL_SMOOTHNESS_LEFT_ID"
+
+        /**
+         * Optional
+         */
         const val PEDAL_SMOOTHNESS_RIGHT = "FIELD_PEDAL_SMOOTHNESS_RIGHT_ID"
+
+        /**
+         * Optional
+         */
         const val TORQUE_EFFECTIVENESS_LEFT = "FIELD_TORQUE_EFFECTIVENESS_LEFT_ID"
+
+        /**
+         * Optional
+         */
         const val TORQUE_EFFECTIVENESS_RIGHT = "FIELD_TORQUE_EFFECTIVENESS_RIGHT_ID"
         const val AVERAGE_POWER = "FIELD_AVERAGE_POWER_ID"
         const val SINGLE = "FIELD_SINGLE_ID"
@@ -1026,9 +1063,25 @@ data class DataType(
         const val PRESSURE_ELEVATION = "FIELD_PRESSURE_ELEVATION_ID"
         const val ELEVATION_GAIN = "FIELD_ELEVATION_GAIN_ID"
         const val ELEVATION_LOSS = "FIELD_ELEVATION_LOSS_ID"
+
+        /**
+         * Optional
+         */
         const val ELEVATION_REMAINING = "FIELD_ELEVATION_REMAINING_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val ON_ROUTE = "FIELD_ON_ROUTE_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val REROUTING_ENABLED = "FIELD_REROUTING_ENABLED_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val NAVIGATION_STATE = "FIELD_NAVIGATION_STATE_ID"
         const val SMOOTHED_3S_AVERAGE_CADENCE = "FIELD_3S_AVERAGE_CADENCE_ID"
         const val SMOOTHED_5S_AVERAGE_CADENCE = "FIELD_5S_AVERAGE_CADENCE_ID"
@@ -1043,12 +1096,32 @@ data class DataType(
         const val SMOOTHED_5S_AVERAGE_SPEED = "FIELD_5S_AVERAGE_SPEED_ID"
         const val SMOOTHED_10S_AVERAGE_SPEED = "FIELD_10S_AVERAGE_SPEED_ID"
         const val SMOOTHED_1HR_AVERAGE_SPEED = "FIELD_1HR_AVERAGE_SPEED_ID"
+
+        /**
+         * Optional
+         */
         const val DISTANCE_TO_DESTINATION = "FIELD_DISTANCE_TO_DESTINATION_ID"
+
+        /**
+         * Optional
+         */
         const val DISTANCE_TO_NEXT_TURN = "FIELD_DISTANCE_TO_NEXT_TURN_ID"
         const val DISTANCE_FROM_BOTTOM = "FIELD_DISTANCE_FROM_BOTTOM_ID"
         const val DISTANCE_TO_TOP = "FIELD_DISTANCE_TO_TOP_ID"
         const val ELEVATION_FROM_BOTTOM = "FIELD_ELEVATION_FROM_BOTTOM_ID"
         const val ELEVATION_TO_TOP = "FIELD_ELEVATION_TO_TOP_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val CLIMB_NUMBER = "FIELD_CLIMB_NUMBER_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val TOTAL_CLIMBS = "FIELD_TOTAL_CLIMBS_ID"
         const val TIME_TO_DESTINATION = "FIELD_TIME_TO_DESTINATION_ID"
         const val TIME_OF_ARRIVAL = "FIELD_TIME_OF_ARRIVAL_ID"
         const val SUNRISE = "FIELD_SUNRISE_ID"
@@ -1063,53 +1136,207 @@ data class DataType(
         const val POWER_ZONE = "FIELD_POWER_ZONE_ID"
         const val VARIABILITY_INDEX = "FIELD_VARIABILITY_INDEX_ID"
         const val PAUSED_TIME = "FIELD_PAUSED_TIME_ID"
+
+        /**
+         * Optional
+         */
         const val PERCENT_MAX_HR = "FIELD_PERCENT_MAX_HR_ID"
+
+        /**
+         * Optional
+         */
         const val PERCENT_MAX_FTP = "FIELD_PERCENT_MAX_FTP_ID"
         const val TEMPERATURE = "FIELD_TEMPERATURE_ID"
         const val CORE_TEMP = "FIELD_CORE_TEMP_ID"
         const val SKIN_TEMP = "FIELD_SKIN_TEMP_ID"
-        const val CORE_DATA_QUALITY = "FIELD_CORE_DATA_QUALITY_ID"
-        const val CORE_RESERVED = "FIELD_CORE_RESERVED_ID"
+
+        /**
+         * Optional
+         */
         const val ELEVATION_GRADE = "FIELD_ELEVATION_GRADE_ID"
+
+        /**
+         * Optional
+         */
         const val VERTICAL_SPEED = "FIELD_VERTICAL_SPEED_ID"
         const val NORMALIZED_POWER = "FIELD_NORMALIZED_POWER_ID"
         const val TRAINING_STRESS_SCORE = "FIELD_TRAINING_STRESS_SCORE_ID"
         const val INTENSITY_FACTOR = "FIELD_INTENSITY_FACTOR_ID"
+
+        /**
+         * Optional
+         */
         const val MAX_ELEVATION = "FIELD_MAX_ELEVATION_ID"
+
+        /**
+         * Optional
+         */
         const val MIN_ELEVATION = "FIELD_MIN_ELEVATION_ID"
+
+        /**
+         * Optional
+         */
         const val AVERAGE_ELEVATION = "FIELD_AVERAGE_ELEVATION_ID"
+
+        /**
+         * Optional
+         */
         const val LAP_NUMBER = "FIELD_LAP_NUMBER_ID"
+
+        /**
+         * Optional
+         */
         const val BATTERY_PERCENT = "FIELD_BATTERY_PERCENT_ID"
+
+        /**
+         * Alternate type: INT
+         * Optional
+         */
         const val HEADING = "FIELD_HEADING_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
         const val SHIFTING_BATTERY_STATUS = "FIELD_SHIFTING_BATTERY_STATUS_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
         const val SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR = "FIELD_SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
         const val SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR = "FIELD_SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val SHIFTING_FRONT_GEAR = "FIELD_SHIFTING_FRONT_GEAR_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
         const val SHIFTING_FRONT_GEAR_TEETH = "FIELD_SHIFTING_FRONT_GEAR_TEETH_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
         const val SHIFTING_FRONT_GEAR_MAX = "FIELD_SHIFTING_FRONT_GEAR_MAX_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val SHIFTING_REAR_GEAR = "FIELD_SHIFTING_REAR_GEAR_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
         const val SHIFTING_REAR_GEAR_TEETH = "FIELD_SHIFTING_REAR_GEAR_TEETH_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
         const val SHIFTING_REAR_GEAR_MAX = "FIELD_SHIFTING_REAR_GEAR_MAX_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val SHIFTING_COUNT = "FIELD_SHIFTING_COUNT_ID"
         const val TIRE_PRESSURE = "FIELD_TIRE_PRESSURE_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val TIRE_PRESSURE_POSITION = "FIELD_TIRE_PRESSURE_POSITION_ID"
+
+        /**
+         * Optional
+         */
         const val TIRE_PRESSURE_TARGET = "FIELD_TIRE_PRESSURE_TARGET_ID"
+
+        /**
+         * Optional
+         */
         const val TIRE_PRESSURE_RANGE = "FIELD_TIRE_PRESSURE_RANGE_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val RADAR_THREAT_LEVEL = "FIELD_RADAR_THREAT_LEVEL_ID"
+
+        /**
+         * Optional
+         */
         const val RADAR_TARGET_1_RANGE = "FIELD_RADAR_TARGET_1_RANGE_ID"
+
+        /**
+         * Optional
+         */
         const val RADAR_TARGET_2_RANGE = "FIELD_RADAR_TARGET_2_RANGE_ID"
+
+        /**
+         * Optional
+         */
         const val RADAR_TARGET_3_RANGE = "FIELD_RADAR_TARGET_3_RANGE_ID"
+
+        /**
+         * Optional
+         */
         const val RADAR_TARGET_4_RANGE = "FIELD_RADAR_TARGET_4_RANGE_ID"
+
+        /**
+         * Optional
+         */
         const val RADAR_TARGET_5_RANGE = "FIELD_RADAR_TARGET_5_RANGE_ID"
+
+        /**
+         * Optional
+         */
         const val RADAR_TARGET_6_RANGE = "FIELD_RADAR_TARGET_6_RANGE_ID"
+
+        /**
+         * Optional
+         */
         const val RADAR_TARGET_7_RANGE = "FIELD_RADAR_TARGET_7_RANGE_ID"
+
+        /**
+         * Optional
+         */
         const val RADAR_TARGET_8_RANGE = "FIELD_RADAR_TARGET_8_RANGE_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val RADAR_ERROR = "FIELD_RADAR_ERROR_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val LEV_BATTERY_STATUS = "FIELD_LEV_BATTERY_STATUS_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val LEV_ASSIST_MODE = "FIELD_LEV_ASSIST_MODE_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val LEV_SUPPORTED_ASSIST_MODES = "FIELD_LEV_SUPPORTED_ASSIST_MODES_ID"
         const val LEV_ENERGY_CONSUMPTION = "FIELD_LEV_ENERGY_CONSUMPTION_ID"
         const val LEV_20MIN_ENERGY_CONSUMPTION = "FIELD_LEV_20MIN_ENERGY_CONSUMPTION_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
         const val LEV_MOTOR_ASSIST_PERCENTAGE = "FIELD_LEV_MOTOR_ASSIST_PERCENTAGE_ID"
         const val LEV_MOTOR_POWER = "FIELD_LEV_MOTOR_POWER_ID"
         const val LEV_COMBINED_POWER = "FIELD_LEV_COMBINED_POWER_ID"

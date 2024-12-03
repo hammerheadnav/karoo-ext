@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.launch
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -47,21 +48,33 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     lateinit var karooSystem: KarooSystemService
 
     private var serviceJob: Job? = null
+    private val devices = ConcurrentHashMap<String, SampleDevice>()
 
     override val types by lazy {
         listOf(
             PowerHrDataType(karooSystem, extension),
             CustomSpeedDataType(karooSystem, extension),
+            BespokeDataType(extension),
         )
     }
 
     override fun startScan(emitter: Emitter<Device>) {
-        // Find a new static HR source every 5 seconds
+        // Find a new sources every 5 seconds
         val job = CoroutineScope(Dispatchers.IO).launch {
             delay(1000)
             repeat(Int.MAX_VALUE) {
-                emitter.onNext(StaticHrSource(extension, 100 + it * 10).source)
-                delay(5000)
+                val hr = StaticHrSource(extension, 100 + it * 10)
+                devices.putIfAbsent(hr.source.uid, hr)
+                emitter.onNext(hr.source)
+                delay(1000)
+                val shift = IncrementalShiftingSource(extension, it)
+                devices.putIfAbsent(shift.source.uid, shift)
+                emitter.onNext(shift.source)
+                delay(1000)
+                val bespoke = BespokeDataSource(extension, it)
+                devices.putIfAbsent(bespoke.source.uid, bespoke)
+                emitter.onNext(bespoke.source)
+                delay(1000)
             }
         }
         emitter.setCancellable {
@@ -70,7 +83,18 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     }
 
     override fun connectDevice(uid: String, emitter: Emitter<DeviceEvent>) {
-        StaticHrSource.fromUid(extension, uid)?.connect(emitter)
+        val id = uid.substringAfterLast("-").toIntOrNull() ?: return
+        devices.getOrPut(uid) {
+            if (uid.contains(IncrementalShiftingSource.PREFIX)) {
+                IncrementalShiftingSource(extension, id)
+            } else if (uid.contains(StaticHrSource.PREFIX)) {
+                StaticHrSource(extension, id)
+            } else if (uid.contains(BespokeDataSource.PREFIX)) {
+                BespokeDataSource(extension, id)
+            } else {
+                throw IllegalArgumentException("unknown type for $uid")
+            }
+        }.connect(emitter)
     }
 
     override fun onCreate() {
