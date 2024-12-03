@@ -306,4 +306,8 @@ data class LaunchPinActivity(
      * Longitude of pin
      */
     val lng: Double,
+    /**
+     * Optional name describing the location
+     */
+    val name: String? = null,
 ) : KarooEffect()

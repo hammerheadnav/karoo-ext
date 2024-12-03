@@ -46,6 +46,8 @@ import androidx.compose.ui.unit.sp
 import io.hammerhead.karooext.models.KarooEffect
 import io.hammerhead.karooext.models.LaunchPinActivity
 import io.hammerhead.karooext.models.PerformHardwareAction
+import io.hammerhead.karooext.models.ReleaseAnt
+import io.hammerhead.karooext.models.RequestAnt
 import io.hammerhead.karooext.models.RideState
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.SystemNotification
@@ -99,6 +101,7 @@ fun ControlsTab(
     playBeeps: () -> Unit,
     toggleHomeBackground: () -> Unit,
 ) {
+    var antRequested by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -127,11 +130,22 @@ fun ControlsTab(
         Spacer(modifier = Modifier.height(12.dp))
         Button(
             onClick = {
-                dispatchEffect(LaunchPinActivity(40.133044, -75.5183991))
+                dispatchEffect(LaunchPinActivity(40.133044, -75.5183991, "PXV"))
             },
             colors = ButtonDefaults.textButtonColors(containerColor = Color.Cyan, contentColor = Color.Black),
         ) {
             Text("Open Pin")
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(
+            onClick = {
+                val resource = "samp"
+                dispatchEffect(if (antRequested) RequestAnt(resource) else ReleaseAnt(resource))
+                antRequested = !antRequested
+            },
+            colors = ButtonDefaults.textButtonColors(containerColor = Color.Black, contentColor = Color.White),
+        ) {
+            Text(if (antRequested) "Release ANT" else "Request ANT")
         }
     }
 }
