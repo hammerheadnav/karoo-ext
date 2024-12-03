@@ -17,6 +17,7 @@
 package io.hammerhead.sampleext.extension
 
 import io.hammerhead.karooext.internal.Emitter
+import io.hammerhead.karooext.models.BatteryStatus
 import io.hammerhead.karooext.models.ConnectionStatus
 import io.hammerhead.karooext.models.DataPoint
 import io.hammerhead.karooext.models.DataType
@@ -45,6 +46,7 @@ class IncrementalShiftingSource(extension: String, private val id: Int) : Sample
             listOf(
                 DataType.Source.SHIFTING_FRONT_GEAR,
                 DataType.Source.SHIFTING_REAR_GEAR,
+                DataType.Source.SHIFTING_BATTERY,
             ),
             "Inc. Shifting $id",
         )
@@ -80,6 +82,20 @@ class IncrementalShiftingSource(extension: String, private val id: Int) : Sample
                             values = mapOf(
                                 DataType.Field.SHIFTING_REAR_GEAR to 1 + it % 12.0,
                                 DataType.Field.SHIFTING_REAR_GEAR_MAX to 12.0,
+                            ),
+                            sourceId = source.uid,
+                        ),
+                    ),
+                )
+                val rearBattery = (1.0 + it) % BatteryStatus.entries.size
+                emitter.onNext(
+                    OnDataPoint(
+                        DataPoint(
+                            DataType.Type.SHIFTING_BATTERY,
+                            values = mapOf(
+                                DataType.Field.SHIFTING_BATTERY_STATUS to rearBattery,
+                                DataType.Field.SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR to it.toDouble() % BatteryStatus.entries.size,
+                                DataType.Field.SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR to rearBattery,
                             ),
                             sourceId = source.uid,
                         ),
