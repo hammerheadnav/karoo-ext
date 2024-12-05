@@ -44,7 +44,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.hammerhead.karooext.models.KarooEffect
-import io.hammerhead.karooext.models.LaunchPinActivity
 import io.hammerhead.karooext.models.PerformHardwareAction
 import io.hammerhead.karooext.models.ReleaseAnt
 import io.hammerhead.karooext.models.RequestAnt
@@ -126,15 +125,6 @@ fun ControlsTab(
         Spacer(modifier = Modifier.height(12.dp))
         Button(onClick = toggleHomeBackground) {
             Text(if (homeBackgroundSet) "Clear Background" else "Set Background")
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Button(
-            onClick = {
-                dispatchEffect(LaunchPinActivity(40.133044, -75.5183991, "PXV"))
-            },
-            colors = ButtonDefaults.textButtonColors(containerColor = Color.Cyan, contentColor = Color.Black),
-        ) {
-            Text("Open Pin")
         }
         Spacer(modifier = Modifier.height(12.dp))
         Button(

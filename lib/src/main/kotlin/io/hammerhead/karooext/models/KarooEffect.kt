@@ -288,26 +288,3 @@ data class ZoomPage(
      */
     val zoomIn: Boolean,
 ) : KarooEffect()
-
-/**
- * Open the "pin drop" activity at this selected location, allowing the user to navigate to or create a POI
- *
- * Replicates the functionality of sharing a location from companion app or long-pressing the map
- *
- * @since 1.1.2
- */
-@Serializable
-data class LaunchPinActivity(
-    /**
-     * Latitude of pin
-     */
-    val lat: Double,
-    /**
-     * Longitude of pin
-     */
-    val lng: Double,
-    /**
-     * Optional name describing the location
-     */
-    val name: String? = null,
-) : KarooEffect()
