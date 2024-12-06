@@ -869,6 +869,12 @@ data class DataType(
         const val LOCATION = "TYPE_LOCATION_ID"
 
         /**
+         * Current radar state
+         * Fields: [Field.RADAR_THREAT_LEVEL], [Field.RADAR_TARGET_1_RANGE], [Field.RADAR_TARGET_2_RANGE], [Field.RADAR_TARGET_3_RANGE], [Field.RADAR_TARGET_4_RANGE], [Field.RADAR_TARGET_5_RANGE], [Field.RADAR_TARGET_6_RANGE], [Field.RADAR_TARGET_7_RANGE], [Field.RADAR_TARGET_8_RANGE]
+         */
+        const val RADAR = "TYPE_RADAR_ID"
+
+        /**
          * Category: Navigation
          */
 
