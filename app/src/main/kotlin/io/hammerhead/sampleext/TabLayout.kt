@@ -130,7 +130,7 @@ fun ControlsTab(
         Button(
             onClick = {
                 val resource = "samp"
-                dispatchEffect(if (antRequested) RequestAnt(resource) else ReleaseAnt(resource))
+                dispatchEffect(if (antRequested) ReleaseAnt(resource) else RequestAnt(resource))
                 antRequested = !antRequested
             },
             colors = ButtonDefaults.textButtonColors(containerColor = Color.Black, contentColor = Color.White),
