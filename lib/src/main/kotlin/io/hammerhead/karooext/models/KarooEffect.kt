@@ -286,5 +286,5 @@ data class ZoomPage(
      *   true - zoom in
      *   false - zoom out
      */
-    val zoomIn: Boolean,
+    val zoomIn: Boolean = true,
 ) : KarooEffect()
