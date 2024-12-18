@@ -30,6 +30,7 @@ import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
 import io.hammerhead.karooext.models.ExtensionInfo
+import io.hammerhead.karooext.models.MapEvent
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.ViewConfig
 import timber.log.Timber
@@ -118,6 +119,18 @@ abstract class KarooExtension(
                 Timber.d("$TAG: stopView $id")
                 emitters.remove(id)?.cancel()
             }
+
+            override fun startMap(id: String, handler: IHandler) {
+                val emitter = Emitter.create<MapEvent>(packageName, handler)
+                emitters[id] = emitter
+                Timber.d("$TAG: startMap $id")
+                startMap(emitter)
+            }
+
+            override fun stopMap(id: String) {
+                Timber.d("$TAG: stopMap $id")
+                emitters.remove(id)?.cancel()
+            }
         }
     }
 
@@ -143,6 +156,8 @@ abstract class KarooExtension(
      * @see [DeviceEvent]
      */
     open fun connectDevice(uid: String, emitter: Emitter<DeviceEvent>) {}
+
+    open fun startMap(emitter: Emitter<MapEvent>) {}
 
     /**
      * @suppress

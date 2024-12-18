@@ -16,4 +16,7 @@ interface IKarooExtension {
 
     oneway void startView(String id, String typeId, in Bundle configBundle, in IHandler handler);
     oneway void stopView(String id);
+
+    oneway void startMap(String id, in IHandler handler);
+    oneway void stopMap(String id);
 }

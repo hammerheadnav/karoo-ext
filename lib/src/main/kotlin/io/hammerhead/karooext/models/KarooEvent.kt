@@ -16,6 +16,10 @@
 
 package io.hammerhead.karooext.models
 
+import io.hammerhead.karooext.models.OnHttpResponse.MakeHttpRequest
+import io.hammerhead.karooext.models.OnStreamState.StartStreaming
+import io.hammerhead.karooext.models.UserProfile.PreferredUnit
+import io.hammerhead.karooext.models.UserProfile.Zone
 import kotlinx.serialization.Serializable
 
 /**
@@ -247,4 +251,84 @@ data class OnHttpResponse(val state: HttpResponseState) : KarooEvent() {
         // 100KB maximum for request/response body
         const val MAX_REQUEST_SIZE = 100_000
     }
+}
+
+@Serializable
+data class OnLocationChanged(
+    val lat: Double,
+    val lng: Double,
+    val orientation: Double?,
+) : KarooEvent() {
+
+    /**
+     * Default params for [OnLocationChanged] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+@Serializable
+data class OnMapCenterMoved(
+    val lat: Double,
+    val lng: Double,
+    val zoom: Int,
+) : KarooEvent() {
+
+    /**
+     * Default params for [OnMapCenterMoved] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+@Serializable
+data class OnGlobalPOIs(val pois: List<NamedCoordinates>) : KarooEvent() {
+
+    /**
+     * Default params for [OnGlobalPOIs] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+@Serializable
+data class OnNavigationState(
+    val state: NavigationState,
+) : KarooEvent() {
+    @Serializable
+    sealed class NavigationState {
+        @Serializable
+        data object Idle : NavigationState()
+
+        @Serializable
+        data class NavigatingRoute(
+            val polyline: String,
+            val name: String,
+            val reversed: Boolean,
+            val breadcrumb: Boolean,
+            val pois: List<NamedCoordinates>,
+        ) : NavigationState()
+
+        @Serializable
+        data class NavigatingToDestination(val destination: NamedCoordinates) : NavigationState()
+    }
+
+    /**
+     * Default params for [OnNavigationState] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+@Serializable
+data class OnNavigationProgress(
+    val onRoute: Boolean,
+    val distanceAlongRoute: Double?,
+    val distanceRemaining: Double?,
+) : KarooEvent() {
+    /**
+     * Default params for [OnNavigationProgress] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
 }

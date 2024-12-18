@@ -3,7 +3,8 @@
     displayName="@string/extension_name"
     icon="@drawable/ic_sample"
     id="sample"
-    scansDevices="true">
+    scansDevices="true"
+    mapLayer="true">
     <DataType
         description="@string/custom_speed_description"
         displayName="@string/custom_speed"

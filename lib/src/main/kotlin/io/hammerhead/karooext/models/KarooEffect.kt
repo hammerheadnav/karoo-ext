@@ -288,3 +288,12 @@ data class ZoomPage(
      */
     val zoomIn: Boolean = true,
 ) : KarooEffect()
+
+/**
+ * Open map pin activity to allow user the choice to navigate to this
+ * point or save this point as a POI.
+ */
+@Serializable
+data class LaunchPinDrop(
+    val pin: NamedCoordinates,
+) : KarooEffect()

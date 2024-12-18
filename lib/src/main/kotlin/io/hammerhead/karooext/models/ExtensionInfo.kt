@@ -42,11 +42,17 @@ data class ExtensionInfo(
      */
     val icon: Drawable,
     /**
-     * Whether this extension cans for devices.
+     * Whether this extension scans for devices.
      *
      * @see [KarooExtension.startScan]
      */
     val scansDevices: Boolean,
+    /**
+     * Whether this extension provides map layer.
+     *
+     * @see [KarooExtension.startMap]
+     */
+    val mapLayer: Boolean,
     /**
      * Static list of [DataType]s this extension provides.
      *

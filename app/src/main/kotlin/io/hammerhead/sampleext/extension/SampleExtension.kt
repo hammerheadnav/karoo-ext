@@ -30,7 +30,11 @@ import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
 import io.hammerhead.karooext.models.InRideAlert
 import io.hammerhead.karooext.models.KarooEffect
+import io.hammerhead.karooext.models.MapEvent
 import io.hammerhead.karooext.models.MarkLap
+import io.hammerhead.karooext.models.OnLocationChanged
+import io.hammerhead.karooext.models.OnMapCenterMoved
+import io.hammerhead.karooext.models.ShowSymbols
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.SystemNotification
 import io.hammerhead.karooext.models.UserProfile
@@ -41,11 +45,13 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
@@ -106,6 +112,22 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                 throw IllegalArgumentException("unknown type for $uid")
             }
         }.connect(emitter)
+    }
+
+    override fun startMap(emitter: Emitter<MapEvent>) {
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            karooSystem.consumerFlow<OnMapCenterMoved>().onEach { Timber.d("BRENT: center $it") }
+                .combine(karooSystem.consumerFlow<OnLocationChanged>().onEach { Timber.d("BRENT: location $it") }) { mapCenter, location ->
+                    Pair(mapCenter, location)
+                }
+                .collect { (mapCenter, location) ->
+                    Timber.d("BRENT: map $mapCenter, $location")
+                    // TODO: points or line near me?
+                }
+        }
+        emitter.setCancellable {
+            job.cancel()
+        }
     }
 
     @SuppressLint("UnspecifiedRegisterReceiverFlag")

@@ -44,6 +44,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.hammerhead.karooext.models.KarooEffect
+import io.hammerhead.karooext.models.LaunchPinDrop
+import io.hammerhead.karooext.models.NamedCoordinates
 import io.hammerhead.karooext.models.PerformHardwareAction
 import io.hammerhead.karooext.models.ReleaseAnt
 import io.hammerhead.karooext.models.RequestAnt
@@ -136,6 +138,15 @@ fun ControlsTab(
             colors = ButtonDefaults.textButtonColors(containerColor = Color.Black, contentColor = Color.White),
         ) {
             Text(if (antRequested) "Release ANT" else "Request ANT")
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(
+            onClick = {
+                dispatchEffect(LaunchPinDrop(NamedCoordinates(40.1330043, -75.5182738, "Work")))
+            },
+            colors = ButtonDefaults.textButtonColors(containerColor = Color.Magenta, contentColor = Color.White),
+        ) {
+            Text("Pin Drop")
         }
     }
 }
