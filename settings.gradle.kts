@@ -27,6 +27,10 @@ dependencyResolutionManagement {
                 password = providers.gradleProperty("gpr.key").getOrElse(System.getenv("TOKEN"))
             }
         }
+        // mapbox
+        maven {
+            url = uri("https://api.mapbox.com/downloads/v2/releases/maven")
+        }
     }
 }
 

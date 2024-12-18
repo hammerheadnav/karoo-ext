@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class NamedCoordinates(
     val lat: Double,
     val lng: Double,
-    val name: String?,
+    val name: String? = null,
 )

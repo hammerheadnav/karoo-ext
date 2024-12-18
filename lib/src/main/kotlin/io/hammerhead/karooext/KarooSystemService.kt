@@ -33,6 +33,10 @@ import io.hammerhead.karooext.models.KarooEvent
 import io.hammerhead.karooext.models.KarooEventParams
 import io.hammerhead.karooext.models.KarooInfo
 import io.hammerhead.karooext.models.Lap
+import io.hammerhead.karooext.models.OnGlobalPOIs
+import io.hammerhead.karooext.models.OnLocationChanged
+import io.hammerhead.karooext.models.OnNavigationProgress
+import io.hammerhead.karooext.models.OnNavigationState
 import io.hammerhead.karooext.models.RideState
 import io.hammerhead.karooext.models.UserProfile
 import timber.log.Timber
@@ -226,6 +230,10 @@ class KarooSystemService(private val context: Context) {
             RideState::class -> RideState.Params
             Lap::class -> Lap.Params
             UserProfile::class -> UserProfile.Params
+            OnLocationChanged::class -> OnLocationChanged.Params
+            OnGlobalPOIs::class -> OnGlobalPOIs.Params
+            OnNavigationState::class -> OnNavigationState.Params
+            OnNavigationProgress::class -> OnNavigationProgress.Params
             else -> throw IllegalArgumentException("No default KarooEventParams for ${T::class}")
         }
         return addConsumer<T>(params, onError, onComplete, onEvent)

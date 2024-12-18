@@ -268,20 +268,6 @@ data class OnLocationChanged(
 }
 
 @Serializable
-data class OnMapCenterMoved(
-    val lat: Double,
-    val lng: Double,
-    val zoom: Int,
-) : KarooEvent() {
-
-    /**
-     * Default params for [OnMapCenterMoved] event listener
-     */
-    @Serializable
-    data object Params : KarooEventParams()
-}
-
-@Serializable
 data class OnGlobalPOIs(val pois: List<NamedCoordinates>) : KarooEvent() {
 
     /**
