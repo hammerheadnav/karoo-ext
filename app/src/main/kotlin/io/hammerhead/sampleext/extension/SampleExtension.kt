@@ -22,7 +22,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import com.mapbox.geojson.Point
+import com.mapbox.geojson.utils.PolylineUtils
 import com.mapbox.turf.TurfConstants
+import com.mapbox.turf.TurfMeasurement
 import dagger.hilt.android.AndroidEntryPoint
 import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.extension.KarooExtension
@@ -32,10 +34,12 @@ import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
 import io.hammerhead.karooext.models.InRideAlert
 import io.hammerhead.karooext.models.KarooEffect
-import io.hammerhead.karooext.models.MapEvent
+import io.hammerhead.karooext.models.MapEffect
 import io.hammerhead.karooext.models.MarkLap
 import io.hammerhead.karooext.models.NamedCoordinates
 import io.hammerhead.karooext.models.OnLocationChanged
+import io.hammerhead.karooext.models.OnMapZoomLevel
+import io.hammerhead.karooext.models.ShowPolyline
 import io.hammerhead.karooext.models.ShowSymbols
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.SystemNotification
@@ -47,6 +51,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
@@ -57,12 +62,6 @@ import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import kotlin.reflect.full.createInstance
-import com.mapbox.turf.TurfMeasurement.length
-import com.mapbox.turf.TurfConversion.radiansToDegrees
-import com.mapbox.turf.TurfMeasurement
-import com.mapbox.geojson.utils.PolylineUtils
-import com.mapbox.turf.TurfMisc.lineSlice
-import io.hammerhead.karooext.models.ShowPolyline
 
 @AndroidEntryPoint
 class SampleExtension : KarooExtension("sample", "1.0") {
@@ -120,12 +119,18 @@ class SampleExtension : KarooExtension("sample", "1.0") {
         }.connect(emitter)
     }
 
-    override fun startMap(emitter: Emitter<MapEvent>) {
+    override fun startMap(emitter: Emitter<MapEffect>) {
         val job = CoroutineScope(Dispatchers.IO).launch {
-            karooSystem.consumerFlow<OnLocationChanged>()
-                .collect { location ->
+            combine(karooSystem.consumerFlow<OnLocationChanged>(), karooSystem.consumerFlow<OnMapZoomLevel>()) { location, mapZoom ->
+                Pair(location, mapZoom)
+            }
+                .collect { (location, mapZoom) ->
                     val source = Point.fromLngLat(location.lng, location.lat)
-                    val totalDistance = 100.0
+                    val totalDistance = when {
+                        mapZoom.zoomLevel <= 13.0 -> 100.0
+                        mapZoom.zoomLevel <= 15.0 -> 200.0
+                        else -> 400.0
+                    }
                     val dest = TurfMeasurement.destination(source, totalDistance, 45.0, TurfConstants.UNIT_METERS)
                     val half = TurfMeasurement.destination(source, totalDistance / 2, 45.0, TurfConstants.UNIT_METERS)
                     emitter.onNext(
@@ -140,8 +145,8 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                                     orientation = 0.0,
                                     customIcon = R.drawable.ic_arrow,
                                 ),
-                            )
-                        )
+                            ),
+                        ),
                     )
                     val polyline = PolylineUtils.encode(listOf(source, dest), 5)
                     emitter.onNext(ShowPolyline("45", polyline, getColor(R.color.colorPrimary), 4))

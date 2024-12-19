@@ -21,12 +21,12 @@ import androidx.annotation.DrawableRes
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class MapEvent
+sealed class MapEffect
 
 @Serializable
 data class ShowSymbols(
     val symbols: List<Symbol>,
-) : MapEvent() {
+) : MapEffect() {
     @Serializable
     data class Symbol(
         val point: NamedCoordinates,
@@ -42,7 +42,7 @@ data class ShowPolyline(
     val encodedPolyline: String,
     @ColorInt val color: Int,
     val width: Int,
-) : MapEvent()
+) : MapEffect()
 
 @Serializable
-data class HidePolyline(val id: String) : MapEvent()
+data class HidePolyline(val id: String) : MapEffect()

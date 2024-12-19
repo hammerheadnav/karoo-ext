@@ -30,7 +30,7 @@ import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
 import io.hammerhead.karooext.models.ExtensionInfo
-import io.hammerhead.karooext.models.MapEvent
+import io.hammerhead.karooext.models.MapEffect
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.ViewConfig
 import timber.log.Timber
@@ -121,7 +121,7 @@ abstract class KarooExtension(
             }
 
             override fun startMap(id: String, handler: IHandler) {
-                val emitter = Emitter.create<MapEvent>(packageName, handler)
+                val emitter = Emitter.create<MapEffect>(packageName, handler)
                 emitters[id] = emitter
                 Timber.d("$TAG: startMap $id")
                 startMap(emitter)
@@ -157,7 +157,7 @@ abstract class KarooExtension(
      */
     open fun connectDevice(uid: String, emitter: Emitter<DeviceEvent>) {}
 
-    open fun startMap(emitter: Emitter<MapEvent>) {}
+    open fun startMap(emitter: Emitter<MapEffect>) {}
 
     /**
      * @suppress

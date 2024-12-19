@@ -318,3 +318,14 @@ data class OnNavigationProgress(
     @Serializable
     data object Params : KarooEventParams()
 }
+
+@Serializable
+data class OnMapZoomLevel(
+    val zoomLevel: Double,
+) : KarooEvent() {
+    /**
+     * Default params for [OnMapZoomLevel] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
