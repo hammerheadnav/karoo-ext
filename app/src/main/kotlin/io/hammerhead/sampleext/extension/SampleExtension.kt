@@ -127,9 +127,9 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                 .collect { (location, mapZoom) ->
                     val source = Point.fromLngLat(location.lng, location.lat)
                     val totalDistance = when {
-                        mapZoom.zoomLevel <= 13.0 -> 100.0
-                        mapZoom.zoomLevel <= 15.0 -> 200.0
-                        else -> 400.0
+                        mapZoom.zoomLevel >= 15.0 -> 100.0
+                        mapZoom.zoomLevel >= 12.0 -> 200.0
+                        else -> 300.0
                     }
                     val dest = TurfMeasurement.destination(source, totalDistance, 45.0, TurfConstants.UNIT_METERS)
                     val half = TurfMeasurement.destination(source, totalDistance / 2, 45.0, TurfConstants.UNIT_METERS)

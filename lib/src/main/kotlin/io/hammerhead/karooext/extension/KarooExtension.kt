@@ -44,6 +44,8 @@ import java.util.concurrent.ConcurrentHashMap
 abstract class KarooExtension(
     /**
      * Extension ID, matching [ExtensionInfo.id] from extension manifest.
+     *
+     * This is different from your application id (com.something) and cannot contain '.'
      */
     val extension: String,
     /**
@@ -52,6 +54,10 @@ abstract class KarooExtension(
     val version: String,
 ) : Service() {
     private val emitters = ConcurrentHashMap<String, Emitter<*>>()
+
+    init {
+        check(extension.none { it == '.' }) { "extension ID cannot contain '.'" }
+    }
 
     /**
      * @suppress

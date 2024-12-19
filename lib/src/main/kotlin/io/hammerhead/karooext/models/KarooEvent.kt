@@ -293,7 +293,11 @@ data class OnNavigationState(
             val reversed: Boolean,
             val breadcrumb: Boolean,
             val pois: List<Symbol.POI>,
-        ) : NavigationState()
+        ) : NavigationState() {
+            override fun toString(): String {
+                return "NavigatingRoute($name, polyline=[${polyline.length}], reversed=$reversed, breadcrumb=$breadcrumb, pois=${pois.map { "POI(${it.name ?: it.type})" }})"
+            }
+        }
 
         @Serializable
         data class NavigatingToDestination(val destination: Symbol.POI) : NavigationState()
@@ -301,19 +305,6 @@ data class OnNavigationState(
 
     /**
      * Default params for [OnNavigationState] event listener
-     */
-    @Serializable
-    data object Params : KarooEventParams()
-}
-
-@Serializable
-data class OnNavigationProgress(
-    val onRoute: Boolean,
-    val distanceAlongRoute: Double?,
-    val distanceRemaining: Double?,
-) : KarooEvent() {
-    /**
-     * Default params for [OnNavigationProgress] event listener
      */
     @Serializable
     data object Params : KarooEventParams()

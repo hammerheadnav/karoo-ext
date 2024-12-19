@@ -23,6 +23,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Tab
@@ -153,6 +156,8 @@ fun ControlsTab(
 
 @Composable
 fun DataTab(mainData: MainData) {
+    var isPOIDialogOpen by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -161,6 +166,36 @@ fun DataTab(mainData: MainData) {
         Text(text = "Karoo System: " + if (mainData.connected) "Connected" else "Disconnected")
         Text(text = "Ride State: ${mainData.rideState}")
         Text(text = "Power: ${(mainData.power as? StreamState.Streaming)?.dataPoint?.singleValue ?: "--"}")
+        Text(text = "Navigation: ${mainData.navigationState}")
+        Button(
+            onClick = { isPOIDialogOpen = true },
+            colors = ButtonDefaults.textButtonColors(containerColor = Color.Magenta, contentColor = Color.White),
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) {
+            Text("Global POIs")
+        }
+        if (isPOIDialogOpen) {
+            AlertDialog(
+                onDismissRequest = { isPOIDialogOpen = false },
+                text = {
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(rememberScrollState())
+                            .padding(4.dp),
+                    ) {
+                        mainData.globalPOIs.map {
+                            Text("POI: ${it.name ?: ""} ${it.type}")
+                        }
+                    }
+                },
+                confirmButton = {
+                    Button(onClick = { isPOIDialogOpen = false }) {
+                        Text("Close")
+                    }
+                },
+                modifier = Modifier.padding(10.dp),
+            )
+        }
     }
 }
 

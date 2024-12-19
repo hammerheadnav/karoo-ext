@@ -1,18 +1,23 @@
 package io.hammerhead.karooext.models
 
 import androidx.annotation.DrawableRes
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 sealed interface Symbol {
+    val id: String
+
     @Serializable
     data class POI(
-        val id: String,
+        override val id: String,
         val lat: Double,
         val lng: Double,
+        @SerialName("poiType")
         val type: String = GENERIC,
         val name: String? = null,
     ) : Symbol {
+        @Suppress("unused")
         companion object {
             const val AID_STATION = "aid_station"
             const val ATM = "atm"
@@ -54,7 +59,7 @@ sealed interface Symbol {
 
     @Serializable
     data class Icon(
-        val id: String,
+        override val id: String,
         val lat: Double,
         val lng: Double,
         @DrawableRes val iconRes: Int,
