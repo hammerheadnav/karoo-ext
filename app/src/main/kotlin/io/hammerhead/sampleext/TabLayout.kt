@@ -45,12 +45,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.hammerhead.karooext.models.KarooEffect
 import io.hammerhead.karooext.models.LaunchPinDrop
-import io.hammerhead.karooext.models.NamedCoordinates
 import io.hammerhead.karooext.models.PerformHardwareAction
 import io.hammerhead.karooext.models.ReleaseAnt
 import io.hammerhead.karooext.models.RequestAnt
 import io.hammerhead.karooext.models.RideState
 import io.hammerhead.karooext.models.StreamState
+import io.hammerhead.karooext.models.Symbol
 import io.hammerhead.karooext.models.SystemNotification
 
 @Composable
@@ -142,7 +142,7 @@ fun ControlsTab(
         Spacer(modifier = Modifier.height(12.dp))
         Button(
             onClick = {
-                dispatchEffect(LaunchPinDrop(NamedCoordinates(40.1330043, -75.5182738, "Work")))
+                dispatchEffect(LaunchPinDrop(Symbol.POI("work", 40.1330043, -75.5182738, type = Symbol.POI.SHOPPING, name = "Work")))
             },
             colors = ButtonDefaults.textButtonColors(containerColor = Color.Magenta, contentColor = Color.White),
         ) {

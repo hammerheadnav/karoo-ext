@@ -295,5 +295,5 @@ data class ZoomPage(
  */
 @Serializable
 data class LaunchPinDrop(
-    val pin: NamedCoordinates,
+    val pin: Symbol.POI,
 ) : KarooEffect()

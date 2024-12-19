@@ -36,12 +36,12 @@ import io.hammerhead.karooext.models.InRideAlert
 import io.hammerhead.karooext.models.KarooEffect
 import io.hammerhead.karooext.models.MapEffect
 import io.hammerhead.karooext.models.MarkLap
-import io.hammerhead.karooext.models.NamedCoordinates
 import io.hammerhead.karooext.models.OnLocationChanged
 import io.hammerhead.karooext.models.OnMapZoomLevel
 import io.hammerhead.karooext.models.ShowPolyline
 import io.hammerhead.karooext.models.ShowSymbols
 import io.hammerhead.karooext.models.StreamState
+import io.hammerhead.karooext.models.Symbol
 import io.hammerhead.karooext.models.SystemNotification
 import io.hammerhead.karooext.models.UserProfile
 import io.hammerhead.sampleext.R
@@ -136,14 +136,17 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                     emitter.onNext(
                         ShowSymbols(
                             listOf(
-                                ShowSymbols.Symbol(
-                                    point = NamedCoordinates(dest.latitude(), dest.longitude()),
-                                    clickable = true,
+                                Symbol.POI(
+                                    id = "away",
+                                    lat = dest.latitude(),
+                                    lng = dest.longitude(),
                                 ),
-                                ShowSymbols.Symbol(
-                                    point = NamedCoordinates(half.latitude(), half.longitude()),
-                                    orientation = 0.0,
-                                    customIcon = R.drawable.ic_arrow,
+                                Symbol.Icon(
+                                    id = "half",
+                                    lat = half.latitude(),
+                                    lng = half.longitude(),
+                                    orientation = 0f,
+                                    iconRes = R.drawable.ic_arrow,
                                 ),
                             ),
                         ),

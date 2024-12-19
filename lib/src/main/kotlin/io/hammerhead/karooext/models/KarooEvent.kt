@@ -268,7 +268,7 @@ data class OnLocationChanged(
 }
 
 @Serializable
-data class OnGlobalPOIs(val pois: List<NamedCoordinates>) : KarooEvent() {
+data class OnGlobalPOIs(val pois: List<Symbol.POI>) : KarooEvent() {
 
     /**
      * Default params for [OnGlobalPOIs] event listener
@@ -292,11 +292,11 @@ data class OnNavigationState(
             val name: String,
             val reversed: Boolean,
             val breadcrumb: Boolean,
-            val pois: List<NamedCoordinates>,
+            val pois: List<Symbol.POI>,
         ) : NavigationState()
 
         @Serializable
-        data class NavigatingToDestination(val destination: NamedCoordinates) : NavigationState()
+        data class NavigatingToDestination(val destination: Symbol.POI) : NavigationState()
     }
 
     /**

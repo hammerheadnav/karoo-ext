@@ -17,7 +17,6 @@
 package io.hammerhead.karooext.models
 
 import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,15 +25,10 @@ sealed class MapEffect
 @Serializable
 data class ShowSymbols(
     val symbols: List<Symbol>,
-) : MapEffect() {
-    @Serializable
-    data class Symbol(
-        val point: NamedCoordinates,
-        @DrawableRes val customIcon: Int? = null,
-        val orientation: Double? = null,
-        val clickable: Boolean = false,
-    )
-}
+) : MapEffect()
+
+@Serializable
+data class HideSymbols(val symbolIds: List<String>) : MapEffect()
 
 @Serializable
 data class ShowPolyline(
