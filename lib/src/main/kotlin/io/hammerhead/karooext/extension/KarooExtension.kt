@@ -163,6 +163,13 @@ abstract class KarooExtension(
      */
     open fun connectDevice(uid: String, emitter: Emitter<DeviceEvent>) {}
 
+    /**
+     * Start providing effects for the map layer
+     *
+     * This will be called only if [ExtensionInfo] has `mapLayer` set to true
+     *
+     * @see [MapEffect]
+     */
     open fun startMap(emitter: Emitter<MapEffect>) {}
 
     /**
