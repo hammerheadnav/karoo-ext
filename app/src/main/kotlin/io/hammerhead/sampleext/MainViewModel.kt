@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import io.hammerhead.karooext.models.KarooEffect
 import io.hammerhead.karooext.models.Lap
 import io.hammerhead.karooext.models.OnGlobalPOIs
 import io.hammerhead.karooext.models.OnHttpResponse
+import io.hammerhead.karooext.models.OnNavigationReroute
 import io.hammerhead.karooext.models.OnNavigationState
 import io.hammerhead.karooext.models.OnStreamState
 import io.hammerhead.karooext.models.PlayBeepPattern
@@ -164,6 +165,9 @@ class MainViewModel @Inject constructor(
                 }
                 karooSystem.addConsumer { user: UserProfile ->
                     Timber.i("User profile loaded as $user")
+                }
+                karooSystem.addConsumer { reroute: OnNavigationReroute ->
+                    Timber.i("Reroute polyline now ${reroute.polyline}")
                 }
 
                 cont.invokeOnCancellation {

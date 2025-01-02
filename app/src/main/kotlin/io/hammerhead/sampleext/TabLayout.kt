@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -145,7 +145,7 @@ fun ControlsTab(
         Spacer(modifier = Modifier.height(12.dp))
         Button(
             onClick = {
-                dispatchEffect(LaunchPinDrop(Symbol.POI("work", 40.1330043, -75.5182738, type = Symbol.POI.SHOPPING, name = "Work")))
+                dispatchEffect(LaunchPinDrop(Symbol.POI("work", 40.1330043, -75.5182738, type = Symbol.POI.Types.SHOPPING, name = "Work")))
             },
             colors = ButtonDefaults.textButtonColors(containerColor = Color.Magenta, contentColor = Color.White),
         ) {

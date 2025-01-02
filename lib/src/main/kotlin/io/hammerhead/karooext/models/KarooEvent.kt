@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -371,6 +371,23 @@ data class OnNavigationState(
 
     /**
      * Default params for [OnNavigationState] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+/**
+ * Observe the routing-specific trace when navigation to destination or off route
+ */
+@Serializable
+data class OnNavigationReroute(
+    /**
+     * Google encoded polyline, precision 5 of the calculated route from position to destination or return to route at rejoin distance
+     */
+    val polyline: String?,
+) : KarooEvent() {
+    /**
+     * Default params for [OnNavigationReroute] event listener
      */
     @Serializable
     data object Params : KarooEventParams()
