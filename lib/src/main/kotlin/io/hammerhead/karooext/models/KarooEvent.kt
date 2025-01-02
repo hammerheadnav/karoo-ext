@@ -332,7 +332,9 @@ data class OnNavigationState(
         @Serializable
         data class NavigatingRoute(
             /**
-             * Google encoded polyline, precision 5.
+             * Google encoded polyline, precision 5 of the selected route.
+             *
+             * @see [OnNavigationReroute]
              */
             val polyline: String,
             /**
@@ -378,6 +380,16 @@ data class OnNavigationState(
 
 /**
  * Observe the routing-specific trace when navigation to destination or off route
+ *
+ * When navigation state is [OnNavigationState.NavigationState.NavigatingToDestination] this will
+ * be location from original location to the selected destination and will change if the user deviates from the
+ * suggested path.
+ *
+ * When navigation state is [OnNavigationState.NavigationState.NavigatingRoute] this will be null until the user
+ * goes off route at which point, this polyline will be the suggested way to return to the route and will change
+ * if the user deviates from the suggested return path.
+ *
+ * @see [OnNavigationState]
  */
 @Serializable
 data class OnNavigationReroute(
