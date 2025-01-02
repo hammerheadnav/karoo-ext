@@ -332,11 +332,15 @@ data class OnNavigationState(
         @Serializable
         data class NavigatingRoute(
             /**
-             * Google encoded polyline, precision 5 of the selected route.
-             *
-             * @see [OnNavigationReroute]
+             * Google encoded polyline, precision 5, of the selected route.
              */
-            val polyline: String,
+            val routePolyline: String,
+            /**
+             * Google encoded polyline, precision 5, of the path to navigate back to the route.
+             *
+             * Null when on route or off route and using breadcrumb navigation.
+             */
+            val rejoinPolyline: String?,
             /**
              * Name of the route
              */
@@ -360,7 +364,7 @@ data class OnNavigationState(
              * @suppress
              */
             override fun toString(): String {
-                return "NavigatingRoute($name, polyline=[${polyline.length}], reversed=$reversed, breadcrumb=$breadcrumb, pois=${pois.map { "POI(${it.name ?: it.type})" }})"
+                return "NavigatingRoute($name, routePolyline=[${routePolyline.length}], rejoinPolyline=[${rejoinPolyline?.length}], reversed=$reversed, breadcrumb=$breadcrumb, pois=${pois.map { "POI(${it.name ?: it.type})" }})"
             }
         }
 
@@ -368,38 +372,22 @@ data class OnNavigationState(
          * Navigation to a destination POI
          */
         @Serializable
-        data class NavigatingToDestination(val destination: Symbol.POI) : NavigationState()
+        data class NavigatingToDestination(
+            /**
+             * Destination the rider selected to navigate to.
+             */
+            val destination: Symbol.POI,
+            /**
+             * The polyline from the rider's original location to the destination.
+             *
+             * This will change if the rider deviates from the previous suggested path to the destination.
+             */
+            val polyline: String,
+        ) : NavigationState()
     }
 
     /**
      * Default params for [OnNavigationState] event listener
-     */
-    @Serializable
-    data object Params : KarooEventParams()
-}
-
-/**
- * Observe the routing-specific trace when navigation to destination or off route
- *
- * When navigation state is [OnNavigationState.NavigationState.NavigatingToDestination] this will
- * be location from original location to the selected destination and will change if the user deviates from the
- * suggested path.
- *
- * When navigation state is [OnNavigationState.NavigationState.NavigatingRoute] this will be null until the user
- * goes off route at which point, this polyline will be the suggested way to return to the route and will change
- * if the user deviates from the suggested return path.
- *
- * @see [OnNavigationState]
- */
-@Serializable
-data class OnNavigationReroute(
-    /**
-     * Google encoded polyline, precision 5 of the calculated route from position to destination or return to route at rejoin distance
-     */
-    val polyline: String?,
-) : KarooEvent() {
-    /**
-     * Default params for [OnNavigationReroute] event listener
      */
     @Serializable
     data object Params : KarooEventParams()

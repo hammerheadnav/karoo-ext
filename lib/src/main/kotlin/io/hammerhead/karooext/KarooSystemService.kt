@@ -36,7 +36,6 @@ import io.hammerhead.karooext.models.Lap
 import io.hammerhead.karooext.models.OnGlobalPOIs
 import io.hammerhead.karooext.models.OnLocationChanged
 import io.hammerhead.karooext.models.OnMapZoomLevel
-import io.hammerhead.karooext.models.OnNavigationReroute
 import io.hammerhead.karooext.models.OnNavigationState
 import io.hammerhead.karooext.models.RideState
 import io.hammerhead.karooext.models.UserProfile
@@ -234,7 +233,6 @@ class KarooSystemService(private val context: Context) {
             OnLocationChanged::class -> OnLocationChanged.Params
             OnGlobalPOIs::class -> OnGlobalPOIs.Params
             OnNavigationState::class -> OnNavigationState.Params
-            OnNavigationReroute::class -> OnNavigationReroute.Params
             OnMapZoomLevel::class -> OnMapZoomLevel.Params
             else -> throw IllegalArgumentException("No default KarooEventParams for ${T::class}")
         }
