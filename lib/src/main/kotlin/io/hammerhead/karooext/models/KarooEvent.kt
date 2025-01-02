@@ -342,6 +342,10 @@ data class OnNavigationState(
              */
             val rejoinPolyline: String?,
             /**
+             * Distance along `routePolyline` that `rejoinPolyline` meets.
+             */
+            val rejoinDistance: Double?,
+            /**
              * Name of the route
              */
             val name: String,
