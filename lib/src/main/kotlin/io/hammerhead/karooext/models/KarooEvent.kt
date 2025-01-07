@@ -336,6 +336,10 @@ data class OnNavigationState(
              */
             val routePolyline: String,
             /**
+             * Distance (in meters) of the full route.
+             */
+            val routeDistance: Double,
+            /**
              * Google encoded polyline, precision 5, of the path to navigate back to the route.
              *
              * Null when on route or off route and using breadcrumb navigation.
@@ -387,7 +391,14 @@ data class OnNavigationState(
              * This will change if the rider deviates from the previous suggested path to the destination.
              */
             val polyline: String,
-        ) : NavigationState()
+        ) : NavigationState() {
+            /**
+             * @suppress
+             */
+            override fun toString(): String {
+                return "NavigatingToDestination($destination, polyline=[${polyline.length}])"
+            }
+        }
     }
 
     /**

@@ -30,6 +30,7 @@ import io.hammerhead.karooext.models.KarooEffect
 import io.hammerhead.karooext.models.Lap
 import io.hammerhead.karooext.models.OnGlobalPOIs
 import io.hammerhead.karooext.models.OnHttpResponse
+import io.hammerhead.karooext.models.OnMapZoomLevel
 import io.hammerhead.karooext.models.OnNavigationState
 import io.hammerhead.karooext.models.OnStreamState
 import io.hammerhead.karooext.models.PlayBeepPattern
@@ -158,6 +159,9 @@ class MainViewModel @Inject constructor(
                 }
                 karooSystem.addConsumer { event: OnGlobalPOIs ->
                     mutableState.update { it.copy(globalPOIs = event.pois) }
+                }
+                karooSystem.addConsumer { zoom: OnMapZoomLevel ->
+                    Timber.i("Map zoom $zoom")
                 }
                 karooSystem.addConsumer { lap: Lap ->
                     Timber.i("Lap ${lap.number}!")
