@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@ data class ExtensionInfo(
      * Whether this extension provides map layer.
      *
      * @see [KarooExtension.startMap]
+     * @since 1.1.3
      */
     val mapLayer: Boolean,
     /**

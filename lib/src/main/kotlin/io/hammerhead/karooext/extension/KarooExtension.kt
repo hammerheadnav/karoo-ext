@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -169,6 +169,7 @@ abstract class KarooExtension(
      * This will be called only if [ExtensionInfo] has `mapLayer` set to true
      *
      * @see [MapEffect]
+     * @since 1.1.3
      */
     open fun startMap(emitter: Emitter<MapEffect>) {}
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -292,6 +292,8 @@ data class ZoomPage(
 /**
  * Open map pin activity to allow user the choice to navigate to this
  * point or save this point as a POI.
+ *
+ * @since 1.1.3
  */
 @Serializable
 data class LaunchPinDrop(

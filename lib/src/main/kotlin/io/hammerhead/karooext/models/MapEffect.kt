@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@ import kotlinx.serialization.Serializable
 
 /**
  * Effect classes for use in [io.hammerhead.karooext.extension.KarooExtension] call `startMap`
+ *
+ * @since 1.1.3
  */
 @Serializable
 sealed class MapEffect
@@ -31,6 +33,7 @@ sealed class MapEffect
  * This can be called again with the same ID to update symbols.
  *
  * @see [Symbol]
+ * @since 1.1.3
  */
 @Serializable
 data class ShowSymbols(
@@ -44,6 +47,8 @@ data class ShowSymbols(
 
 /**
  * Remove symbols by `id` that were previously added with [ShowSymbols]
+ *
+ * @since 1.1.3
  */
 @Serializable
 data class HideSymbols(
@@ -55,6 +60,8 @@ data class HideSymbols(
 
 /**
  * Show a polyline on the map with style
+ *
+ * @since 1.1.3
  */
 @Serializable
 data class ShowPolyline(
@@ -82,6 +89,7 @@ data class ShowPolyline(
  * Hide a previously shown polyline
  *
  * @see [ShowPolyline]
+ * @since 1.1.3
  */
 @Serializable
 data class HidePolyline(val id: String) : MapEffect()
