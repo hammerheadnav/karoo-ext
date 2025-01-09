@@ -255,6 +255,8 @@ data class OnHttpResponse(val state: HttpResponseState) : KarooEvent() {
 
 /**
  * Observe the current position and orientation
+ *
+ * @since 1.1.3
  */
 @Serializable
 data class OnLocationChanged(
@@ -285,6 +287,7 @@ data class OnLocationChanged(
  * Observe the rider's POIs save to their account
  *
  * @see [Symbol.POI]
+ * @since 1.1.3
  */
 @Serializable
 data class OnGlobalPOIs(
@@ -305,6 +308,8 @@ data class OnGlobalPOIs(
 
 /**
  * Observe the state of navigation: route selection or destination
+ *
+ * @since 1.1.3
  */
 @Serializable
 data class OnNavigationState(
@@ -312,11 +317,14 @@ data class OnNavigationState(
      * Current state
      *
      * @see [NavigationState]
+     * @since 1.1.3
      */
     val state: NavigationState,
 ) : KarooEvent() {
     /**
      * Encapsulation of navigation state options
+     *
+     * @since 1.1.3
      */
     @Serializable
     sealed class NavigationState {
@@ -403,6 +411,8 @@ data class OnNavigationState(
 
     /**
      * Default params for [OnNavigationState] event listener
+     *
+     * @since 1.1.3
      */
     @Serializable
     data object Params : KarooEventParams()
@@ -410,6 +420,8 @@ data class OnNavigationState(
 
 /**
  * Observe the zoom level of the map
+ *
+ * @since 1.1.3
  */
 @Serializable
 data class OnMapZoomLevel(
