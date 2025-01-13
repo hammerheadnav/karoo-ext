@@ -24,6 +24,7 @@ import io.hammerhead.karooext.EXT_LIB_VERSION
 import io.hammerhead.karooext.aidl.IHandler
 import io.hammerhead.karooext.aidl.IKarooExtension
 import io.hammerhead.karooext.internal.Emitter
+import io.hammerhead.karooext.internal.FitEmitter
 import io.hammerhead.karooext.internal.ViewEmitter
 import io.hammerhead.karooext.internal.serializableFromBundle
 import io.hammerhead.karooext.models.DataType
@@ -140,7 +141,7 @@ abstract class KarooExtension(
             }
 
             override fun startFit(id: String, handler: IHandler) {
-                val emitter = Emitter.create<FitEffect>(packageName, handler)
+                val emitter = FitEmitter(packageName, handler)
                 emitters[id] = emitter
                 Timber.d("$TAG: startFit $id")
                 startFit(emitter)
