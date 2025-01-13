@@ -19,4 +19,7 @@ interface IKarooExtension {
 
     oneway void startMap(String id, in IHandler handler);
     oneway void stopMap(String id);
+
+    oneway void startFit(String id, in IHandler handler);
+    oneway void stopFit(String id);
 }

@@ -30,6 +30,7 @@ import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
 import io.hammerhead.karooext.models.ExtensionInfo
+import io.hammerhead.karooext.models.FitEffect
 import io.hammerhead.karooext.models.MapEffect
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.ViewConfig
@@ -137,6 +138,18 @@ abstract class KarooExtension(
                 Timber.d("$TAG: stopMap $id")
                 emitters.remove(id)?.cancel()
             }
+
+            override fun startFit(id: String, handler: IHandler) {
+                val emitter = Emitter.create<FitEffect>(packageName, handler)
+                emitters[id] = emitter
+                Timber.d("$TAG: startFit $id")
+                startFit(emitter)
+            }
+
+            override fun stopFit(id: String) {
+                Timber.d("$TAG: stopFit $id")
+                emitters.remove(id)?.cancel()
+            }
         }
     }
 
@@ -172,6 +185,15 @@ abstract class KarooExtension(
      * @since 1.1.3
      */
     open fun startMap(emitter: Emitter<MapEffect>) {}
+
+    /**
+     * Start providing effects for FIT file writing
+     *
+     * This will be called only if [ExtensionInfo] has `fitFile` set to true
+     *
+     * @see [FitEffect]
+     */
+    open fun startFit(emitter: Emitter<FitEffect>) {}
 
     /**
      * @suppress

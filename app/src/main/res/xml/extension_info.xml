@@ -4,7 +4,8 @@
     icon="@drawable/ic_sample"
     id="sample"
     scansDevices="true"
-    mapLayer="true">
+    mapLayer="true"
+    fitFile="true">
     <DataType
         description="@string/custom_speed_description"
         displayName="@string/custom_speed"

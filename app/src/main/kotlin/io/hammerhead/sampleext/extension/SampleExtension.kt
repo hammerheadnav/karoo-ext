@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,11 @@ import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.extension.KarooExtension
 import io.hammerhead.karooext.internal.Emitter
 import io.hammerhead.karooext.models.DataType
+import io.hammerhead.karooext.models.DeveloperField
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
+import io.hammerhead.karooext.models.FieldValue
+import io.hammerhead.karooext.models.FitEffect
 import io.hammerhead.karooext.models.InRideAlert
 import io.hammerhead.karooext.models.KarooEffect
 import io.hammerhead.karooext.models.MapEffect
@@ -44,6 +47,8 @@ import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.Symbol
 import io.hammerhead.karooext.models.SystemNotification
 import io.hammerhead.karooext.models.UserProfile
+import io.hammerhead.karooext.models.WriteFieldDescriptionMesg
+import io.hammerhead.karooext.models.WriteToRecordMesg
 import io.hammerhead.sampleext.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -154,6 +159,44 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                     val polyline = PolylineUtils.encode(listOf(source, dest), 5)
                     emitter.onNext(ShowPolyline("45", polyline, getColor(R.color.colorPrimary), 4))
                 }
+        }
+        emitter.setCancellable {
+            job.cancel()
+        }
+    }
+
+    private val developerField by lazy {
+        DeveloperField(
+            fieldDefinitionNumber = 0,
+            // public static final short FLOAT32 = 136;
+            fitBaseTypeId = 136,
+            fieldName = "my-thing",
+            units = "abc"
+        )
+    }
+
+    override fun startFit(emitter: Emitter<FitEffect>) {
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            // Always start by defining developer field before use
+            emitter.onNext(WriteFieldDescriptionMesg(developerField))
+
+            repeat(Int.MAX_VALUE) { inc ->
+                Timber.d("BRENT: FIT $inc")
+                emitter.onNext(
+                    WriteToRecordMesg(
+                        /**
+                         * public static final int PowerFieldNum = 7;
+                         */
+                        FieldValue(7, inc.toDouble())
+                    )
+                )
+                emitter.onNext(
+                    WriteToRecordMesg(
+                        FieldValue(developerField, inc.div(2.0))
+                    )
+                )
+                delay(1000)
+            }
         }
         emitter.setCancellable {
             job.cancel()

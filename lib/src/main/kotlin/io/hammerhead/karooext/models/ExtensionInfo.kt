@@ -55,6 +55,12 @@ data class ExtensionInfo(
      */
     val mapLayer: Boolean,
     /**
+     * Whether this extension writes to the FIT file.
+     *
+     * @see [KarooExtension.startFit]
+     */
+    val fitFile: Boolean,
+    /**
      * Static list of [DataType]s this extension provides.
      *
      * @see [DataType]
