@@ -47,7 +47,6 @@ import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.Symbol
 import io.hammerhead.karooext.models.SystemNotification
 import io.hammerhead.karooext.models.UserProfile
-import io.hammerhead.karooext.models.WriteFieldDescriptionMesg
 import io.hammerhead.karooext.models.WriteToRecordMesg
 import io.hammerhead.sampleext.R
 import kotlinx.coroutines.CoroutineScope
@@ -177,9 +176,6 @@ class SampleExtension : KarooExtension("sample", "1.0") {
 
     override fun startFit(emitter: Emitter<FitEffect>) {
         val job = CoroutineScope(Dispatchers.IO).launch {
-            // Always start by defining developer field before use
-            emitter.onNext(WriteFieldDescriptionMesg(developerField))
-
             repeat(Int.MAX_VALUE) { inc ->
                 Timber.d("BRENT: FIT $inc")
                 emitter.onNext(

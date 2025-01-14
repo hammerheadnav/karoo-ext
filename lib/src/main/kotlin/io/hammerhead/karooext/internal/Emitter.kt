@@ -21,13 +21,7 @@ import android.widget.RemoteViews
 import io.hammerhead.karooext.BUNDLE_PACKAGE
 import io.hammerhead.karooext.BUNDLE_VALUE
 import io.hammerhead.karooext.aidl.IHandler
-import io.hammerhead.karooext.models.DeveloperField
-import io.hammerhead.karooext.models.FieldValue
-import io.hammerhead.karooext.models.FitEffect
 import io.hammerhead.karooext.models.ViewEvent
-import io.hammerhead.karooext.models.WriteEventMesg
-import io.hammerhead.karooext.models.WriteFieldDescriptionMesg
-import io.hammerhead.karooext.models.WriteToRecordMesg
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -126,31 +120,5 @@ class ViewEmitter(
         bundle.putParcelable("view", view)
         bundle.putString(BUNDLE_PACKAGE, packageName)
         handler.onNext(bundle)
-    }
-}
-
-/**
- * Special [Emitter] that validates writing of developer fields with [FitEffect].
- */
-class FitEmitter(
-    private val packageName: String,
-    private val handler: IHandler,
-    private val effectEmitter: Emitter<FitEffect> = Emitter.create<FitEffect>(packageName, handler),
-) : Emitter<FitEffect> by effectEmitter {
-    private val developerFields = mutableSetOf<DeveloperField>()
-
-    override fun onNext(t: FitEffect) {
-        when (t) {
-            is WriteEventMesg -> checkDeveloperFields(t.values)
-            is WriteToRecordMesg -> checkDeveloperFields(t.values)
-            is WriteFieldDescriptionMesg -> developerFields.add(t.developerField)
-        }
-        effectEmitter.onNext(t)
-    }
-
-    private fun checkDeveloperFields(values: List<FieldValue>) {
-        if (values.any { it.developerField != null && !developerFields.contains(it.developerField) }) {
-            throw IllegalStateException("Undeclared developer field in ${values}, see WriteFieldDescriptionMesg")
-        }
     }
 }

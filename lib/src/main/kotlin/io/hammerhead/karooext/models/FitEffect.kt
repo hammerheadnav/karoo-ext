@@ -17,13 +17,24 @@
 package io.hammerhead.karooext.models
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 /**
  * @since 1.1.4
  */
 @Serializable
-sealed class FitEffect
+sealed interface FitEffect
 
+@Serializable
+sealed interface FitEffectWithValues : FitEffect {
+    val values: List<FieldValue>
+
+    @Transient
+    val developerFields: Set<DeveloperField>
+        get() = values.mapNotNull { it.developerField }.toSet()
+
+    fun copyWith(values: List<FieldValue>): FitEffectWithValues
+}
 
 /**
  * @since 1.1.4
@@ -47,28 +58,20 @@ data class DeveloperField(
 @Suppress("unused", "DataClassPrivateConstructor")
 @Serializable
 data class FieldValue private constructor(
-    val fieldNum: Short,
+    val fieldNum: Int,
     val value: Double,
     val developerField: DeveloperField?,
 ) {
     /**
      * Create field value with standard field definition
      */
-    constructor(fieldNum: Short, value: Double) : this(fieldNum, value, null)
+    constructor(fieldNum: Int, value: Double) : this(fieldNum, value, null)
 
     /**
      * Create field value for a custom-defined developer field
      */
-    constructor(developerField: DeveloperField, value: Double) : this(developerField.fieldDefinitionNumber, value, developerField)
+    constructor(developerField: DeveloperField, value: Double) : this(developerField.fieldDefinitionNumber.toInt(), value, developerField)
 }
-
-/**
- * @since 1.1.4
- */
-@Serializable
-data class WriteFieldDescriptionMesg(
-    val developerField: DeveloperField,
-) : FitEffect()
 
 /**
  * @since 1.1.4
@@ -77,13 +80,49 @@ data class WriteFieldDescriptionMesg(
 data class WriteEventMesg(
     val event: Short,
     val eventType: Short,
-    val values: List<FieldValue>,
-) : FitEffect()
+    override val values: List<FieldValue>,
+) : FitEffectWithValues {
+    override fun copyWith(values: List<FieldValue>): FitEffectWithValues {
+        return copy(values = values)
+    }
+}
 
 /**
  * @since 1.1.4
  */
 @Serializable
-data class WriteToRecordMesg(val values: List<FieldValue>) : FitEffect() {
+data class WriteToRecordMesg(
+    override val values: List<FieldValue>,
+) : FitEffectWithValues {
     constructor(value: FieldValue) : this(listOf(value))
+
+    override fun copyWith(values: List<FieldValue>): FitEffectWithValues {
+        return copy(values = values)
+    }
 }
+
+/**
+ * @since 1.1.4
+ */
+@Serializable
+data class WriteToSessionMesg(
+    override val values: List<FieldValue>,
+) : FitEffectWithValues {
+    constructor(value: FieldValue) : this(listOf(value))
+
+    override fun copyWith(values: List<FieldValue>): FitEffectWithValues {
+        return copy(values = values)
+    }
+}
+
+/**
+ * @suppress
+ */
+@Serializable
+data class WriteDeveloperDataIdMesg(val developerDataId: Short) : FitEffect
+
+/**
+ * @suppress
+ */
+@Serializable
+data class WriteFieldDescriptionMesg(val developerField: DeveloperField) : FitEffect
