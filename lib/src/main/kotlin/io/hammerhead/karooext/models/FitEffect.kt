@@ -34,6 +34,7 @@ data class DeveloperField(
     val fitBaseTypeId: Short,
     val fieldName: String,
     val units: String,
+    val nativeFieldNum: Short? = null,
     /**
      * Do not use. Populated by Karoo System.
      */
@@ -43,13 +44,21 @@ data class DeveloperField(
 /**
  * @since 1.1.4
  */
-@Suppress("unused")
+@Suppress("unused", "DataClassPrivateConstructor")
 @Serializable
-data class FieldValue(
+data class FieldValue private constructor(
     val fieldNum: Short,
     val value: Double,
-    val developerField: DeveloperField? = null,
+    val developerField: DeveloperField?,
 ) {
+    /**
+     * Create field value with standard field definition
+     */
+    constructor(fieldNum: Short, value: Double) : this(fieldNum, value, null)
+
+    /**
+     * Create field value for a custom-defined developer field
+     */
     constructor(developerField: DeveloperField, value: Double) : this(developerField.fieldDefinitionNumber, value, developerField)
 }
 
