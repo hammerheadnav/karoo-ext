@@ -41,6 +41,7 @@ import io.hammerhead.karooext.models.MapEffect
 import io.hammerhead.karooext.models.MarkLap
 import io.hammerhead.karooext.models.OnLocationChanged
 import io.hammerhead.karooext.models.OnMapZoomLevel
+import io.hammerhead.karooext.models.RideState
 import io.hammerhead.karooext.models.ShowPolyline
 import io.hammerhead.karooext.models.ShowSymbols
 import io.hammerhead.karooext.models.StreamState
@@ -48,6 +49,7 @@ import io.hammerhead.karooext.models.Symbol
 import io.hammerhead.karooext.models.SystemNotification
 import io.hammerhead.karooext.models.UserProfile
 import io.hammerhead.karooext.models.WriteToRecordMesg
+import io.hammerhead.karooext.models.WriteToSessionMesg
 import io.hammerhead.sampleext.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -179,23 +181,38 @@ class SampleExtension : KarooExtension("sample", "1.0") {
         val job = CoroutineScope(Dispatchers.IO).launch {
             karooSystem.streamDataFlow(DataType.Type.ELAPSED_TIME)
                 .mapNotNull { (it as? StreamState.Streaming)?.dataPoint?.singleValue?.div(1000) }
-                .collect { seconds ->
+                .combine(karooSystem.consumerFlow<RideState>()) { seconds, rideState ->
+                    Pair(seconds, rideState)
+                }
+                .collect { (seconds, rideState) ->
                     val doughnuts = (seconds / 120.0).roundToInt() / 10.0
-                    Timber.d("Doughnuts now $doughnuts")
-                    emitter.onNext(WriteToRecordMesg(FieldValue(doughnutsField, doughnuts)))
+                    when (rideState) {
+                        is RideState.Idle -> {}
+                        // When paused, write to SessionMesg so it's committed infrequently
+                        // Last set will be saved at end of activity
+                        is RideState.Paused -> {
+                            Timber.d("Doughnuts session now $doughnuts")
+                            emitter.onNext(WriteToSessionMesg(FieldValue(doughnutsField, doughnuts)))
+                        }
+                        // When recording, write doughnuts and power to record messages
+                        is RideState.Recording -> {
+                            Timber.d("Doughnuts now $doughnuts")
+                            emitter.onNext(WriteToRecordMesg(FieldValue(doughnutsField, doughnuts)))
 
-                    // Power: saw-tooth [100, 200]
-                    val fakePower = 100 + seconds.mod(200.0).minus(100).absoluteValue
-                    Timber.d("Power now $fakePower")
-                    emitter.onNext(
-                        WriteToRecordMesg(
-                            /**
-                             * From FIT SDK:
-                             * public static final int PowerFieldNum = 7;
-                             */
-                            FieldValue(7, fakePower),
-                        ),
-                    )
+                            // Power: saw-tooth [100, 200]
+                            val fakePower = 100 + seconds.mod(200.0).minus(100).absoluteValue
+                            Timber.d("Power now $fakePower")
+                            emitter.onNext(
+                                WriteToRecordMesg(
+                                    /**
+                                     * From FIT SDK:
+                                     * public static final int PowerFieldNum = 7;
+                                     */
+                                    FieldValue(7, fakePower),
+                                ),
+                            )
+                        }
+                    }
                 }
         }
         emitter.setCancellable {
