@@ -48,6 +48,7 @@ import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.Symbol
 import io.hammerhead.karooext.models.SystemNotification
 import io.hammerhead.karooext.models.UserProfile
+import io.hammerhead.karooext.models.WriteEventMesg
 import io.hammerhead.karooext.models.WriteToRecordMesg
 import io.hammerhead.karooext.models.WriteToSessionMesg
 import io.hammerhead.sampleext.R
@@ -185,19 +186,21 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                     Pair(seconds, rideState)
                 }
                 .collect { (seconds, rideState) ->
-                    val doughnuts = (seconds / 120.0).roundToInt() / 10.0
+                    // One to start and another one earned every 20 minutes (rounded to 0.1)
+                    val doughnuts = 1 + (seconds / 120.0).roundToInt() / 10.0
+                    val doughnutsField = FieldValue(doughnutsField, doughnuts)
                     when (rideState) {
                         is RideState.Idle -> {}
                         // When paused, write to SessionMesg so it's committed infrequently
                         // Last set will be saved at end of activity
                         is RideState.Paused -> {
                             Timber.d("Doughnuts session now $doughnuts")
-                            emitter.onNext(WriteToSessionMesg(FieldValue(doughnutsField, doughnuts)))
+                            emitter.onNext(WriteToSessionMesg(doughnutsField))
                         }
                         // When recording, write doughnuts and power to record messages
                         is RideState.Recording -> {
                             Timber.d("Doughnuts now $doughnuts")
-                            emitter.onNext(WriteToRecordMesg(FieldValue(doughnutsField, doughnuts)))
+                            emitter.onNext(WriteToRecordMesg(doughnutsField))
 
                             // Power: saw-tooth [100, 200]
                             val fakePower = 100 + seconds.mod(200.0).minus(100).absoluteValue
@@ -212,6 +215,16 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                                 ),
                             )
                         }
+                    }
+                    if (seconds == 42.0) {
+                        // Off-course marker at 42 seconds with doughnuts included
+                        emitter.onNext(
+                            WriteEventMesg(
+                                event = 7, // OFF_COURSE((short)7),
+                                eventType = 3, // MARKER((short)3),
+                                values = listOf(doughnutsField),
+                            )
+                        )
                     }
                 }
         }
