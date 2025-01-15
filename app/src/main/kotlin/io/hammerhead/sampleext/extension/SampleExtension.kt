@@ -65,6 +65,8 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
+import kotlin.math.absoluteValue
+import kotlin.math.roundToInt
 import kotlin.reflect.full.createInstance
 
 @AndroidEntryPoint
@@ -164,35 +166,37 @@ class SampleExtension : KarooExtension("sample", "1.0") {
         }
     }
 
-    private val developerField by lazy {
+    private val doughnutsField by lazy {
         DeveloperField(
             fieldDefinitionNumber = 0,
-            // public static final short FLOAT32 = 136;
-            fitBaseTypeId = 136,
-            fieldName = "my-thing",
-            units = "abc"
+            fitBaseTypeId = 136, // FitBaseType.Float32
+            fieldName = "Doughnuts Earned",
+            units = "doughnuts",
         )
     }
 
     override fun startFit(emitter: Emitter<FitEffect>) {
         val job = CoroutineScope(Dispatchers.IO).launch {
-            repeat(Int.MAX_VALUE) { inc ->
-                Timber.d("BRENT: FIT $inc")
-                emitter.onNext(
-                    WriteToRecordMesg(
-                        /**
-                         * public static final int PowerFieldNum = 7;
-                         */
-                        FieldValue(7, inc.toDouble())
+            karooSystem.streamDataFlow(DataType.Type.ELAPSED_TIME)
+                .mapNotNull { (it as? StreamState.Streaming)?.dataPoint?.singleValue?.div(1000) }
+                .collect { seconds ->
+                    val doughnuts = (seconds / 120.0).roundToInt() / 10.0
+                    Timber.d("Doughnuts now $doughnuts")
+                    emitter.onNext(WriteToRecordMesg(FieldValue(doughnutsField, doughnuts)))
+
+                    // Power: saw-tooth [100, 200]
+                    val fakePower = 100 + seconds.mod(200.0).minus(100).absoluteValue
+                    Timber.d("Power now $fakePower")
+                    emitter.onNext(
+                        WriteToRecordMesg(
+                            /**
+                             * From FIT SDK:
+                             * public static final int PowerFieldNum = 7;
+                             */
+                            FieldValue(7, fakePower),
+                        ),
                     )
-                )
-                emitter.onNext(
-                    WriteToRecordMesg(
-                        FieldValue(developerField, inc.div(2.0))
-                    )
-                )
-                delay(1000)
-            }
+                }
         }
         emitter.setCancellable {
             job.cancel()
