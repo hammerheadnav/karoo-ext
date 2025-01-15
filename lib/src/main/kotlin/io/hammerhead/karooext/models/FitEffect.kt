@@ -214,13 +214,18 @@ data class WriteToSessionMesg(
 }
 
 /**
- * @suppress
+ * Internal use by Karoo System when the first [DeveloperField] is used in [FitEffectWithValues]
+ *
+ * Ignored if emitted by an extension
  */
 @Serializable
 data class WriteDeveloperDataIdMesg(val developerDataId: Short) : FitEffect
 
+
 /**
- * @suppress
+ * Internal use by Karoo System when a new [DeveloperField] is used in [FitEffectWithValues]
+ *
+ * Ignored if emitted by an extension
  */
 @Serializable
 data class WriteFieldDescriptionMesg(val developerField: DeveloperField) : FitEffect
