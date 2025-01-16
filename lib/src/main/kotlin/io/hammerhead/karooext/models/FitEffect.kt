@@ -106,9 +106,9 @@ data class DeveloperField(
  *
  * @since 1.1.4
  */
-@Suppress("unused", "DataClassPrivateConstructor")
+@Suppress("unused")
 @Serializable
-data class FieldValue private constructor(
+data class FieldValue(
     /**
      * Standard field number
      */
