@@ -27,6 +27,9 @@ import io.hammerhead.karooext.internal.KarooSystemListener
 import io.hammerhead.karooext.internal.bundleWithSerializable
 import io.hammerhead.karooext.internal.createConsumer
 import io.hammerhead.karooext.internal.serializableFromBundle
+import io.hammerhead.karooext.models.ActiveRidePage
+import io.hammerhead.karooext.models.ActiveRideProfile
+import io.hammerhead.karooext.models.Bikes
 import io.hammerhead.karooext.models.HardwareType
 import io.hammerhead.karooext.models.KarooEffect
 import io.hammerhead.karooext.models.KarooEvent
@@ -38,6 +41,7 @@ import io.hammerhead.karooext.models.OnLocationChanged
 import io.hammerhead.karooext.models.OnMapZoomLevel
 import io.hammerhead.karooext.models.OnNavigationState
 import io.hammerhead.karooext.models.RideState
+import io.hammerhead.karooext.models.SavedDevices
 import io.hammerhead.karooext.models.UserProfile
 import timber.log.Timber
 import java.util.UUID
@@ -234,6 +238,10 @@ class KarooSystemService(private val context: Context) {
             OnGlobalPOIs::class -> OnGlobalPOIs.Params
             OnNavigationState::class -> OnNavigationState.Params
             OnMapZoomLevel::class -> OnMapZoomLevel.Params
+            SavedDevices::class -> SavedDevices.Params
+            Bikes::class -> Bikes.Params
+            ActiveRideProfile::class -> ActiveRideProfile.Params
+            ActiveRidePage::class -> ActiveRidePage.Params
             else -> throw IllegalArgumentException("No default KarooEventParams for ${T::class}")
         }
         return addConsumer<T>(params, onError, onComplete, onEvent)

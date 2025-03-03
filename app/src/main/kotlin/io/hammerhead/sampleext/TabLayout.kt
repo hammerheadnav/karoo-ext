@@ -64,7 +64,7 @@ fun TabLayout(
     playBeeps: () -> Unit,
     toggleHomeBackground: () -> Unit,
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    var selectedTabIndex by remember { mutableIntStateOf(1) }
     val tabs = listOf("Controls", "Data", "Requests")
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -156,8 +156,6 @@ fun ControlsTab(
 
 @Composable
 fun DataTab(mainData: MainData) {
-    var isPOIDialogOpen by remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -167,35 +165,64 @@ fun DataTab(mainData: MainData) {
         Text(text = "Ride State: ${mainData.rideState}")
         Text(text = "Power: ${(mainData.power as? StreamState.Streaming)?.dataPoint?.singleValue ?: "--"}")
         Text(text = "Navigation: ${mainData.navigationState}")
-        Button(
-            onClick = { isPOIDialogOpen = true },
-            colors = ButtonDefaults.textButtonColors(containerColor = Color.Magenta, contentColor = Color.White),
+        Text(text = "Active profile: ${mainData.rideProfile}")
+        Text(text = "Active page: ${mainData.activePage}")
+        ExpandableData(
+            buttonText = "Global POIs",
+            buttonColor = Color.Magenta,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
-            Text("Global POIs")
+            mainData.globalPOIs.map {
+                Text("POI: ${it.name ?: ""} ${it.type}")
+            }
         }
-        if (isPOIDialogOpen) {
-            AlertDialog(
-                onDismissRequest = { isPOIDialogOpen = false },
-                text = {
-                    Column(
-                        modifier = Modifier
-                            .verticalScroll(rememberScrollState())
-                            .padding(4.dp),
-                    ) {
-                        mainData.globalPOIs.map {
-                            Text("POI: ${it.name ?: ""} ${it.type}")
-                        }
-                    }
-                },
-                confirmButton = {
-                    Button(onClick = { isPOIDialogOpen = false }) {
-                        Text("Close")
-                    }
-                },
-                modifier = Modifier.padding(10.dp),
-            )
+        ExpandableData(
+            buttonText = "Saved Devices",
+            buttonColor = Color.DarkGray,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) {
+            mainData.savedDevices.map {
+                Text("Device: $it")
+            }
         }
+    }
+}
+
+@Composable
+fun ExpandableData(
+    buttonText: String,
+    buttonColor: Color,
+    modifier: Modifier,
+    content: @Composable () -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Button(
+        onClick = { expanded = true },
+        colors = ButtonDefaults.textButtonColors(containerColor = buttonColor, contentColor = Color.White),
+        modifier = modifier,
+    ) {
+        Text(buttonText)
+    }
+    if (expanded) {
+        AlertDialog(
+            onDismissRequest = { expanded = false },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(4.dp),
+                ) {
+                    content()
+                }
+            },
+            confirmButton = {
+                Button(onClick = { expanded = false }) {
+                    Text("Close")
+                }
+            },
+            modifier = Modifier.padding(10.dp),
+        )
     }
 }
 

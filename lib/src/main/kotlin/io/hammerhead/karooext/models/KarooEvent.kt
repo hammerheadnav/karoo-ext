@@ -439,3 +439,102 @@ data class OnMapZoomLevel(
     @Serializable
     data object Params : KarooEventParams()
 }
+
+/**
+ * Observe saved devices
+ *
+ * @since 1.1.5
+ */
+@Serializable
+data class SavedDevices(
+    val devices: List<SavedDevice>,
+) : KarooEvent() {
+    @Serializable
+    data class SavedDevice(
+        val id: String,
+        val connectionType: String,
+        val name: String,
+        val enabled: Boolean,
+        val details: DeviceDetail,
+        val components: Map<String, DeviceDetail>?,
+        val supportedDataTypes: List<String>,
+        val gearInfo: GearInfo?,
+    ) {
+        @Serializable
+        data class DeviceDetail(
+            val lastBattery: BatteryStatus?,
+            val lastBatteryUpdate: Long?,
+            val manufacturer: String?,
+            val serialNumber: String?,
+        )
+
+        @Serializable
+        data class GearInfo(
+            val maxFrontGears: Int,
+            val maxRearGears: Int,
+            val frontTeeth: List<Int>?,
+            val rearTeeth: List<Int>?,
+        )
+    }
+
+    /**
+     * Default params for [Devices] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+/**
+ * Observe bikes
+ *
+ * @since 1.1.5
+ */
+@Serializable
+data class Bikes(
+    val bikes: List<Bike>,
+) : KarooEvent() {
+    @Serializable
+    data class Bike(
+        val id: String,
+        val name: String,
+        val odometer: Double,
+    )
+
+    /**
+     * Default params for [Bikes] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+/**
+ * Observe the active ride profile
+ *
+ * @since 1.1.5
+ */
+@Serializable
+data class ActiveRideProfile(
+    val profile: RideProfile,
+) : KarooEvent() {
+    /**
+     * Default params for [ActiveRideProfile] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+/**
+ * Observe the visible ride page
+ *
+ * @since 1.1.5
+ */
+@Serializable
+data class ActiveRidePage(
+    val page: RideProfile.Page,
+) : KarooEvent() {
+    /**
+     * Default params for [ActiveRidePage] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}

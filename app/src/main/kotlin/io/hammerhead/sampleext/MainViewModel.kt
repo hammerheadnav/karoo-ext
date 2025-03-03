@@ -22,7 +22,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.hammerhead.karooext.KarooSystemService
+import io.hammerhead.karooext.models.ActiveRidePage
+import io.hammerhead.karooext.models.ActiveRideProfile
 import io.hammerhead.karooext.models.ApplyLauncherBackground
+import io.hammerhead.karooext.models.Bikes
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.HardwareType
 import io.hammerhead.karooext.models.HttpResponseState
@@ -34,7 +37,9 @@ import io.hammerhead.karooext.models.OnMapZoomLevel
 import io.hammerhead.karooext.models.OnNavigationState
 import io.hammerhead.karooext.models.OnStreamState
 import io.hammerhead.karooext.models.PlayBeepPattern
+import io.hammerhead.karooext.models.RideProfile
 import io.hammerhead.karooext.models.RideState
+import io.hammerhead.karooext.models.SavedDevices
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.Symbol
 import io.hammerhead.karooext.models.UserProfile
@@ -66,6 +71,10 @@ data class MainData(
     val httpStatus: String? = null,
     val navigationState: OnNavigationState.NavigationState? = null,
     val globalPOIs: List<Symbol.POI> = emptyList(),
+    val savedDevices: List<SavedDevices.SavedDevice> = emptyList(),
+    val bikes: List<Bikes.Bike> = emptyList(),
+    val rideProfile: RideProfile? = null,
+    val activePage: RideProfile.Page? = null,
 )
 
 val json = Json {
@@ -159,6 +168,18 @@ class MainViewModel @Inject constructor(
                 }
                 karooSystem.addConsumer { event: OnGlobalPOIs ->
                     mutableState.update { it.copy(globalPOIs = event.pois) }
+                }
+                karooSystem.addConsumer { event: SavedDevices ->
+                    mutableState.update { it.copy(savedDevices = event.devices) }
+                }
+                karooSystem.addConsumer { event: Bikes ->
+                    mutableState.update { it.copy(bikes = event.bikes) }
+                }
+                karooSystem.addConsumer { event: ActiveRideProfile ->
+                    mutableState.update { it.copy(rideProfile = event.profile) }
+                }
+                karooSystem.addConsumer { event: ActiveRidePage ->
+                    mutableState.update { it.copy(activePage = event.page) }
                 }
                 karooSystem.addConsumer { zoom: OnMapZoomLevel ->
                     Timber.i("Map zoom $zoom")
