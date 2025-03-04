@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,36 +87,42 @@ data class DataType(
         /**
          * Speed - Current speed
          * Fields: [Field.SPEED]
+         * Units: km/h (metric), mph (imperial)
          */
         const val SPEED = "TYPE_SPEED_ID"
 
         /**
          * Average Speed - Avg. speed this ride
          * Fields: [Field.AVERAGE_SPEED]
+         * Units: km/h (metric), mph (imperial)
          */
         const val AVERAGE_SPEED = "TYPE_AVERAGE_SPEED_ID"
 
         /**
          * Max Speed - Max. speed this ride
          * Fields: [Field.MAX_SPEED]
+         * Units: km/h (metric), mph (imperial)
          */
         const val MAX_SPEED = "TYPE_MAX_SPEED_ID"
 
         /**
          * 3s Average Speed - 3-second rolling avg.
          * Fields: [Field.SMOOTHED_3S_AVERAGE_SPEED]
+         * Units: km/h (metric), mph (imperial)
          */
         const val SMOOTHED_3S_AVERAGE_SPEED = "TYPE_3S_AVERAGE_SPEED_ID"
 
         /**
          * 5s Average Speed - 5-second rolling avg.
          * Fields: [Field.SMOOTHED_5S_AVERAGE_SPEED]
+         * Units: km/h (metric), mph (imperial)
          */
         const val SMOOTHED_5S_AVERAGE_SPEED = "TYPE_5S_AVERAGE_SPEED_ID"
 
         /**
          * 10s Average Speed - 10-second rolling avg.
          * Fields: [Field.SMOOTHED_10S_AVERAGE_SPEED]
+         * Units: km/h (metric), mph (imperial)
          */
         const val SMOOTHED_10S_AVERAGE_SPEED = "TYPE_10S_AVERAGE_SPEED_ID"
 
@@ -127,6 +133,7 @@ data class DataType(
         /**
          * Distance - Distance traveled this ride
          * Fields: [Field.DISTANCE]
+         * Units: km (metric), mi (imperial)
          */
         const val DISTANCE = "TYPE_DISTANCE_ID"
 
@@ -137,6 +144,7 @@ data class DataType(
         /**
          * Heart Rate - Current HR
          * Fields: [Field.HEART_RATE]
+         * Units: bpm
          */
         const val HEART_RATE = "TYPE_HEART_RATE_ID"
 
@@ -149,18 +157,21 @@ data class DataType(
         /**
          * Average Heart Rate - Avg. HR this ride
          * Fields: [Field.AVG_HR]
+         * Units: bpm
          */
         const val AVERAGE_HR = "TYPE_AVERAGE_HR_ID"
 
         /**
          * Max Heart Rate - Max. HR this ride
          * Fields: [Field.MAX_HR]
+         * Units: bpm
          */
         const val MAX_HR = "TYPE_MAX_HR_ID"
 
         /**
          * Percentage of Max HR - Ratio of current HR to your max.
          * Fields: [Field.PERCENT_MAX_HR]
+         * Units: %
          */
         const val PERCENT_MAX_HR = "TYPE_PERCENT_MAX_HR_ID"
 
@@ -173,6 +184,7 @@ data class DataType(
         /**
          * Average % of HRR - Avg. ratio of HR to your HR Reserve this ride
          * Fields: [Field.AVERAGE_PERCENT_HRR]
+         * Units: bpm
          */
         const val AVERAGE_PERCENT_HRR = "TYPE_AVERAGE_PERCENT_HRR_ID"
 
@@ -183,36 +195,42 @@ data class DataType(
         /**
          * Cadence - Current pedaling rate
          * Fields: [Field.CADENCE]
+         * Units: rpm
          */
         const val CADENCE = "TYPE_CADENCE_ID"
 
         /**
          * Average Cadence - Avg. pedaling rate this ride
          * Fields: [Field.AVERAGE_CADENCE]
+         * Units: rpm
          */
         const val AVERAGE_CADENCE = "TYPE_AVERAGE_CADENCE_ID"
 
         /**
          * Max Cadence - Max. pedaling rate this ride
          * Fields: [Field.MAX_CADENCE]
+         * Units: rpm
          */
         const val MAX_CADENCE = "TYPE_MAX_CADENCE_ID"
 
         /**
          * 3s Average Cadence - 3-second rolling avg.
          * Fields: [Field.SMOOTHED_3S_AVERAGE_CADENCE]
+         * Units: rpm
          */
         const val SMOOTHED_3S_AVERAGE_CADENCE = "TYPE_3S_AVERAGE_CADENCE_ID"
 
         /**
          * 5s Average Cadence - 5-second rolling avg.
          * Fields: [Field.SMOOTHED_5S_AVERAGE_CADENCE]
+         * Units: rpm
          */
         const val SMOOTHED_5S_AVERAGE_CADENCE = "TYPE_5S_AVERAGE_CADENCE_ID"
 
         /**
          * 10s Average Cadence - 10-second rolling avg.
          * Fields: [Field.SMOOTHED_10S_AVERAGE_CADENCE]
+         * Units: rpm
          */
         const val SMOOTHED_10S_AVERAGE_CADENCE = "TYPE_10S_AVERAGE_CADENCE_ID"
 
@@ -223,6 +241,7 @@ data class DataType(
         /**
          * Power - Current power output
          * Fields: [Field.POWER]
+         * Units: W
          */
         const val POWER = "TYPE_POWER_ID"
 
@@ -235,48 +254,56 @@ data class DataType(
         /**
          * Average Power - Avg. power output this ride
          * Fields: [Field.AVERAGE_POWER]
+         * Units: W
          */
         const val AVERAGE_POWER = "TYPE_AVERAGE_POWER_ID"
 
         /**
          * Max Power - Max. power output this ride
          * Fields: [Field.MAX_POWER]
+         * Units: W
          */
         const val MAX_POWER = "TYPE_MAX_POWER_ID"
 
         /**
          * 3s Average Power - 3-second rolling avg.
          * Fields: [Field.SMOOTHED_3S_AVERAGE_POWER]
+         * Units: W
          */
         const val SMOOTHED_3S_AVERAGE_POWER = "TYPE_3S_AVERAGE_POWER_ID"
 
         /**
          * 5s Average Power - 5-second rolling avg.
          * Fields: [Field.SMOOTHED_5S_AVERAGE_POWER]
+         * Units: W
          */
         const val SMOOTHED_5S_AVERAGE_POWER = "TYPE_5S_AVERAGE_POWER_ID"
 
         /**
          * 10s Average Power - 10-second rolling avg.
          * Fields: [Field.SMOOTHED_10S_AVERAGE_POWER]
+         * Units: W
          */
         const val SMOOTHED_10S_AVERAGE_POWER = "TYPE_10S_AVERAGE_POWER_ID"
 
         /**
          * 30s Average Power - 30-second rolling avg.
          * Fields: [Field.SMOOTHED_30S_AVERAGE_POWER]
+         * Units: W
          */
         const val SMOOTHED_30S_AVERAGE_POWER = "TYPE_30S_AVERAGE_POWER_ID"
 
         /**
          * Normalized Power® - Normalized Power® this ride
          * Fields: [Field.NORMALIZED_POWER]
+         * Units: W
          */
         const val NORMALIZED_POWER = "TYPE_NORMALIZED_POWER_ID"
 
         /**
          * Percentage of FTP - Current power as a % of functional threshold power
          * Fields: [Field.PERCENT_MAX_FTP]
+         * Units: %
          */
         const val PERCENT_MAX_FTP = "TYPE_PERCENT_MAX_FTP_ID"
 
@@ -295,12 +322,14 @@ data class DataType(
         /**
          * 20min Average Power - 20-min. rolling avg.
          * Fields: [Field.SMOOTHED_20M_AVERAGE_POWER]
+         * Units: W
          */
         const val SMOOTHED_20M_AVERAGE_POWER = "TYPE_20M_AVERAGE_POWER_ID"
 
         /**
          * 1hr Average Power - 1-hr. rolling avg.
          * Fields: [Field.SMOOTHED_1HR_AVERAGE_POWER]
+         * Units: W
          */
         const val SMOOTHED_1HR_AVERAGE_POWER = "TYPE_1HR_AVERAGE_POWER_ID"
 
@@ -355,12 +384,14 @@ data class DataType(
         /**
          * Power to Weight - Power output in watts per kilogram
          * Fields: [Field.POWER_TO_WEIGHT]
+         * Units: W/Kg
          */
         const val POWER_TO_WEIGHT = "TYPE_POWER_TO_WEIGHT"
 
         /**
          * Energy Output - Amount of energy used this ride
          * Fields: [Field.ENERGY_OUTPUT]
+         * Units: kJ
          */
         const val ENERGY_OUTPUT = "TYPE_ENERGY_OUTPUT_ID"
 
@@ -373,6 +404,7 @@ data class DataType(
         /**
          * Calorie Burn Rate - Calories burned per hour this ride
          * Fields: [Field.CALORIES_PER_HOUR]
+         * Units: Cal/h
          */
         const val CALORIES_PER_HOUR = "TYPE_CALORIES_PER_HOUR_ID"
 
@@ -385,24 +417,28 @@ data class DataType(
         /**
          * Torque - Current torque in N⋅m
          * Fields: [Field.TORQUE]
+         * Units: N⋅m
          */
         const val TORQUE = "TYPE_TORQUE_ID"
 
         /**
          * 3s Average Torque - 3-second rolling avg. in N⋅m
          * Fields: [Field.TORQUE]
+         * Units: N⋅m
          */
         const val SMOOTHED_3S_AVERAGE_TORQUE = "TYPE_3S_AVERAGE_TORQUE_ID"
 
         /**
          * Average Torque - Average torque this ride in N⋅m
          * Fields: [Field.TORQUE]
+         * Units: N⋅m
          */
         const val AVERAGE_TORQUE = "TYPE_AVERAGE_TORQUE_ID"
 
         /**
          * Max Torque - Max. torque this ride in N⋅m
          * Fields: [Field.TORQUE]
+         * Units: N⋅m
          */
         const val MAX_TORQUE = "TYPE_MAX_TORQUE_ID"
 
@@ -425,54 +461,63 @@ data class DataType(
         /**
          * Lap Distance - Distance traveled this lap
          * Fields: [Field.DISTANCE]
+         * Units: km (metric), mi (imperial)
          */
         const val DISTANCE_LAP = "TYPE_DISTANCE_LAP_ID"
 
         /**
          * Lap Speed - Avg. speed this lap
          * Fields: [Field.AVERAGE_SPEED]
+         * Units: km/h (metric), mph (imperial)
          */
         const val AVERAGE_SPEED_LAP = "TYPE_AVERAGE_SPEED_LAP_ID"
 
         /**
          * Lap Max Speed - Max. speed this lap
          * Fields: [Field.MAX_SPEED]
+         * Units: km/h (metric), mph (imperial)
          */
         const val MAX_SPEED_LAP = "TYPE_MAX_SPEED_LAP_ID"
 
         /**
          * Lap Heart Rate - Avg. heart rate this lap
          * Fields: [Field.AVG_HR]
+         * Units: bpm
          */
         const val AVERAGE_LAP_HR = "TYPE_AVERAGE_LAP_HR_ID"
 
         /**
          * Lap Max Heart Rate - Max. heart rate this lap
          * Fields: [Field.MAX_HR]
+         * Units: bpm
          */
         const val MAX_HR_LAP = "TYPE_MAX_HR_LAP_ID"
 
         /**
          * Lap Cadence - Avg. cadence this lap
          * Fields: [Field.AVERAGE_CADENCE]
+         * Units: rpm
          */
         const val CADENCE_LAP = "TYPE_CADENCE_LAP_ID"
 
         /**
          * Lap Max Cadence - Max. cadence this lap
          * Fields: [Field.MAX_CADENCE]
+         * Units: rpm
          */
         const val MAX_CADENCE_LAP = "TYPE_MAX_CADENCE_LAP_ID"
 
         /**
          * Lap Power - Avg. power output this lap
          * Fields: [Field.AVERAGE_POWER]
+         * Units: W
          */
         const val POWER_LAP = "TYPE_POWER_LAP_ID"
 
         /**
          * Lap Normalized Power® - Normalized Power® this lap
          * Fields: [Field.NORMALIZED_POWER]
+         * Units: W
          */
         const val NORMALIZED_POWER_LAP = "TYPE_NORMALIZED_POWER_LAP_ID"
 
@@ -485,78 +530,91 @@ data class DataType(
         /**
          * Lap Max Power - Max. power output this lap
          * Fields: [Field.MAX_POWER]
+         * Units: W
          */
         const val MAX_POWER_LAP = "TYPE_MAX_POWER_LAP_ID"
 
         /**
          * Lap Torque - Avg. torque this lap in N⋅m
          * Fields: [Field.TORQUE]
+         * Units: N⋅m
          */
         const val TORQUE_LAP = "TYPE_TORQUE_LAP_ID"
 
         /**
          * Lap Max Torque - Max. torque this lap in N⋅m
          * Fields: [Field.TORQUE]
+         * Units: N⋅m
          */
         const val MAX_TORQUE_LAP = "TYPE_MAX_TORQUE_LAP_ID"
 
         /**
          * Lap VAM - Avg. VAM this lap in meters/hour
          * Fields: [Field.VERTICAL_SPEED]
+         * Units: m/h
          */
         const val AVERAGE_VERTICAL_SPEED_LAP = "TYPE_AVERAGE_VERTICAL_SPEED_LAP_ID"
 
         /**
          * Lap Ascent - Total elevation gain this lap
          * Fields: [Field.ELEVATION_GAIN]
+         * Units: m (metric), ft (imperial)
          */
         const val ELEVATION_GAIN_LAP = "TYPE_ELEVATION_GAIN_LAP_ID"
 
         /**
          * Lap Descent - Total elevation descended this lap
          * Fields: [Field.ELEVATION_LOSS]
+         * Units: m (metric), ft (imperial)
          */
         const val ELEVATION_LOSS_LAP = "TYPE_ELEVATION_LOSS_LAP_ID"
 
         /**
          * Lap Min Elevation - Min. altitude this lap
          * Fields: [Field.MIN_ELEVATION]
+         * Units: m (metric), ft (imperial)
          */
         const val MIN_ELEVATION_LAP = "TYPE_MIN_ELEVATION_LAP_ID"
 
         /**
          * Lap Max Elevation - Max. altitude this lap
          * Fields: [Field.MAX_ELEVATION]
+         * Units: m (metric), ft (imperial)
          */
         const val MAX_ELEVATION_LAP = "TYPE_MAX_ELEVATION_LAP_ID"
 
         /**
          * Lap Elevation - Avg. altitude this lap
          * Fields: [Field.AVERAGE_ELEVATION]
+         * Units: m (metric), ft (imperial)
          */
         const val AVERAGE_ELEVATION_LAP = "TYPE_AVERAGE_ELEVATION_LAP_ID"
 
         /**
          * Lap Core Temp - Avg. core body temperature this lap
          * Fields: [Field.CORE_TEMP]
+         * Units: °C (metric), °F (imperial)
          */
         const val AVERAGE_CORE_TEMP_LAP = "TYPE_AVERAGE_CORE_TEMP_LAP_ID"
 
         /**
          * Lap Max Core Temp - Max. core body temperature this lap
          * Fields: [Field.CORE_TEMP]
+         * Units: °C (metric), °F (imperial)
          */
         const val MAX_CORE_TEMP_LAP = "TYPE_MAX_CORE_TEMP_LAP_ID"
 
         /**
          * Lap Skin Temp - Avg. skin temperature this lap
          * Fields: [Field.SKIN_TEMP]
+         * Units: °C (metric), °F (imperial)
          */
         const val AVERAGE_SKIN_TEMP_LAP = "TYPE_AVERAGE_SKIN_TEMP_LAP_ID"
 
         /**
          * Lap Max Skin Temp - Max. skin temperature this lap
          * Fields: [Field.SKIN_TEMP]
+         * Units: °C (metric), °F (imperial)
          */
         const val MAX_SKIN_TEMP_LAP = "TYPE_MAX_SKIN_TEMP_LAP_ID"
 
@@ -585,24 +643,28 @@ data class DataType(
         /**
          * Last Lap Heart Rate - Avg. heart rate of previous lap
          * Fields: [Field.AVG_HR]
+         * Units: bpm
          */
         const val AVERAGE_HR_LAST_LAP = "TYPE_AVERAGE_HR_LAST_LAP_ID"
 
         /**
          * Last Lap Cadence - Avg. cadence of previous lap
          * Fields: [Field.AVERAGE_CADENCE]
+         * Units: rpm
          */
         const val AVERAGE_CADENCE_LAST_LAP = "TYPE_AVERAGE_CADENCE_LAST_LAP_ID"
 
         /**
          * Last Lap Power - Avg. power output in previous lap
          * Fields: [Field.AVERAGE_POWER]
+         * Units: W
          */
         const val AVERAGE_POWER_LAST_LAP = "TYPE_AVERAGE_POWER_LAST_LAP_ID"
 
         /**
          * Last Lap Normalized Power® - Normalized Power® of previous lap
          * Fields: [Field.NORMALIZED_POWER]
+         * Units: W
          */
         const val NORMALIZED_POWER_LAST_LAP = "TYPE_NORMALIZED_POWER_LAST_LAP_ID"
 
@@ -631,86 +693,106 @@ data class DataType(
         /**
          * Current Elevation - Current altitude above or below sea level
          * Fields: [Field.PRESSURE_ELEVATION]
+         * Units: m (metric), ft (imperial)
          */
         const val PRESSURE_ELEVATION_CORRECTION = "TYPE_PRESSURE_ELEVATION_CORRECTION_ID"
 
         /**
          * Ascent - Total elevation gain this ride
          * Fields: [Field.ELEVATION_GAIN]
+         * Units: m (metric), ft (imperial)
          */
         const val ELEVATION_GAIN = "TYPE_ELEVATION_GAIN_ID"
 
         /**
          * Descent - Total elevation descended this ride
          * Fields: [Field.ELEVATION_LOSS]
+         * Units: m (metric), ft (imperial)
          */
         const val ELEVATION_LOSS = "TYPE_ELEVATION_LOSS_ID"
 
         /**
          * Current Grade % - Steepness of current surface
          * Fields: [Field.ELEVATION_GRADE]
+         * Units: m (metric), ft (imperial)
          */
         const val ELEVATION_GRADE = "TYPE_ELEVATION_GRADE_ID"
 
         /**
          * VAM - Current rate of ascent in meters/hour
          * Fields: [Field.VERTICAL_SPEED]
+         * Units: m/h
          */
         const val VERTICAL_SPEED = "TYPE_VERTICAL_SPEED_ID"
 
         /**
          * Average VAM - Avg. VAM this ride in meters/hour
          * Fields: [Field.VERTICAL_SPEED]
+         * Units: m/h
          */
         const val AVERAGE_VERTICAL_SPEED = "TYPE_AVERAGE_VERTICAL_SPEED_ID"
 
         /**
          * 30s Average VAM - 30-second rolling avg. in meters/hour
          * Fields: [Field.VERTICAL_SPEED]
+         * Units: m/h
          */
         const val AVERAGE_VERTICAL_SPEED_30S = "TYPE_AVERAGE_VERTICAL_SPEED_30S_ID"
 
         /**
          * Min Elevation - Lowest altitude this ride
          * Fields: [Field.MIN_ELEVATION]
+         * Units: m (metric), ft (imperial)
          */
         const val MIN_ELEVATION = "TYPE_MIN_ELEVATION_ID"
 
         /**
          * Max Elevation - Highest altitude this ride
          * Fields: [Field.MAX_ELEVATION]
+         * Units: m (metric), ft (imperial)
          */
         const val MAX_ELEVATION = "TYPE_MAX_ELEVATION_ID"
 
         /**
          * Avg Elevation - Mean elevation this ride
          * Fields: [Field.AVERAGE_ELEVATION]
+         * Units: m (metric), ft (imperial)
          */
         const val AVERAGE_ELEVATION = "TYPE_AVERAGE_ELEVATION_ID"
 
         /**
          * Distance to Top - Distance left to top of current climb
          * Fields: [Field.DISTANCE_TO_TOP]
+         * Units: km (metric), mi (imperial)
          */
         const val DISTANCE_TO_TOP = "TYPE_DISTANCE_TO_TOP_ID"
 
         /**
          * Elevation to Top - Elevation left to top of current climb
          * Fields: [Field.ELEVATION_TO_TOP]
+         * Units: m (metric), ft (imperial)
          */
         const val ELEVATION_TO_TOP = "TYPE_ELEVATION_TO_TOP_ID"
 
         /**
          * Distance from Base - Distance since the start of current climb
          * Fields: [Field.DISTANCE_FROM_BOTTOM]
+         * Units: km (metric), mi (imperial)
          */
         const val DISTANCE_FROM_BOTTOM = "TYPE_DISTANCE_FROM_BOTTOM_ID"
 
         /**
          * Elevation from Base - Elevation above the start of current climb
          * Fields: [Field.ELEVATION_FROM_BOTTOM]
+         * Units: m (metric), ft (imperial)
          */
         const val ELEVATION_FROM_BOTTOM = "TYPE_ELEVATION_FROM_BOTTOM_ID"
+
+        /**
+         * Climb Number - Current climb number
+         * Fields: [Field.CLIMB_NUMBER], [Field.TOTAL_CLIMBS]
+         */
+        const val CLIMB_NUMBER = "TYPE_CLIMB_NUMBER_ID"
 
         /**
          * Category: Time
@@ -841,24 +923,28 @@ data class DataType(
         /**
          * Battery - Karoo battery level
          * Fields: [Field.BATTERY_PERCENT]
+         * Units: %
          */
         const val BATTERY_PERCENT = "TYPE_BATTERY_PERCENT_ID"
 
         /**
          * Front Pressure - Tire pressure in front tire
          * Fields: [Field.TIRE_PRESSURE], [Field.TIRE_PRESSURE_TARGET], [Field.TIRE_PRESSURE_RANGE]
+         * Units: kPa (metric), PSI (imperial)
          */
         const val TIRE_PRESSURE_FRONT = "TYPE_TIRE_PRESSURE_FRONT_ID"
 
         /**
          * Rear Pressure - Tire pressure in rear tire
          * Fields: [Field.TIRE_PRESSURE], [Field.TIRE_PRESSURE_TARGET], [Field.TIRE_PRESSURE_RANGE]
+         * Units: kPa (metric), PSI (imperial)
          */
         const val TIRE_PRESSURE_REAR = "TYPE_TIRE_PRESSURE_REAR_ID"
 
         /**
          * Temperature - Current air temperature
          * Fields: [Field.TEMPERATURE]
+         * Units: °C (metric), °F (imperial)
          */
         const val TEMPERATURE = "TYPE_TEMPERATURE_ID"
 
@@ -881,18 +967,21 @@ data class DataType(
         /**
          * Distance to Destination - Distance to end of route
          * Fields: [Field.DISTANCE_TO_DESTINATION], [Field.NAVIGATION_STATE], [Field.REROUTING_ENABLED], [Field.ON_ROUTE]
+         * Units: km (metric), mi (imperial)
          */
         const val DISTANCE_TO_DESTINATION = "TYPE_DISTANCE_TO_DESTINATION_ID"
 
         /**
          * Distance to Next Turn - Distance till next navigation turn
-         * Fields: [Field.DISTANCE_TO_NEXT_TURN]
+         * Fields: [Field.DISTANCE_TO_NEXT_TURN], [Field.NAVIGATION_STATE], [Field.REROUTING_ENABLED], [Field.ON_ROUTE]
+         * Units: km (metric), mi (imperial)
          */
         const val DISTANCE_TO_NEXT_TURN = "TYPE_DISTANCE_TO_NEXT_TURN_ID"
 
         /**
          * Elevation Remaining - Total remaining ascent on current route
          * Fields: [Field.ELEVATION_REMAINING], [Field.NAVIGATION_STATE], [Field.REROUTING_ENABLED], [Field.ON_ROUTE]
+         * Units: m (metric), ft (imperial)
          */
         const val ELEVATION_REMAINING = "TYPE_ELEVATION_REMAINING_ID"
 
@@ -927,11 +1016,12 @@ data class DataType(
         /**
          * Est Range Remaining - Estimated eBike range in current assist mode
          * Fields: [Field.LEV_ESTIMATED_RANGE]
+         * Units: km (metric), mi (imperial)
          */
         const val LEV_ESTIMATED_RANGE = "TYPE_LEV_ESTIMATED_RANGE_ID"
 
         /**
-         * Assist Mode/Level - Current bike assist mode/level
+         * Assist Level - Currently selected bike assist level
          * Fields: [Field.LEV_ASSIST_MODE], [Field.LEV_SUPPORTED_ASSIST_MODES]
          */
         const val LEV_ASSIST_MODE = "TYPE_LEV_ASSIST_MODE_ID"
@@ -939,24 +1029,28 @@ data class DataType(
         /**
          * Burn Rate - Rate of energy consumption, in wh/km or wh/mi
          * Fields: [Field.LEV_ENERGY_CONSUMPTION]
+         * Units: Wh/km (metric), Wh/mi (imperial)
          */
         const val LEV_ENERGY_CONSUMPTION = "TYPE_LEV_ENERGY_CONSUMPTION_ID"
 
         /**
          * 20M Burn Rate - Average rate of energy consumption over the last 20 min
          * Fields: [Field.LEV_20MIN_ENERGY_CONSUMPTION]
+         * Units: Wh/km (metric), Wh/mi (imperial)
          */
         const val LEV_20M_ENERGY_CONSUMPTION = "TYPE_LEV_20M_ENERGY_CONSUMPTION_ID"
 
         /**
          * Bike Motor Power - Current bike motor power output in watts
          * Fields: [Field.LEV_MOTOR_POWER]
+         * Units: W
          */
         const val LEV_MOTOR_POWER = "TYPE_LEV_MOTOR_POWER_ID"
 
         /**
          * Combined Power - Current combined rider and motor power in watts
          * Fields: [Field.LEV_COMBINED_POWER]
+         * Units: W
          */
         const val LEV_COMBINED_POWER = "TYPE_LEV_COMBINED_POWER_ID"
 
@@ -967,36 +1061,42 @@ data class DataType(
         /**
          * Core Body Temp - Current core body temperature
          * Fields: [Field.CORE_TEMP], [Field.CORE_DATA_QUALITY], [Field.CORE_RESERVED]
+         * Units: °C (metric), °F (imperial)
          */
         const val CORE_TEMP = "TYPE_CORE_TEMP_ID"
 
         /**
          * Average Core Body Temp - Avg. core body temperature this ride
          * Fields: [Field.CORE_TEMP]
+         * Units: °C (metric), °F (imperial)
          */
         const val AVERAGE_CORE_TEMP = "TYPE_AVERAGE_CORE_TEMP_ID"
 
         /**
          * Max Core Body Temp - Max. core body temperature this ride
          * Fields: [Field.CORE_TEMP]
+         * Units: °C (metric), °F (imperial)
          */
         const val MAX_CORE_TEMP = "TYPE_MAX_CORE_TEMP_ID"
 
         /**
          * Skin Temp - Current skin temperature
          * Fields: [Field.SKIN_TEMP], [Field.CORE_DATA_QUALITY]
+         * Units: °C (metric), °F (imperial)
          */
         const val SKIN_TEMP = "TYPE_SKIN_TEMP_ID"
 
         /**
          * Average Skin Temp - Avg. skin temperature this ride
          * Fields: [Field.SKIN_TEMP]
+         * Units: °C (metric), °F (imperial)
          */
         const val AVERAGE_SKIN_TEMP = "TYPE_AVERAGE_SKIN_TEMP_ID"
 
         /**
          * Max Skin Temp - Max. skin temperature this ride
          * Fields: [Field.SKIN_TEMP]
+         * Units: °C (metric), °F (imperial)
          */
         const val MAX_SKIN_TEMP = "TYPE_MAX_SKIN_TEMP_ID"
     }
@@ -1121,7 +1221,6 @@ data class DataType(
 
         /**
          * Alternate type: INT_POSITIVE_OR_ZERO
-         * Optional
          */
         const val CLIMB_NUMBER = "FIELD_CLIMB_NUMBER_ID"
 
