@@ -65,4 +65,8 @@ data class RideProfile(
         val enabled: Boolean,
         val speedThreshold: Double,
     )
+
+    override fun toString(): String {
+        return "RideProfile($id, name=$name)"
+    }
 }

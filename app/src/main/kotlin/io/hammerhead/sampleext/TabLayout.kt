@@ -46,6 +46,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastRoundToInt
+import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.KarooEffect
 import io.hammerhead.karooext.models.LaunchPinDrop
 import io.hammerhead.karooext.models.PerformHardwareAction
@@ -64,7 +66,7 @@ fun TabLayout(
     playBeeps: () -> Unit,
     toggleHomeBackground: () -> Unit,
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(1) }
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf("Controls", "Data", "Requests")
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -166,7 +168,22 @@ fun DataTab(mainData: MainData) {
         Text(text = "Power: ${(mainData.power as? StreamState.Streaming)?.dataPoint?.singleValue ?: "--"}")
         Text(text = "Navigation: ${mainData.navigationState}")
         Text(text = "Active profile: ${mainData.rideProfile}")
-        Text(text = "Active page: ${mainData.activePage}")
+        ExpandableData(
+            buttonText = "Bikes",
+            buttonColor = Color.Green,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) {
+            mainData.bikes.map {
+                Text("${it.name}: ${it.odometer.fastRoundToInt()}m")
+            }
+        }
+        ExpandableData(
+            buttonText = "Active page",
+            buttonColor = Color.Blue,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) {
+            Text(mainData.activePage.toString())
+        }
         ExpandableData(
             buttonText = "Global POIs",
             buttonColor = Color.Magenta,
@@ -182,7 +199,8 @@ fun DataTab(mainData: MainData) {
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
             mainData.savedDevices.map {
-                Text("Device: $it")
+                val extDetails = Device.fromDeviceUid(it.id)?.let { "[ext=${it.first} id=${it.second}]" } ?: ""
+                Text("Device: ${it.name} (${it.connectionType}) $extDetails")
             }
         }
     }

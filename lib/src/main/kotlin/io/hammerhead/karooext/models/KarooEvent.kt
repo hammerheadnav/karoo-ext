@@ -451,6 +451,9 @@ data class SavedDevices(
 ) : KarooEvent() {
     @Serializable
     data class SavedDevice(
+        /**
+         * @see Device.fromDeviceUid
+         */
         val id: String,
         val connectionType: String,
         val name: String,
