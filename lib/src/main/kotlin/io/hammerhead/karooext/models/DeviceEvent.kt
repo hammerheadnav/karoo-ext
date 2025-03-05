@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,12 @@ data class OnBatteryStatus(val status: BatteryStatus) : DeviceEvent()
 data class OnManufacturerInfo(val info: ManufacturerInfo) : DeviceEvent()
 
 /**
- * Device produced a new data point
+ * Device produced a new data point.
+ *
+ * Typical sensors emit data at 1Hz (once per second) and should continue
+ * to emit even if the value is unchanged. If data is not emitted for some amount
+ * of time, the Karoo system will assume the sensor is idle and treat the view/stream
+ * accordingly.
  *
  * @see [DataPoint]
  */

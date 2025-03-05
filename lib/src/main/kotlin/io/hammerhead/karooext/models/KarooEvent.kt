@@ -439,3 +439,199 @@ data class OnMapZoomLevel(
     @Serializable
     data object Params : KarooEventParams()
 }
+
+/**
+ * Observe saved devices
+ *
+ * @since 1.1.5
+ */
+@Serializable
+data class SavedDevices(
+    /**
+     * List of save devices
+     *
+     * @see SavedDevice
+     */
+    val devices: List<SavedDevice>,
+) : KarooEvent() {
+    /**
+     * A device added by the user and saved in the device list
+     */
+    @Serializable
+    data class SavedDevice(
+        /**
+         * ID of the device
+         *
+         * @see Device.fromDeviceUid
+         */
+        val id: String,
+        /**
+         * The connection for this sensor
+         *
+         * One of: ANT_PLUS, BLE, OTHER, EXTENSION
+         */
+        val connectionType: String,
+        /**
+         * The name of the sensor
+         */
+        val name: String,
+        /**
+         * If the sensor is currently enabled
+         */
+        val enabled: Boolean,
+        /**
+         * Details of the top-level (or only) device
+         */
+        val details: DeviceDetail,
+        /**
+         * Associated components and their details
+         *
+         * Null if single device
+         */
+        val components: Map<String, DeviceDetail>?,
+        /**
+         * Data types that this sensor provides
+         *
+         * @see DataType.Type
+         */
+        val supportedDataTypes: List<String>,
+        /**
+         * Optional configured gearing info
+         *
+         * @see GearInfo
+         */
+        val gearInfo: GearInfo?,
+    ) {
+        /**
+         * Saved device details
+         */
+        @Serializable
+        data class DeviceDetail(
+            /**
+             * Battery status at last check
+             *
+             * @see lastBatteryUpdate
+             */
+            val lastBattery: BatteryStatus?,
+            /**
+             * Timestamp (ms since epoch) that `lastBattery` was updated
+             */
+            val lastBatteryUpdate: Long?,
+            /**
+             * Manufacturer name
+             */
+            val manufacturer: String?,
+            /**
+             * Serial number
+             */
+            val serialNumber: String?,
+        )
+
+        /**
+         * Saved gear info
+         */
+        @Serializable
+        data class GearInfo(
+            /**
+             * Number of chainrings
+             */
+            val maxFrontGears: Int,
+            /**
+             * Number of cogs in the cassette
+             */
+            val maxRearGears: Int,
+            /**
+             * User-provided teeth in each chainring (size matches `maxFrontGears`)
+             */
+            val frontTeeth: List<Int>?,
+            /**
+             * User-provided teeth in each cog of cassette (size matches `maxRearGears`)
+             */
+            val rearTeeth: List<Int>?,
+        )
+    }
+
+    /**
+     * Default params for [SavedDevices] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+/**
+ * Observe bikes
+ *
+ * @since 1.1.5
+ */
+@Serializable
+data class Bikes(
+    /**
+     * List of all bikes
+     *
+     * @see Bike
+     */
+    val bikes: List<Bike>,
+) : KarooEvent() {
+    /**
+     * A saved bike
+     */
+    @Serializable
+    data class Bike(
+        /**
+         * Unique ID
+         */
+        val id: String,
+        /**
+         * Name of the bike
+         */
+        val name: String,
+        /**
+         * Distance saved to this bike on Karoo in meters.
+         */
+        val odometer: Double,
+    )
+
+    /**
+     * Default params for [Bikes] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+/**
+ * Observe the active ride profile
+ *
+ * @since 1.1.5
+ */
+@Serializable
+data class ActiveRideProfile(
+    /**
+     * The current profile that is active (selected by user on launcher)
+     */
+    val profile: RideProfile,
+) : KarooEvent() {
+    /**
+     * Default params for [ActiveRideProfile] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+/**
+ * Observe the visible ride page
+ *
+ * @since 1.1.5
+ */
+@Serializable
+data class ActiveRidePage(
+    /**
+     * The current page with a profile that is visible to the user
+     */
+    val page: RideProfile.Page,
+) : KarooEvent() {
+    /**
+     * Default params for [ActiveRidePage] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}

@@ -46,6 +46,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.util.fastRoundToInt
+import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.KarooEffect
 import io.hammerhead.karooext.models.LaunchPinDrop
 import io.hammerhead.karooext.models.PerformHardwareAction
@@ -156,8 +158,6 @@ fun ControlsTab(
 
 @Composable
 fun DataTab(mainData: MainData) {
-    var isPOIDialogOpen by remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -167,35 +167,80 @@ fun DataTab(mainData: MainData) {
         Text(text = "Ride State: ${mainData.rideState}")
         Text(text = "Power: ${(mainData.power as? StreamState.Streaming)?.dataPoint?.singleValue ?: "--"}")
         Text(text = "Navigation: ${mainData.navigationState}")
-        Button(
-            onClick = { isPOIDialogOpen = true },
-            colors = ButtonDefaults.textButtonColors(containerColor = Color.Magenta, contentColor = Color.White),
+        Text(text = "Active profile: ${mainData.rideProfile}")
+        ExpandableData(
+            buttonText = "Bikes",
+            buttonColor = Color.Green,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
-            Text("Global POIs")
+            mainData.bikes.map {
+                Text("${it.name}: ${it.odometer.fastRoundToInt()}m")
+            }
         }
-        if (isPOIDialogOpen) {
-            AlertDialog(
-                onDismissRequest = { isPOIDialogOpen = false },
-                text = {
-                    Column(
-                        modifier = Modifier
-                            .verticalScroll(rememberScrollState())
-                            .padding(4.dp),
-                    ) {
-                        mainData.globalPOIs.map {
-                            Text("POI: ${it.name ?: ""} ${it.type}")
-                        }
-                    }
-                },
-                confirmButton = {
-                    Button(onClick = { isPOIDialogOpen = false }) {
-                        Text("Close")
-                    }
-                },
-                modifier = Modifier.padding(10.dp),
-            )
+        ExpandableData(
+            buttonText = "Active page",
+            buttonColor = Color.Blue,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) {
+            Text(mainData.activePage.toString())
         }
+        ExpandableData(
+            buttonText = "Global POIs",
+            buttonColor = Color.Magenta,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) {
+            mainData.globalPOIs.map {
+                Text("POI: ${it.name ?: ""} ${it.type}")
+            }
+        }
+        ExpandableData(
+            buttonText = "Saved Devices",
+            buttonColor = Color.DarkGray,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) {
+            mainData.savedDevices.map {
+                val extDetails = Device.fromDeviceUid(it.id)?.let { "[ext=${it.first} id=${it.second}]" } ?: ""
+                Text("Device: ${it.name} (${it.connectionType}) $extDetails")
+            }
+        }
+    }
+}
+
+@Composable
+fun ExpandableData(
+    buttonText: String,
+    buttonColor: Color,
+    modifier: Modifier,
+    content: @Composable () -> Unit,
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Button(
+        onClick = { expanded = true },
+        colors = ButtonDefaults.textButtonColors(containerColor = buttonColor, contentColor = Color.White),
+        modifier = modifier,
+    ) {
+        Text(buttonText)
+    }
+    if (expanded) {
+        AlertDialog(
+            onDismissRequest = { expanded = false },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(4.dp),
+                ) {
+                    content()
+                }
+            },
+            confirmButton = {
+                Button(onClick = { expanded = false }) {
+                    Text("Close")
+                }
+            },
+            modifier = Modifier.padding(10.dp),
+        )
     }
 }
 

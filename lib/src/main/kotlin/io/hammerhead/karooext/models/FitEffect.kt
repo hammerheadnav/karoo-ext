@@ -221,7 +221,6 @@ data class WriteToSessionMesg(
 @Serializable
 data class WriteDeveloperDataIdMesg(val developerDataId: Short) : FitEffect
 
-
 /**
  * Internal use by Karoo System when a new [DeveloperField] is used in [FitEffectWithValues]
  *

@@ -3,9 +3,9 @@
   "packageName": "io.hammerhead.sampleext",
   "iconUrl": "https://github.com/hammerheadnav/karoo-ext/releases/latest/download/karoo-ext-sample.png",
   "latestApkUrl": "https://github.com/hammerheadnav/karoo-ext/releases/latest/download/karoo-ext-sample.apk",
-  "latestVersion": "2.2",
-  "latestVersionCode": 7,
+  "latestVersion": "2.3",
+  "latestVersionCode": 8,
   "developer": "Hammerhead",
   "description": "Hammerhead's Sample app from github.com/hammerheadnav/karoo-ext which demonstrates the capabilities of Karoo Extensions.\nIt won't provide much use to riders but can be a quick way to get started developing for Karoo.",
-  "releaseNotes": "Added custom FIT file samples."
+  "releaseNotes": "Added additional events."
 }

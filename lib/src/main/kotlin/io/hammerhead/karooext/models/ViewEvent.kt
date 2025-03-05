@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ data class UpdateGraphicConfig(
      * Setting this can be used to overlay graphical elements on existing numeric data field treatment
      * and requires streaming data updates from `startStream`.
      *
-     * If never non-null, defaults to null and streaming data is not rendered.
+     * If never included, defaults to null and streaming data is not rendered.
      */
     val formatDataTypeId: String? = null,
 ) : ViewEvent()
@@ -69,7 +69,8 @@ data class ShowCustomStreamState(
 data class UpdateNumericConfig(
     /**
      * If a single field is present in streaming data point (from startStream),
-     * control how it is formatted and rendered.
+     * control how it is formatted and rendered. Use an ID string from [DataType.Type]
+     * of the matching type which will account for precision and unit conversion.
      *
      * If never applied, defaults to integer precision.
      */

@@ -12,7 +12,7 @@ plugins {
 }
 
 val moduleName = "karoo-ext"
-val libVersion = "1.1.4"
+val libVersion = "1.1.5"
 
 buildscript {
     dependencies {

@@ -223,7 +223,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                                 event = 7, // OFF_COURSE((short)7),
                                 eventType = 3, // MARKER((short)3),
                                 values = listOf(doughnutsField),
-                            )
+                            ),
                         )
                     }
                 }
