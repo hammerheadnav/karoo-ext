@@ -477,8 +477,6 @@ data class SavedDevices(
         val name: String,
         /**
          * If the sensor is currently enabled
-         *
-         * @see RideProfile.disabledDevices
          */
         val enabled: Boolean,
         /**

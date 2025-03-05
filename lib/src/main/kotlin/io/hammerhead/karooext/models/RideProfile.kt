@@ -46,25 +46,6 @@ data class RideProfile(
      */
     val indoor: Boolean,
     /**
-     * Configuration of audio alerts
-     *
-     * @see AudioAlerts
-     */
-    val audioAlerts: AudioAlerts,
-    /**
-     * Configuration of auto-pause
-     *
-     * @see AutoPause
-     */
-    val autoPause: AutoPause,
-    /**
-     * List of IDs for sensors which the user has specifically
-     * disabled in this profile.
-     *
-     * @see SavedDevices.SavedDevice.id
-     */
-    val disabledDevices: List<String>,
-    /**
      * Activity type for this profile that is selected at ride review by default.
      *
      * One of: RIDE, EBIKE, MOUNTAIN_BIKE, GRAVEL, EMOUNTAIN_BIKE, VELOMOBILE
@@ -111,58 +92,6 @@ data class RideProfile(
             val gridSize: Pair<Int, Int>,
         )
     }
-
-    /**
-     * Configuration of audio alerts
-     */
-    @Serializable
-    data class AudioAlerts(
-        /**
-         * Top-level enabled preference
-         */
-        val audioAlertsEnabled: Boolean,
-        /**
-         * Enabled preference for sub-category turn-by-turn
-         */
-        val tbtEnabled: Boolean,
-        /**
-         * Enabled preference for sub-category workouts
-         */
-        val workoutsEnabled: Boolean,
-        /**
-         * Enabled preference for sub-category radar
-         */
-        val radarEnabled: Boolean,
-        /**
-         * Enabled preference for sub-category SLS
-         */
-        val slsEnabled: Boolean,
-        /**
-         * Enabled preference for sub-category phone notifications
-         */
-        val phoneNotifications: Boolean,
-        /**
-         * Enabled preference for sub-category LEV (eBike)
-         */
-        val levEnabled: Boolean,
-    )
-
-    /**
-     * Configuration of auto-pause
-     *
-     * @see RideState.Paused.auto
-     */
-    @Serializable
-    data class AutoPause(
-        /**
-         * If auto-pause is used in this profile
-         */
-        val enabled: Boolean,
-        /**
-         * The speed (in m/s) under which the ride will be paused
-         */
-        val speedThreshold: Double,
-    )
 
     /**
      * @suppress
