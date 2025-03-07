@@ -22,7 +22,7 @@ import kotlinx.serialization.Serializable
  * Ride profile with settings and page setup
  *
  * Displayed and chosen on launcher in horizontal scroll
- * and take effect shortly after a profile is scrolled too
+ * and take effect shortly after a profile is scrolled to
  * even if a ride isn't started.
  *
  * @since 1.1.5
