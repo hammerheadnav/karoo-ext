@@ -41,6 +41,8 @@ import io.hammerhead.karooext.models.MapEffect
 import io.hammerhead.karooext.models.MarkLap
 import io.hammerhead.karooext.models.OnLocationChanged
 import io.hammerhead.karooext.models.OnMapZoomLevel
+import io.hammerhead.karooext.models.ReleaseBluetooth
+import io.hammerhead.karooext.models.RequestBluetooth
 import io.hammerhead.karooext.models.RideState
 import io.hammerhead.karooext.models.ShowPolyline
 import io.hammerhead.karooext.models.ShowSymbols
@@ -62,8 +64,10 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
@@ -71,11 +75,16 @@ import javax.inject.Inject
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 import kotlin.reflect.full.createInstance
+import kotlin.uuid.ExperimentalUuidApi
 
+@OptIn(ExperimentalUuidApi::class)
 @AndroidEntryPoint
 class SampleExtension : KarooExtension("sample", "1.0") {
     @Inject
     lateinit var karooSystem: KarooSystemService
+
+    @Inject
+    lateinit var bleManager: BleManager
 
     private var serviceJob: Job? = null
     private val devices = ConcurrentHashMap<String, SampleDevice>()
@@ -85,26 +94,34 @@ class SampleExtension : KarooExtension("sample", "1.0") {
             PowerHrDataType(karooSystem, extension),
             CustomSpeedDataType(karooSystem, extension),
             BespokeDataType(extension),
+            DoubleHrDataType(extension),
         )
     }
 
     override fun startScan(emitter: Emitter<Device>) {
         // Find a new sources every 5 seconds
         val job = CoroutineScope(Dispatchers.IO).launch {
-            delay(1000)
-            repeat(Int.MAX_VALUE) {
-                val hr = StaticHrSource(extension, 100 + it * 10)
-                devices.putIfAbsent(hr.source.uid, hr)
-                emitter.onNext(hr.source)
+            val staticSources = flow {
                 delay(1000)
-                val shift = IncrementalShiftingSource(extension, it)
-                devices.putIfAbsent(shift.source.uid, shift)
-                emitter.onNext(shift.source)
-                delay(1000)
-                val bespoke = BespokeDataSource(extension, it)
-                devices.putIfAbsent(bespoke.source.uid, bespoke)
-                emitter.onNext(bespoke.source)
-                delay(1000)
+                repeat(Int.MAX_VALUE) {
+                    val hr = StaticHrSource(extension, 100 + it * 10)
+                    emit(hr)
+                    delay(1000)
+                    val shift = IncrementalShiftingSource(extension, it)
+                    emit(shift)
+                    delay(1000)
+                    val bespoke = BespokeDataSource(extension, it)
+                    emit(bespoke)
+                    delay(1000)
+                }
+            }
+            val bleSources = bleManager.scan(listOf(DoubleHrSensor.HRS_SERVICE_UUID)).map { (address, name) ->
+                Timber.i("BLE Scanned found $address: $name")
+                DoubleHrSensor(bleManager, extension, address, name)
+            }
+            merge(staticSources, bleSources).collect { device ->
+                devices.putIfAbsent(device.source.uid, device)
+                emitter.onNext(device.source)
             }
         }
         emitter.setCancellable {
@@ -113,15 +130,17 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     }
 
     override fun connectDevice(uid: String, emitter: Emitter<DeviceEvent>) {
-        val id = uid.substringAfterLast("-").toIntOrNull() ?: return
-        Timber.d("Connect to $id")
+        Timber.d("Connect to $uid")
         devices.getOrPut(uid) {
-            if (uid.contains(IncrementalShiftingSource.PREFIX)) {
+            val id = uid.substringAfterLast("-").toIntOrNull()
+            if (uid.contains(IncrementalShiftingSource.PREFIX) && id != null) {
                 IncrementalShiftingSource(extension, id)
-            } else if (uid.contains(StaticHrSource.PREFIX)) {
+            } else if (uid.contains(StaticHrSource.PREFIX) && id != null) {
                 StaticHrSource(extension, id)
-            } else if (uid.contains(BespokeDataSource.PREFIX)) {
+            } else if (uid.contains(BespokeDataSource.PREFIX) && id != null) {
                 BespokeDataSource(extension, id)
+            } else if (uid.contains(DoubleHrSensor.PREFIX)) {
+                DoubleHrSensor(bleManager, extension, uid.substringAfterLast("-"), null)
             } else {
                 throw IllegalArgumentException("unknown type for $uid")
             }
@@ -239,6 +258,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
         serviceJob = CoroutineScope(Dispatchers.IO).launch {
             karooSystem.connect { connected ->
                 if (connected) {
+                    karooSystem.dispatch(RequestBluetooth("samp"))
                     karooSystem.dispatch(
                         SystemNotification(
                             "sample-started",
@@ -319,6 +339,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     override fun onDestroy() {
         serviceJob?.cancel()
         serviceJob = null
+        karooSystem.dispatch(ReleaseBluetooth("samp"))
         karooSystem.disconnect()
         super.onDestroy()
     }

@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "io.hammerhead.sampleext"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "io.hammerhead.sampleext"
@@ -83,6 +83,8 @@ dependencies {
     // coroutines
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.rx2)
+
+    implementation("no.nordicsemi.kotlin.ble:client-android:2.0.0-alpha02")
 
     // Hilt
     ksp(libs.hilt.android.compiler)

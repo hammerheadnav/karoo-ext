@@ -1,6 +1,6 @@
 [versions]
 activity = "1.9.3"
-agp = "8.4.2"
+agp = "8.6.1"
 dokka = "1.9.20"
 kotlin = "2.0.0"
 coreKtx = "1.13.1"

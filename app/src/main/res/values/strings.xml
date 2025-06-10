@@ -9,4 +9,6 @@
     <string name="alert_detail">You\'re at %1$s now.</string>
     <string name="bespoke">Bespoke</string>
     <string name="bespoke_description">Bespoke type from sample</string>
+    <string name="double_hr">2HR</string>
+    <string name="double_hr_description">Double HR</string>
 </resources>

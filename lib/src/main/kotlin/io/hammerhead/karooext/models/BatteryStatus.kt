@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,4 +31,18 @@ enum class BatteryStatus {
     LOW,
     CRITICAL,
     INVALID,
+    ;
+
+    companion object {
+        fun fromPercentage(percentage: Int): BatteryStatus {
+            return when {
+                percentage > 95 -> NEW
+                percentage > 80 -> GOOD
+                percentage > 45 -> OK
+                percentage > 15 -> LOW
+                percentage > 0 -> CRITICAL
+                else -> INVALID
+            }
+        }
+    }
 }
