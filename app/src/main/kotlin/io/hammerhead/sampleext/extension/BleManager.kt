@@ -7,23 +7,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.replay
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.suspendCancellableCoroutine
 import no.nordicsemi.kotlin.ble.client.android.CentralManager
 import no.nordicsemi.kotlin.ble.client.android.Peripheral
 import no.nordicsemi.kotlin.ble.client.android.native
@@ -32,7 +26,6 @@ import no.nordicsemi.kotlin.ble.core.ConnectionState
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.time.Duration.Companion.milliseconds
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -43,7 +36,6 @@ class BleManager @Inject constructor(@ApplicationContext private val context: Co
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     init {
-
     }
 
     private val centralManager by lazy {
@@ -125,7 +117,6 @@ class BleManager @Inject constructor(@ApplicationContext private val context: Co
             }
         }
     }
-
 
     companion object {
         // UUIDs for the Device Information service (DIS)
