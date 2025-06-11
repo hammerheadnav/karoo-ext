@@ -261,7 +261,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
         serviceJob = CoroutineScope(Dispatchers.IO).launch {
             karooSystem.connect { connected ->
                 if (connected) {
-                    karooSystem.dispatch(RequestBluetooth("samp"))
+                    karooSystem.dispatch(RequestBluetooth(extension))
                     val message = if (ActivityCompat.checkSelfPermission(this@SampleExtension, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
                         "Sample extension started (permissions granted)"
                     } else {
@@ -347,7 +347,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     override fun onDestroy() {
         serviceJob?.cancel()
         serviceJob = null
-        karooSystem.dispatch(ReleaseBluetooth("samp"))
+        karooSystem.dispatch(ReleaseBluetooth(extension))
         karooSystem.disconnect()
         super.onDestroy()
     }

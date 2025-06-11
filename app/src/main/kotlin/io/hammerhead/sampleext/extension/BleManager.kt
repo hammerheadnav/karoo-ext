@@ -77,10 +77,12 @@ class BleManager @Inject constructor(@ApplicationContext private val context: Co
 
     fun connect(address: String): Flow<Peripheral?> {
         return flow {
+            // Start by scanning until the device is seen and connectable
             val peripheral = centralManager.scan {
                 Address(address)
             }.filter { it.isConnectable }.map { it.peripheral }.first()
             try {
+                // Connect to the device (including retries)
                 repeat(10) { i ->
                     if (i == 0) {
                         Timber.i("Found $peripheral, connecting...")
@@ -90,12 +92,14 @@ class BleManager @Inject constructor(@ApplicationContext private val context: Co
                     }
                     centralManager.connect(peripheral, connectionOptions)
                     Timber.i("Connected to $peripheral")
+                    // Emit the peripheral to the caller so they can setup observers
                     emit(peripheral)
                     // Block while connected
                     peripheral.state
                         .filter { it is ConnectionState.Disconnected }
                         .first()
                     Timber.i("Device disconnected from $peripheral, state is ${peripheral.state.value}")
+                    // Emit null to the caller so they know it disconnected before re-entering this loop to try to connect again
                     emit(null)
                 }
             } finally {
