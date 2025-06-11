@@ -16,11 +16,14 @@
 
 package io.hammerhead.sampleext.extension
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
 import com.mapbox.geojson.Point
 import com.mapbox.geojson.utils.PolylineUtils
 import com.mapbox.turf.TurfConstants
@@ -259,10 +262,15 @@ class SampleExtension : KarooExtension("sample", "1.0") {
             karooSystem.connect { connected ->
                 if (connected) {
                     karooSystem.dispatch(RequestBluetooth("samp"))
+                    val message = if (ActivityCompat.checkSelfPermission(this@SampleExtension, Manifest.permission.BLUETOOTH_SCAN) == PackageManager.PERMISSION_GRANTED) {
+                        "Sample extension started (permissions granted)"
+                    } else {
+                        "Sample extension started (needs permissions)"
+                    }
                     karooSystem.dispatch(
                         SystemNotification(
                             "sample-started",
-                            "Sample extension started",
+                            message,
                             action = "See it",
                             actionIntent = "io.hammerhead.sampleext.MAIN",
                         ),
