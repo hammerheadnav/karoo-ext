@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2025 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import io.hammerhead.karooext.models.ViewEvent
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 
 /**
  * @suppress
@@ -115,7 +116,16 @@ class ViewEmitter(
     private val handler: IHandler,
     private val eventEmitter: Emitter<ViewEvent> = Emitter.create<ViewEvent>(packageName, handler),
 ) : Emitter<ViewEvent> by eventEmitter {
+    private var lastViewUpdate: Long = 0
+
     fun updateView(view: RemoteViews) {
+        val now = System.currentTimeMillis()
+        // Intention is to limit to ~1Hz with 100ms for slop
+        if (now - lastViewUpdate < 900) {
+            Timber.w("ViewEmitter: ignoring updateView, too soon")
+            return
+        }
+        lastViewUpdate = now
         val bundle = Bundle()
         bundle.putParcelable("view", view)
         bundle.putString(BUNDLE_PACKAGE, packageName)
