@@ -434,6 +434,7 @@ data class OnNavigationState(
 
         /**
          * Data for a climb within a route
+         *
          * @since 1.1.6
          */
         @Serializable
