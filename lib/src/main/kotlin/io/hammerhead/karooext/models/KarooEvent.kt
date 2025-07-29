@@ -375,12 +375,18 @@ data class OnNavigationState(
              * @see [Symbol.POI] [OnGlobalPOIs]
              */
             val pois: List<Symbol.POI>,
+            /**
+             * Climbs along the route
+             *
+             * @since 1.1.6
+             */
+            val climbs: List<Climb> = emptyList(),
         ) : NavigationState() {
             /**
              * @suppress
              */
             override fun toString(): String {
-                return "NavigatingRoute($name, routePolyline=[${routePolyline.length}], routeDistance=$routeDistance, rejoinPolyline=[${rejoinPolyline?.length}], rejoinDistance=$rejoinDistance, reversed=$reversed, breadcrumb=$breadcrumb, pois=${pois.map { "POI(${it.name ?: it.type})" }})"
+                return "NavigatingRoute($name, routePolyline=[${routePolyline.length}], routeDistance=$routeDistance, rejoinPolyline=[${rejoinPolyline?.length}], rejoinDistance=$rejoinDistance, reversed=$reversed, breadcrumb=$breadcrumb, pois=${pois.map { "POI(${it.name ?: it.type}, dists=${it.distancesAlongRoute.map { it.toInt() }})" }}, climbs=$climbs)"
             }
         }
 
@@ -399,14 +405,44 @@ data class OnNavigationState(
              * This will change if the rider deviates from the previous suggested path to the destination.
              */
             val polyline: String,
+            /**
+             * Climbs along the path to destination
+             *
+             * @since 1.1.6
+             */
+            val climbs: List<Climb> = emptyList(),
         ) : NavigationState() {
             /**
              * @suppress
              */
             override fun toString(): String {
-                return "NavigatingToDestination($destination, polyline=[${polyline.length}])"
+                return "NavigatingToDestination($destination, polyline=[${polyline.length}], climbs=$climbs)"
             }
         }
+
+        /**
+         * Data for a climb within a route
+         * @since 1.1.6
+         */
+        @Serializable
+        data class Climb(
+            /**
+             * Distance along the route (m)
+             */
+            val startDistance: Double,
+            /**
+             * Length of the climb (m)
+             */
+            val length: Double,
+            /**
+             * Average grade over the climb (%)
+             */
+            val grade: Double,
+            /**
+             * Total ascent of the climb (m)
+             */
+            val totalElevation: Double,
+        )
     }
 
     /**

@@ -166,7 +166,6 @@ fun DataTab(mainData: MainData) {
         Text(text = "Karoo System: " + if (mainData.connected) "Connected" else "Disconnected")
         Text(text = "Ride State: ${mainData.rideState}")
         Text(text = "Power: ${(mainData.power as? StreamState.Streaming)?.dataPoint?.singleValue ?: "--"}")
-        Text(text = "Navigation: ${mainData.navigationState}")
         Text(text = "Active profile: ${mainData.rideProfile}")
         ExpandableData(
             buttonText = "Bikes",
@@ -183,6 +182,13 @@ fun DataTab(mainData: MainData) {
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
             Text(mainData.activePage.toString())
+        }
+        ExpandableData(
+            buttonText = "Navigation state",
+            buttonColor = Color.Cyan,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) {
+            Text(mainData.navigationState.toString())
         }
         ExpandableData(
             buttonText = "Global POIs",
