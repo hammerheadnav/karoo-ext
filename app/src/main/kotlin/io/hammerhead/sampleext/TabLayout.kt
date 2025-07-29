@@ -17,6 +17,7 @@
 package io.hammerhead.sampleext
 
 import android.widget.Toast
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,8 +29,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -41,15 +42,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastRoundToInt
+import com.mapbox.geojson.utils.PolylineUtils
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.KarooEffect
 import io.hammerhead.karooext.models.LaunchPinDrop
+import io.hammerhead.karooext.models.OnNavigationState
 import io.hammerhead.karooext.models.PerformHardwareAction
 import io.hammerhead.karooext.models.ReleaseAnt
 import io.hammerhead.karooext.models.RequestAnt
@@ -67,11 +71,16 @@ fun TabLayout(
     toggleHomeBackground: () -> Unit,
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Controls", "Data", "Requests")
+    val tabs = listOf("Controls", "Data", "Nav", "Requests")
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        TabRow(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+    ) {
+        ScrollableTabRow(
             selectedTabIndex = selectedTabIndex,
+            edgePadding = 2.dp,
             modifier = Modifier.fillMaxWidth(),
         ) {
             tabs.forEachIndexed { index, title ->
@@ -91,7 +100,8 @@ fun TabLayout(
                 toggleHomeBackground = toggleHomeBackground,
             )
             1 -> DataTab(mainData)
-            2 -> RequestsTab(
+            2 -> NavigationTab(mainData)
+            3 -> RequestsTab(
                 httpStatus = mainData.httpStatus,
                 dispatchEffect = dispatchEffect,
                 makeHttpRequest = makeHttpRequest,
@@ -184,11 +194,40 @@ fun DataTab(mainData: MainData) {
             Text(mainData.activePage.toString())
         }
         ExpandableData(
-            buttonText = "Navigation state",
-            buttonColor = Color.Cyan,
+            buttonText = "Saved Devices",
+            buttonColor = Color.DarkGray,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
-            Text(mainData.navigationState.toString())
+            mainData.savedDevices.map {
+                val extDetails = Device.fromDeviceUid(it.id)?.let { "[ext=${it.first} id=${it.second}]" } ?: ""
+                Text("Device: ${it.name} (${it.connectionType}) $extDetails")
+            }
+        }
+    }
+}
+
+@Composable
+fun NavigationTab(mainData: MainData) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+    ) {
+        Text("Navigation state: " + mainData.navigationState.toString())
+        val elevationPolyline = when (mainData.navigationState) {
+            is OnNavigationState.NavigationState.NavigatingRoute -> mainData.navigationState.routeElevationPolyline
+            is OnNavigationState.NavigationState.NavigatingToDestination -> mainData.navigationState.elevationPolyline
+            else -> null
+        }
+        elevationPolyline?.let {
+            ExpandableData(
+                buttonText = "Navigation elevation",
+                buttonColor = Color.Black,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            ) {
+                val decoded = PolylineUtils.decode(elevationPolyline, 1)
+                Graph(decoded.map { Pair(it.latitude(), it.longitude()) })
+            }
         }
         ExpandableData(
             buttonText = "Global POIs",
@@ -197,16 +236,6 @@ fun DataTab(mainData: MainData) {
         ) {
             mainData.globalPOIs.map {
                 Text("POI: ${it.name ?: ""} ${it.type}")
-            }
-        }
-        ExpandableData(
-            buttonText = "Saved Devices",
-            buttonColor = Color.DarkGray,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        ) {
-            mainData.savedDevices.map {
-                val extDetails = Device.fromDeviceUid(it.id)?.let { "[ext=${it.first} id=${it.second}]" } ?: ""
-                Text("Device: ${it.name} (${it.connectionType}) $extDetails")
             }
         }
     }
@@ -292,6 +321,39 @@ fun RequestsTab(
             Text("System Notification")
         }
         Spacer(modifier = Modifier.height(12.dp))
+    }
+}
+
+@Composable
+fun Graph(data: List<Pair<Double, Double>>) {
+    val maxX = data.maxOfOrNull { it.first } ?: 1.0
+    val maxY = data.maxOfOrNull { it.second } ?: 1.0
+
+    val padding = 16.dp
+
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+            .padding(padding),
+    ) {
+        val width = size.width
+        val height = size.height
+
+        val points = data.map {
+            val x = (it.first / maxX * width).toFloat()
+            val y = height - (it.second / maxY * height).toFloat()
+            Offset(x, y)
+        }
+
+        for (i in 0 until points.size - 1) {
+            drawLine(
+                color = Color.Blue,
+                start = points[i],
+                end = points[i + 1],
+                strokeWidth = 4f,
+            )
+        }
     }
 }
 

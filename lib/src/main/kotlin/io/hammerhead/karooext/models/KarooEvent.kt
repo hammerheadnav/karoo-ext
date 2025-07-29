@@ -348,6 +348,12 @@ data class OnNavigationState(
              */
             val routeDistance: Double,
             /**
+             * Pair of distance, elevation, encoded as Google polyline, precision 1, for the selected route.
+             *
+             * @since 1.1.6
+             */
+            val routeElevationPolyline: String?,
+            /**
              * Google encoded polyline, precision 5, of the path to navigate back to the route.
              *
              * Null when on route or off route and using breadcrumb navigation.
@@ -386,7 +392,7 @@ data class OnNavigationState(
              * @suppress
              */
             override fun toString(): String {
-                return "NavigatingRoute($name, routePolyline=[${routePolyline.length}], routeDistance=$routeDistance, rejoinPolyline=[${rejoinPolyline?.length}], rejoinDistance=$rejoinDistance, reversed=$reversed, breadcrumb=$breadcrumb, pois=${pois.map { "POI(${it.name ?: it.type}, dists=${it.distancesAlongRoute.map { it.toInt() }})" }}, climbs=$climbs)"
+                return "NavigatingRoute($name, routePolyline=[${routePolyline.length}], routeDistance=$routeDistance, routeElevation=[${routeElevationPolyline?.length}], rejoinPolyline=[${rejoinPolyline?.length}], rejoinDistance=$rejoinDistance, reversed=$reversed, breadcrumb=$breadcrumb, pois=${pois.map { "POI(${it.name ?: it.type}, dists=${it.distancesAlongRoute.map { it.toInt() }})" }}, climbs=$climbs)"
             }
         }
 
@@ -406,6 +412,12 @@ data class OnNavigationState(
              */
             val polyline: String,
             /**
+             * Pair of distance, elevation, encoded as Google polyline, precision 1, along the suggested path.
+             *
+             * @since 1.1.6
+             */
+            val elevationPolyline: String?,
+            /**
              * Climbs along the path to destination
              *
              * @since 1.1.6
@@ -416,7 +428,7 @@ data class OnNavigationState(
              * @suppress
              */
             override fun toString(): String {
-                return "NavigatingToDestination($destination, polyline=[${polyline.length}], climbs=$climbs)"
+                return "NavigatingToDestination($destination, polyline=[${polyline.length}], elevationPolyline=[${elevationPolyline?.length}], climbs=$climbs)"
             }
         }
 
