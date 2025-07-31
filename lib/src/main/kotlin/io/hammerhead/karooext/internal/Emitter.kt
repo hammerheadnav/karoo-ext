@@ -110,6 +110,8 @@ interface Emitter<T> {
 /**
  * Special [Emitter] that includes a function to update [RemoteViews] in addition
  * to [ViewEvent]s.
+ *
+ * [updateView] can only be called at 1Hz, views emitted more frequently will be dropped.
  */
 class ViewEmitter(
     private val packageName: String,

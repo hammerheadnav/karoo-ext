@@ -352,7 +352,7 @@ data class OnNavigationState(
              *
              * @since 1.1.6
              */
-            val routeElevationPolyline: String?,
+            val routeElevationPolyline: String? = null,
             /**
              * Google encoded polyline, precision 5, of the path to navigate back to the route.
              *
@@ -416,7 +416,7 @@ data class OnNavigationState(
              *
              * @since 1.1.6
              */
-            val elevationPolyline: String?,
+            val elevationPolyline: String? = null,
             /**
              * Climbs along the path to destination
              *

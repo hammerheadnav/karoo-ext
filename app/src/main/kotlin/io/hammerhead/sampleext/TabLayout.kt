@@ -62,6 +62,13 @@ import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.Symbol
 import io.hammerhead.karooext.models.SystemNotification
 
+enum class Tab {
+    Controls,
+    Data,
+    Nav,
+    Requests,
+}
+
 @Composable
 fun TabLayout(
     mainData: MainData,
@@ -70,8 +77,7 @@ fun TabLayout(
     playBeeps: () -> Unit,
     toggleHomeBackground: () -> Unit,
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Controls", "Data", "Nav", "Requests")
+    var selectedTabIndex by remember { mutableIntStateOf(Tab.Controls.ordinal) }
 
     Column(
         modifier = Modifier
@@ -83,25 +89,26 @@ fun TabLayout(
             edgePadding = 2.dp,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            tabs.forEachIndexed { index, title ->
+            Tab.entries.forEachIndexed { index, tab ->
                 Tab(
                     selected = selectedTabIndex == index,
                     onClick = { selectedTabIndex = index },
-                    text = { Text(text = title, fontSize = 12.sp) },
+                    text = { Text(text = tab.name, fontSize = 12.sp) },
                 )
             }
         }
 
-        when (selectedTabIndex) {
-            0 -> ControlsTab(
+        val selectedTab = Tab.entries[selectedTabIndex]
+        when (selectedTab) {
+            Tab.Controls -> ControlsTab(
                 homeBackgroundSet = mainData.homeBackgroundSet,
                 dispatchEffect = dispatchEffect,
                 playBeeps = playBeeps,
                 toggleHomeBackground = toggleHomeBackground,
             )
-            1 -> DataTab(mainData)
-            2 -> NavigationTab(mainData)
-            3 -> RequestsTab(
+            Tab.Data -> DataTab(mainData)
+            Tab.Nav -> NavigationTab(mainData)
+            Tab.Requests -> RequestsTab(
                 httpStatus = mainData.httpStatus,
                 dispatchEffect = dispatchEffect,
                 makeHttpRequest = makeHttpRequest,
