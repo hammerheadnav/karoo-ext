@@ -348,6 +348,12 @@ data class OnNavigationState(
              */
             val routeDistance: Double,
             /**
+             * Pair of distance, elevation, encoded as Google polyline, precision 1, for the selected route.
+             *
+             * @since 1.1.6
+             */
+            val routeElevationPolyline: String? = null,
+            /**
              * Google encoded polyline, precision 5, of the path to navigate back to the route.
              *
              * Null when on route or off route and using breadcrumb navigation.
@@ -375,12 +381,18 @@ data class OnNavigationState(
              * @see [Symbol.POI] [OnGlobalPOIs]
              */
             val pois: List<Symbol.POI>,
+            /**
+             * Climbs along the route
+             *
+             * @since 1.1.6
+             */
+            val climbs: List<Climb> = emptyList(),
         ) : NavigationState() {
             /**
              * @suppress
              */
             override fun toString(): String {
-                return "NavigatingRoute($name, routePolyline=[${routePolyline.length}], routeDistance=$routeDistance, rejoinPolyline=[${rejoinPolyline?.length}], rejoinDistance=$rejoinDistance, reversed=$reversed, breadcrumb=$breadcrumb, pois=${pois.map { "POI(${it.name ?: it.type})" }})"
+                return "NavigatingRoute($name, routePolyline=[${routePolyline.length}], routeDistance=$routeDistance, routeElevation=[${routeElevationPolyline?.length}], rejoinPolyline=[${rejoinPolyline?.length}], rejoinDistance=$rejoinDistance, reversed=$reversed, breadcrumb=$breadcrumb, pois=${pois.map { "POI(${it.name ?: it.type}, dists=${it.distancesAlongRoute.map { it.toInt() }})" }}, climbs=$climbs)"
             }
         }
 
@@ -399,14 +411,51 @@ data class OnNavigationState(
              * This will change if the rider deviates from the previous suggested path to the destination.
              */
             val polyline: String,
+            /**
+             * Pair of distance, elevation, encoded as Google polyline, precision 1, along the suggested path.
+             *
+             * @since 1.1.6
+             */
+            val elevationPolyline: String? = null,
+            /**
+             * Climbs along the path to destination
+             *
+             * @since 1.1.6
+             */
+            val climbs: List<Climb> = emptyList(),
         ) : NavigationState() {
             /**
              * @suppress
              */
             override fun toString(): String {
-                return "NavigatingToDestination($destination, polyline=[${polyline.length}])"
+                return "NavigatingToDestination($destination, polyline=[${polyline.length}], elevationPolyline=[${elevationPolyline?.length}], climbs=$climbs)"
             }
         }
+
+        /**
+         * Data for a climb within a route
+         *
+         * @since 1.1.6
+         */
+        @Serializable
+        data class Climb(
+            /**
+             * Distance along the route (m)
+             */
+            val startDistance: Double,
+            /**
+             * Length of the climb (m)
+             */
+            val length: Double,
+            /**
+             * Average grade over the climb (%)
+             */
+            val grade: Double,
+            /**
+             * Total ascent of the climb (m)
+             */
+            val totalElevation: Double,
+        )
     }
 
     /**

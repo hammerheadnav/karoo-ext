@@ -55,6 +55,14 @@ sealed interface Symbol {
          * Optional name of the POI
          */
         val name: String? = null,
+        /**
+         * Optional distances that a route POI is found along the route polyline
+         *
+         * Because POIs are considered along the route by proximity they can appear more than once
+         *
+         * @since 1.1.6
+         */
+        val distancesAlongRoute: List<Double> = emptyList(),
     ) : Symbol {
         /**
          * Supported string types for POI
