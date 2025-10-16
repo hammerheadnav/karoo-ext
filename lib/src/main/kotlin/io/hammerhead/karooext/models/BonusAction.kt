@@ -21,7 +21,16 @@ package io.hammerhead.karooext.models
 /**
  * Derived from XML meta-data in [ExtensionInfo].
  *
- * Defines an action
+ * Defines an action by ID and resolved display name.
+ *
+ * In extension info XML:
+ * ```xml
+ * <BonusAction
+ *     actionId="<type id>"
+ *     displayName="@string/X" />
+ * ```
+ *
+ * @since 1.1.7
  */
 data class BonusAction(
     val extension: String,
