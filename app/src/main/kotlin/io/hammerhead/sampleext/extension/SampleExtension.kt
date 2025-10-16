@@ -74,6 +74,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import kotlin.math.absoluteValue
@@ -265,11 +266,11 @@ class SampleExtension : KarooExtension("sample", "1.0") {
             }
             SampleAction.ALERT -> karooSystem.dispatch(
                 InRideAlert(
-                    id = "alert",
+                    id = UUID.randomUUID().toString(),
                     icon = R.drawable.ic_sample,
                     title = getString(R.string.action_alert),
                     detail = getString(R.string.action_alert_desc),
-                    autoDismissMs = 10_000,
+                    autoDismissMs = 4_000,
                     backgroundColor = R.color.colorAccent,
                     textColor = R.color.white,
                 ),
