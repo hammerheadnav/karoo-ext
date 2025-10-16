@@ -67,9 +67,9 @@ data class ExtensionInfo(
      */
     val dataTypes: List<DataType>,
     /**
-     * Static list of [Action]s this extension handles
+     * Static list of [BonusAction]s this extension handles
      *
      * @since 1.1.7
      */
-    val actions: List<Action>,
+    val bonusActions: List<BonusAction>,
 )

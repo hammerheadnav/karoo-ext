@@ -151,6 +151,11 @@ Extension Info XML resource (`extension_info.xml`):
         icon="@drawable/X" />
     ...
     <DataType... />
+    <BonusAction
+        actionId="<type id>"
+        displayName="@string/X" />
+    ...
+    <BonusAction... />
 </ExtensionInfo>
 ```
 

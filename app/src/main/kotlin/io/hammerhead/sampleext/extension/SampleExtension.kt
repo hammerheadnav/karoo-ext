@@ -256,7 +256,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
         }
     }
 
-    override fun onAction(actionId: String) {
+    override fun onBonusAction(actionId: String) {
         when (SampleAction.fromActionId(actionId)) {
             SampleAction.OPEN -> {
                 val intent = Intent(this, MainActivity::class.java)
@@ -272,7 +272,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                     autoDismissMs = 10_000,
                     backgroundColor = R.color.colorAccent,
                     textColor = R.color.white,
-                )
+                ),
             )
             null -> Timber.w("Unknown action $actionId")
         }

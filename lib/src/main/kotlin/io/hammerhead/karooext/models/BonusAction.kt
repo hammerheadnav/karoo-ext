@@ -23,7 +23,7 @@ package io.hammerhead.karooext.models
  *
  * Defines an action
  */
-data class Action(
+data class BonusAction(
     val extension: String,
     val actionId: String,
     val displayName: String,
