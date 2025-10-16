@@ -66,4 +66,10 @@ data class ExtensionInfo(
      * @see [DataType]
      */
     val dataTypes: List<DataType>,
+    /**
+     * Static list of [Action]s this extension handles
+     *
+     * @since 1.1.7
+     */
+    val actions: List<Action>,
 )

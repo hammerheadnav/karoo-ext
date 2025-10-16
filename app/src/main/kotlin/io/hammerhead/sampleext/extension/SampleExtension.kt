@@ -56,6 +56,7 @@ import io.hammerhead.karooext.models.UserProfile
 import io.hammerhead.karooext.models.WriteEventMesg
 import io.hammerhead.karooext.models.WriteToRecordMesg
 import io.hammerhead.karooext.models.WriteToSessionMesg
+import io.hammerhead.sampleext.MainActivity
 import io.hammerhead.sampleext.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -252,6 +253,24 @@ class SampleExtension : KarooExtension("sample", "1.0") {
         }
         emitter.setCancellable {
             job.cancel()
+        }
+    }
+
+    override fun onAction(actionId: String) {
+        when (SampleAction.fromActionId(actionId)) {
+            SampleAction.OPEN -> startActivity(Intent(this, MainActivity::class.java))
+            SampleAction.ALERT -> karooSystem.dispatch(
+                InRideAlert(
+                    id = "alert",
+                    icon = R.drawable.ic_sample,
+                    title = getString(R.string.action_alert),
+                    detail = getString(R.string.action_alert_desc),
+                    autoDismissMs = 10_000,
+                    backgroundColor = R.color.colorAccent,
+                    textColor = R.color.white,
+                )
+            )
+            null -> Timber.w("Unknown action $actionId")
         }
     }
 
