@@ -7,5 +7,5 @@
   "latestVersionCode": 9,
   "developer": "Hammerhead",
   "description": "Hammerhead's Sample app from github.com/hammerheadnav/karoo-ext which demonstrates the capabilities of Karoo Extensions.\nIt won't provide much use to riders but can be a quick way to get started developing for Karoo.",
-  "releaseNotes": "Added additional events."
+  "releaseNotes": "Implemented bonus actions."
 }
