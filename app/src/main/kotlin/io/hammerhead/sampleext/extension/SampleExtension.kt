@@ -258,7 +258,11 @@ class SampleExtension : KarooExtension("sample", "1.0") {
 
     override fun onAction(actionId: String) {
         when (SampleAction.fromActionId(actionId)) {
-            SampleAction.OPEN -> startActivity(Intent(this, MainActivity::class.java))
+            SampleAction.OPEN -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
             SampleAction.ALERT -> karooSystem.dispatch(
                 InRideAlert(
                     id = "alert",
