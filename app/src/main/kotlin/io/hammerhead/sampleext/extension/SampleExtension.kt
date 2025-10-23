@@ -56,6 +56,7 @@ import io.hammerhead.karooext.models.UserProfile
 import io.hammerhead.karooext.models.WriteEventMesg
 import io.hammerhead.karooext.models.WriteToRecordMesg
 import io.hammerhead.karooext.models.WriteToSessionMesg
+import io.hammerhead.sampleext.MainActivity
 import io.hammerhead.sampleext.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,6 +74,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 import kotlin.math.absoluteValue
@@ -252,6 +254,28 @@ class SampleExtension : KarooExtension("sample", "1.0") {
         }
         emitter.setCancellable {
             job.cancel()
+        }
+    }
+
+    override fun onBonusAction(actionId: String) {
+        when (SampleAction.fromActionId(actionId)) {
+            SampleAction.OPEN -> {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+            SampleAction.ALERT -> karooSystem.dispatch(
+                InRideAlert(
+                    id = UUID.randomUUID().toString(),
+                    icon = R.drawable.ic_sample,
+                    title = getString(R.string.action_alert),
+                    detail = getString(R.string.action_alert_desc),
+                    autoDismissMs = 4_000,
+                    backgroundColor = R.color.colorAccent,
+                    textColor = R.color.white,
+                ),
+            )
+            null -> Timber.w("Unknown action $actionId")
         }
     }
 

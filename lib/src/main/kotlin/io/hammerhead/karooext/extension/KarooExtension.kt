@@ -26,6 +26,7 @@ import io.hammerhead.karooext.aidl.IKarooExtension
 import io.hammerhead.karooext.internal.Emitter
 import io.hammerhead.karooext.internal.ViewEmitter
 import io.hammerhead.karooext.internal.serializableFromBundle
+import io.hammerhead.karooext.models.BonusAction
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.Device
 import io.hammerhead.karooext.models.DeviceEvent
@@ -150,6 +151,11 @@ abstract class KarooExtension(
                 Timber.d("$TAG: stopFit $id")
                 emitters.remove(id)?.cancel()
             }
+
+            override fun onBonusAction(actionid: String) {
+                Timber.d("$TAG: onBonusAction $actionid")
+                this@KarooExtension.onBonusAction(actionid)
+            }
         }
     }
 
@@ -194,6 +200,19 @@ abstract class KarooExtension(
      * @see [FitEffect]
      */
     open fun startFit(emitter: Emitter<FitEffect>) {}
+
+    /**
+     * Called when an [BonusAction] should be performed.
+     *
+     * Actions defined in [ExtensionInfo] can be assigned to a controller.
+     * When the controller button is activated, the configured `actionId` will be passed
+     * to the matching extension that defined it.
+     *
+     * @see [BonusAction]
+     *
+     * @since 1.1.7
+     */
+    open fun onBonusAction(actionId: String) {}
 
     /**
      * @suppress

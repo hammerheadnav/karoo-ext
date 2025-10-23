@@ -22,6 +22,17 @@ import android.graphics.drawable.Drawable
 
 /**
  * Derived from XML meta-data in [ExtensionInfo].
+ *
+ * In extension info XML:
+ * ```xml
+ * <DataType
+ *     typeId="<type id>"
+ *     description="@string/X"
+ *     displayName="@string/X"
+ *     graphical="true"
+ *     icon="@drawable/X" />
+ * ```
+ *
  */
 data class DataType(
     val extension: String,

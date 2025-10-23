@@ -30,4 +30,10 @@
         graphical="false"
         icon="@drawable/ic_sample"
         typeId="2hr" />
+    <BonusAction
+        displayName="@string/action_open"
+        actionId="open" />
+    <BonusAction
+        displayName="@string/action_alert"
+        actionId="alert" />
 </ExtensionInfo>

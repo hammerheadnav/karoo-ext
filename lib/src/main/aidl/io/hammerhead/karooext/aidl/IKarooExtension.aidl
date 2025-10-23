@@ -22,4 +22,6 @@ interface IKarooExtension {
 
     oneway void startFit(String id, in IHandler handler);
     oneway void stopFit(String id);
+
+    oneway void onBonusAction(String actionId);
 }

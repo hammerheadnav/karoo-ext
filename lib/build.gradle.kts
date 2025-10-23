@@ -12,7 +12,7 @@ plugins {
 }
 
 val moduleName = "karoo-ext"
-val libVersion = "1.1.6"
+val libVersion = "1.1.7"
 
 buildscript {
     dependencies {
@@ -83,7 +83,7 @@ tasks.dokkaHtml.configure {
             skipEmptyPackages.set(true)
             includeNonPublic.set(false)
             includes.from("Module.md")
-            samples.from("src/test/kotlin/samples.kt")
+            samples.from("src/test/kotlin/Samples.kt")
         }
     }
 }

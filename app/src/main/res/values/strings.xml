@@ -11,4 +11,7 @@
     <string name="bespoke_description">Bespoke type from sample</string>
     <string name="double_hr">2xHR</string>
     <string name="double_hr_description">Double HR</string>
+    <string name="action_open">Open</string>
+    <string name="action_alert">Alert</string>
+    <string name="action_alert_desc">Bonus action alert</string>
 </resources>
