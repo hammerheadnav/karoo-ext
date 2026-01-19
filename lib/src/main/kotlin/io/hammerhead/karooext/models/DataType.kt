@@ -90,9 +90,10 @@ data class DataType(
     /**
      * Type constants generated from pre-existing data types used by Karoo.
      */
-    object Type {/**
-     * Category: Speed
-     */
+    object Type {
+        /**
+         * Category: Speed
+         */
 
         /**
          * Speed - Current speed
@@ -149,12 +150,6 @@ data class DataType(
          * Fields: [Field.HEART_RATE]
          */
         const val HEART_RATE = "TYPE_HEART_RATE_ID"
-
-        /**
-         * Heart Rate - Current HR
-         * Fields: [Field.HEART_RATE]
-         */
-        const val HEART_RATE_COLOR = "TYPE_HEART_RATE_COLOR_ID"
 
         /**
          * Heart Rate Zone - Current HR zone
@@ -771,6 +766,12 @@ data class DataType(
         const val CLIMB_NUMBER = "TYPE_CLIMB_NUMBER_ID"
 
         /**
+         * null
+         * Fields: [Field.DISTANCE_FROM_BOTTOM], [Field.DISTANCE_TO_TOP], [Field.ELEVATION_FROM_BOTTOM], [Field.ELEVATION_TO_TOP], [Field.CLIMB_ELEVATION]
+         */
+        const val CLIMB = "TYPE_CLIMB_ID"
+
+        /**
          * Category: Time
          */
 
@@ -893,6 +894,70 @@ data class DataType(
         const val SHIFTING_COUNT_REAR = "TYPE_SHIFTING_COUNT_REAR_ID"
 
         /**
+         * Category: Workout
+         */
+
+        /**
+         * Target Power - Workout interval's current target power
+         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_DIFFICULTY], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE]
+         */
+        const val WORKOUT_POWER_TARGET = "TYPE_WORKOUT_POWER_TARGET_ID"
+
+        /**
+         * Target Cadence - Workout interval's current target cadence
+         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_DIFFICULTY], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE]
+         */
+        const val WORKOUT_CADENCE_TARGET = "TYPE_WORKOUT_CADENCE_TARGET_ID"
+
+        /**
+         * Target Heart Rate - Workout interval's current target heart rate
+         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_DIFFICULTY], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE]
+         */
+        const val WORKOUT_HEART_RATE_TARGET = "TYPE_WORKOUT_HEART_RATE_TARGET_ID"
+
+        /**
+         * Interval Time Remaining - Time remaining to end of interval
+         * Fields: [Field.WORKOUT_TIME_TO_STEP_FINISH], [Field.WORKOUT_STATE]
+         */
+        const val WORKOUT_REMAINING_INTERVAL_DURATION = "TYPE_WORKOUT_REMAINING_INTERVAL_DURATION_ID"
+
+        /**
+         * Workout Time Remaining - Time remaining to end of Workout
+         * Fields: [Field.WORKOUT_REMAINING_TIME], [Field.WORKOUT_STATE]
+         */
+        const val WORKOUT_REMAINING_TOTAL_DURATION = "TYPE_WORKOUT_REMAINING_TOTAL_DURATION_ID"
+
+        /**
+         * Interval Number - Current Interval number + total this Workout
+         * Fields: [Field.WORKOUT_CURRENT_STEP], [Field.WORKOUT_STEP_COUNT], [Field.WORKOUT_STATE]
+         */
+        const val WORKOUT_INTERVAL_COUNT = "TYPE_WORKOUT_INTERVAL_COUNT_ID"
+
+        /**
+         * Primary Target - Primary Target shows your target HR or PWR based on the loaded workout.
+         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_TYPE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE], [Field.WORKOUT_TARGET_MIN_RAMP_VALUE], [Field.WORKOUT_TARGET_MAX_RAMP_VALUE], [Field.WORKOUT_TARGET_RAMP_TYPE]
+         */
+        const val WORKOUT_PRIMARY_TARGET = "TYPE_WORKOUT_PRIMARY_TARGET_ID"
+
+        /**
+         * Secondary Target - Secondary Target shows your target HR, PWR, or CAD based on the loaded workout.
+         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_TYPE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE], [Field.WORKOUT_TARGET_MIN_RAMP_VALUE], [Field.WORKOUT_TARGET_MAX_RAMP_VALUE], [Field.WORKOUT_TARGET_RAMP_TYPE]
+         */
+        const val WORKOUT_SECONDARY_TARGET = "TYPE_WORKOUT_SECONDARY_TARGET_ID"
+
+        /**
+         * Primary Output - Primary Output shows your output HR or PWR based on the loaded workout.
+         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_OUTPUT_VALUE], [Field.WORKOUT_TARGET_TYPE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_RAMP_TYPE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE], [Field.WORKOUT_TARGET_OUTPUT_VALUE_SMOOTHED]
+         */
+        const val WORKOUT_PRIMARY_TARGET_OUTPUT_VALUE = "TYPE_WORKOUT_PRIMARY_TARGET_OUTPUT_VALUE_ID"
+
+        /**
+         * Secondary Output - Secondary Output shows your output HR, PWR, or CAD based on the loaded workout.
+         * Fields: [Field.WORKOUT_STATE], [Field.WORKOUT_TARGET_OUTPUT_VALUE], [Field.WORKOUT_TARGET_TYPE], [Field.WORKOUT_TARGET_VALUE], [Field.WORKOUT_TARGET_RAMP_TYPE], [Field.WORKOUT_TARGET_MIN_VALUE], [Field.WORKOUT_TARGET_MAX_VALUE], [Field.WORKOUT_TARGET_OUTPUT_VALUE_SMOOTHED]
+         */
+        const val WORKOUT_SECONDARY_TARGET_OUTPUT_VALUE = "TYPE_WORKOUT_SECONDARY_TARGET_OUTPUT_VALUE_ID"
+
+        /**
          * Category: Miscellaneous
          */
 
@@ -921,16 +986,80 @@ data class DataType(
         const val TEMPERATURE = "TYPE_TEMPERATURE_ID"
 
         /**
-         * Location
-         * Fields: [Field.LOC_LATITUDE], [Field.LOC_LONGITUDE], [Field.LOC_BEARING], [Field.LOC_ACCURACY]
+         * null
+         * Fields: [Field.LOC_LATITUDE], [Field.LOC_LONGITUDE], [Field.LOC_BEARING], [Field.LOC_ACCURACY], [Field.LOC_ALTITUDE], [Field.LOC_SPEED]
          */
         const val LOCATION = "TYPE_LOCATION_ID"
 
         /**
-         * Current radar state
+         * null
          * Fields: [Field.RADAR_THREAT_LEVEL], [Field.RADAR_TARGET_1_RANGE], [Field.RADAR_TARGET_2_RANGE], [Field.RADAR_TARGET_3_RANGE], [Field.RADAR_TARGET_4_RANGE], [Field.RADAR_TARGET_5_RANGE], [Field.RADAR_TARGET_6_RANGE], [Field.RADAR_TARGET_7_RANGE], [Field.RADAR_TARGET_8_RANGE]
          */
         const val RADAR = "TYPE_RADAR_ID"
+
+        /**
+         * Category: Flight Attendant
+         */
+
+        /**
+         * Fork position - Fork suspension position
+         * Fields: [Field.SUSPENSION_STATE_FRONT]
+         */
+        const val SUSPENSION_STATE_FRONT = "TYPE_SUSPENSION_STATE_FRONT_ID"
+
+        /**
+         * Rear shock position - Rear shock suspension position
+         * Fields: [Field.SUSPENSION_STATE_REAR]
+         */
+        const val SUSPENSION_STATE_REAR = "TYPE_SUSPENSION_STATE_REAR_ID"
+
+        /**
+         * Flight Attendant Effort Zone - Flight Attendant color-coded effort zones
+         * Fields: [Field.SUSPENSION_EFFORT_ZONE]
+         */
+        const val SUSPENSION_EFFORT_ZONE = "TYPE_SUSPENSION_EFFORT_ZONE_ID"
+
+        /**
+         * Fork position count - # of fork position changes during this ride
+         * Fields: [Field.SUSPENSION_STATE_COUNT_FRONT]
+         */
+        const val SUSPENSION_STATE_COUNT_FRONT = "TYPE_SUSPENSION_STATE_COUNT_FRONT_ID"
+
+        /**
+         * Rear shock position count - # of rear shock position changes during this ride
+         * Fields: [Field.SUSPENSION_STATE_COUNT_REAR]
+         */
+        const val SUSPENSION_STATE_COUNT_REAR = "TYPE_SUSPENSION_STATE_COUNT_REAR_ID"
+
+        /**
+         * Flight Attendant Mode - Current Mode
+         * Fields: [Field.SUSPENSION_MODE], [Field.SUSPENSION_EFFORT_ZONE], [Field.SUSPENSION_LSC_FRONT], [Field.SUSPENSION_LSC_REAR], [Field.SUSPENSION_BIAS]
+         */
+        const val SUSPENSION_MODE = "TYPE_SUSPENSION_MODE_ID"
+
+        /**
+         * Bias - Influences system towards firm or soft
+         * Fields: [Field.SUSPENSION_BIAS]
+         */
+        const val SUSPENSION_BIAS = "TYPE_SUSPENSION_BIAS_ID"
+
+        /**
+         * Fork LSC - Fork Low Speed Compression
+         * Fields: [Field.SUSPENSION_LSC_FRONT]
+         */
+        const val SUSPENSION_LSC_FRONT = "TYPE_SUSPENSION_LSC_FRONT_ID"
+
+        /**
+         * Rear Shock LSC - Rear Shock Low Speed Compression
+         * Fields: [Field.SUSPENSION_LSC_REAR]
+         */
+        const val SUSPENSION_LSC_REAR = "TYPE_SUSPENSION_LSC_REAR_ID"
+
+        /**
+         * Flight Attendant Battery Life - Fork and rear shock battery remaining
+         * Fields: [Field.SUSPENSION_BATTERY_STATUS], [Field.SUSPENSION_BATTERY_STATUS_FRONT], [Field.SUSPENSION_BATTERY_STATUS_REAR]
+         */
+        const val SUSPENSION_BATTERY = "TYPE_SUSPENSION_BATTERY_ID"
 
         /**
          * Category: Navigation
@@ -1023,6 +1152,58 @@ data class DataType(
          * Fields: [Field.LEV_COMBINED_POWER]
          */
         const val LEV_COMBINED_POWER = "TYPE_LEV_COMBINED_POWER_ID"
+
+        /**
+         * Category: Strava Live Segments
+         */
+
+        /**
+         * Segment Time - Elapsed time since beginning the segment
+         * Fields: [Field.SEGMENT_OFF_TIME_REMAINING], [Field.SEGMENT_TIME_ELAPSED]
+         */
+        const val SEGMENT_TIME = "TYPE_SEGMENT_TIME_ID"
+
+        /**
+         * KOM - KOM segment time
+         * Fields: [Field.SEGMENT_OFF_TIME_REMAINING], [Field.SEGMENT_KOM_TIME]
+         */
+        const val SEGMENT_KOM = "TYPE_SEGMENT_KOM_ID"
+
+        /**
+         * Time ahead/behind - Time against KOM
+         * Fields: [Field.SEGMENT_OFF_TIME_REMAINING], [Field.SEGMENT_KOM_DELTA_TIME]
+         */
+        const val SEGMENT_TIME_TO_KOM = "TYPE_SEGMENT_TIME_TO_KOM_ID"
+
+        /**
+         * Time ahead/behind - Time against PR
+         * Fields: [Field.SEGMENT_OFF_TIME_REMAINING], [Field.SEGMENT_PR_DELTA_TIME]
+         */
+        const val SEGMENT_TIME_TO_PR = "TYPE_SEGMENT_TIME_TO_PR_ID"
+
+        /**
+         * Time ahead/behind - Time against your closest active competitor ahead of you
+         * Fields: [Field.SEGMENT_OFF_TIME_REMAINING], [Field.SEGMENT_CARROT_DELTA_TIME]
+         */
+        const val SEGMENT_TIME_TO_CARROT = "TYPE_SEGMENT_TIME_TO_CARROT_ID"
+
+        /**
+         * PR - Your fastest time on the segment
+         * Fields: [Field.SEGMENT_OFF_TIME_REMAINING], [Field.SEGMENT_PR_TIME]
+         */
+        const val SEGMENT_PR = "TYPE_SEGMENT_PR_ID"
+
+        /**
+         * Segment Dist. Remaining - Distance remaining on segment
+         * Fields: [Field.SEGMENT_DISTANCE_REMAINING], [Field.SEGMENT_OFF_TIME_REMAINING]
+         */
+        const val SEGMENT_DISTANCE_REMAINING = "TYPE_SEGMENT_DISTANCE_REMAINING_ID"
+
+        /**
+         * Segment Elev. Remaining - Elevation remaining on segment
+         * Fields: [Field.SEGMENT_ELEVATION_REMAINING], [Field.SEGMENT_OFF_TIME_REMAINING]
+         */
+        const val SEGMENT_ELEVATION_REMAINING = "TYPE_SEGMENT_ELEVATION_REMAINING_ID"
 
         /**
          * Category: Body Temp
@@ -1146,8 +1327,6 @@ data class DataType(
 
         /**
          * Alternate type: INT_POSITIVE_OR_ZERO
-         *   - 0: off route
-         *   - 1: on route
          */
         const val ON_ROUTE = "FIELD_ON_ROUTE_ID"
 
@@ -1187,10 +1366,10 @@ data class DataType(
         const val DISTANCE_TO_TOP = "FIELD_DISTANCE_TO_TOP_ID"
         const val ELEVATION_FROM_BOTTOM = "FIELD_ELEVATION_FROM_BOTTOM_ID"
         const val ELEVATION_TO_TOP = "FIELD_ELEVATION_TO_TOP_ID"
+        const val CLIMB_ELEVATION = "FIELD_CLIMB_ELEVATION_ID"
 
         /**
          * Alternate type: INT_POSITIVE_OR_ZERO
-         * Optional
          */
         const val CLIMB_NUMBER = "FIELD_CLIMB_NUMBER_ID"
 
@@ -1267,33 +1446,24 @@ data class DataType(
 
         /**
          * Alternate type: INT
-         *   - 0: north
-         *   - 1: northeast
-         *   - 2: east
-         *   - 3: southeast
-         *   - 4: south
-         *   - 5: southwest
-         *   - 6: west
-         *   - 7: northwest
-         *
-         * Preferable to use [LOC_BEARING] value from [Type.LOCATION]
+         * Optional
          */
         const val HEADING = "FIELD_HEADING_ID"
 
         /**
-         * Alternate type: INT - ordinal of [BatteryStatus]
+         * Alternate type: INT_POSITIVE_OR_ZERO
          * Optional
          */
         const val SHIFTING_BATTERY_STATUS = "FIELD_SHIFTING_BATTERY_STATUS_ID"
 
         /**
-         * Alternate type: INT - ordinal of [BatteryStatus]
+         * Alternate type: INT_POSITIVE_OR_ZERO
          * Optional
          */
         const val SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR = "FIELD_SHIFTING_BATTERY_STATUS_FRONT_DERAILLEUR_ID"
 
         /**
-         * Alternate type: INT - ordinal of [BatteryStatus]
+         * Alternate type: INT_POSITIVE_OR_ZERO
          * Optional
          */
         const val SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR = "FIELD_SHIFTING_BATTERY_STATUS_REAR_DERAILLEUR_ID"
@@ -1340,9 +1510,6 @@ data class DataType(
 
         /**
          * Alternate type: INT_POSITIVE_OR_ZERO
-         *   - 0: Unknown
-         *   - 1: Front
-         *   - 2: Rear
          */
         const val TIRE_PRESSURE_POSITION = "FIELD_TIRE_PRESSURE_POSITION_ID"
 
@@ -1410,18 +1577,166 @@ data class DataType(
          * Alternate type: INT_POSITIVE_OR_ZERO
          */
         const val RADAR_ERROR = "FIELD_RADAR_ERROR_ID"
+        const val SEGMENT_TOTAL_DISTANCE = "FIELD_SEGMENT_TOTAL_DISTANCE_ID"
+
+        /**
+         * Optional
+         */
+        const val SEGMENT_DISTANCE_REMAINING = "FIELD_SEGMENT_DISTANCE_REMAINING_ID"
+
+        /**
+         * Optional
+         */
+        const val SEGMENT_ELEVATION_REMAINING = "FIELD_SEGMENT_ELEVATION_REMAINING_ID"
+
+        /**
+         * Alternate type: LONG_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val SEGMENT_TIME_ELAPSED = "FIELD_SEGMENT_TIME_ELAPSED_ID"
+
+        /**
+         * Alternate type: LONG_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val SEGMENT_PR_TIME = "FIELD_SEGMENT_PR_TIME_ID"
+
+        /**
+         * Alternate type: LONG
+         * Optional
+         */
+        const val SEGMENT_PR_DELTA_TIME = "FIELD_SEGMENT_PR_DELTA_TIME_ID"
+
+        /**
+         * Alternate type: LONG_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val SEGMENT_KOM_TIME = "FIELD_SEGMENT_KOM_TIME_ID"
+
+        /**
+         * Alternate type: LONG
+         * Optional
+         */
+        const val SEGMENT_KOM_DELTA_TIME = "FIELD_SEGMENT_KOM_DELTA_TIME_ID"
+
+        /**
+         * Alternate type: LONG
+         * Optional
+         */
+        const val SEGMENT_CARROT_DELTA_TIME = "FIELD_SEGMENT_CARROT_DELTA_TIME_ID"
 
         /**
          * Alternate type: INT_POSITIVE_OR_ZERO
-         *
-         * Percentage of LEV charge (out of 100)
+         * Optional
+         */
+        const val SEGMENT_DISTANCE_AWAY = "FIELD_SEGMENT_DISTANCE_AWAY_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val SEGMENT_OFF_TIME_REMAINING = "FIELD_SEGMENT_OFF_TIME_REMAINING_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val WORKOUT_STATE = "FIELD_WORKOUT_STATE_ID"
+
+        /**
+         * Alternate type: LONG_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val WORKOUT_ELAPSED_TIME = "FIELD_WORKOUT_ELAPSED_TIME_ID"
+
+        /**
+         * Alternate type: LONG_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val WORKOUT_REMAINING_TIME = "FIELD_WORKOUT_REMAINING_TIME_ID"
+
+        /**
+         * Alternate type: INT
+         * Optional
+         */
+        const val WORKOUT_TIME_TO_STEP_FINISH = "FIELD_WORKOUT_TIME_TO_STEP_FINISH_ID"
+
+        /**
+         * Optional
+         */
+        const val WORKOUT_TARGET_VALUE = "FIELD_WORKOUT_TARGET_VALUE_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val WORKOUT_CURRENT_STEP = "FIELD_WORKOUT_CURRENT_STEP_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val WORKOUT_STEP_COUNT = "FIELD_WORKOUT_STEP_COUNT_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val WORKOUT_TARGET_TYPE = "FIELD_WORKOUT_TARGET_TYPE_ID"
+
+        /**
+         * Optional
+         */
+        const val WORKOUT_TARGET_MIN_VALUE = "FIELD_WORKOUT_TARGET_MIN_VALUE_ID"
+
+        /**
+         * Optional
+         */
+        const val WORKOUT_TARGET_MIN_RAMP_VALUE = "FIELD_WORKOUT_TARGET_MIN_RAMP_VALUE_ID"
+
+        /**
+         * Optional
+         */
+        const val WORKOUT_TARGET_MAX_VALUE = "FIELD_WORKOUT_TARGET_MAX_VALUE_ID"
+
+        /**
+         * Optional
+         */
+        const val WORKOUT_TARGET_MAX_RAMP_VALUE = "FIELD_WORKOUT_TARGET_MAX_RAMP_VALUE_ID"
+
+        /**
+         * Optional
+         */
+        const val WORKOUT_TARGET_OUTPUT_VALUE = "FIELD_WORKOUT_TARGET_OUTPUT_VALUE_ID"
+
+        /**
+         * Optional
+         */
+        const val WORKOUT_TARGET_OUTPUT_VALUE_SMOOTHED = "FIELD_WORKOUT_TARGET_OUTPUT_VALUE_SMOOTHED_ID"
+
+        /**
+         * Optional
+         */
+        const val WORKOUT_TARGET_OUTPUT_AVG_VALUE = "FIELD_WORKOUT_TARGET_OUTPUT_AVG_VALUE_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val WORKOUT_TARGET_RAMP_TYPE = "FIELD_WORKOUT_TARGET_RAMP_TYPE_ID"
+
+        /**
+         * Optional
+         */
+        const val WORKOUT_DIFFICULTY = "FIELD_WORKOUT_DIFFICULTY_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
          */
         const val LEV_BATTERY_STATUS = "FIELD_LEV_BATTERY_STATUS_ID"
 
         /**
          * Alternate type: INT_POSITIVE_OR_ZERO
-         *
-         * Index of assist mode (out of [LEV_SUPPORTED_ASSIST_MODES]) which are manufacturer specific.
          */
         const val LEV_ASSIST_MODE = "FIELD_LEV_ASSIST_MODE_ID"
 
@@ -1439,6 +1754,72 @@ data class DataType(
         const val LEV_MOTOR_POWER = "FIELD_LEV_MOTOR_POWER_ID"
         const val LEV_COMBINED_POWER = "FIELD_LEV_COMBINED_POWER_ID"
         const val LEV_ESTIMATED_RANGE = "FIELD_LEV_ESTIMATED_RANGE_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
+        const val SUSPENSION_STATE_FRONT = "FIELD_SUSPENSION_STATE_FRONT_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
+        const val SUSPENSION_STATE_REAR = "FIELD_SUSPENSION_STATE_REAR_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
+        const val SUSPENSION_MODE = "FIELD_SUSPENSION_MODE_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val SUSPENSION_EFFORT_ZONE = "FIELD_SUSPENSION_EFFORT_ZONE_ID"
+
+        /**
+         * Alternate type: INT
+         * Optional
+         */
+        const val SUSPENSION_BIAS = "FIELD_SUSPENSION_BIAS_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val SUSPENSION_LSC_FRONT = "FIELD_SUSPENSION_LSC_FRONT_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val SUSPENSION_LSC_REAR = "FIELD_SUSPENSION_LSC_REAR_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
+        const val SUSPENSION_STATE_COUNT_FRONT = "FIELD_SUSPENSION_STATE_COUNT_FRONT_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
+        const val SUSPENSION_STATE_COUNT_REAR = "FIELD_SUSPENSION_STATE_COUNT_REAR_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         */
+        const val SUSPENSION_BATTERY_STATUS = "FIELD_SUSPENSION_BATTERY_STATUS_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val SUSPENSION_BATTERY_STATUS_REAR = "FIELD_SUSPENSION_BATTERY_STATUS_REAR_ID"
+
+        /**
+         * Alternate type: INT_POSITIVE_OR_ZERO
+         * Optional
+         */
+        const val SUSPENSION_BATTERY_STATUS_FRONT = "FIELD_SUSPENSION_BATTERY_STATUS_FRONT_ID"
     }
 
     companion object {
