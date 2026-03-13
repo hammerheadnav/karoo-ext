@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2024 SRAM LLC.
+ * Copyright (c) 2026 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,4 +68,12 @@ data class KarooAppManifest(
      * List of URLs of images to show with your app details
      */
     val screenshotUrls: List<String>? = null,
+    /**
+     * List of tags to assist sorting and management of extensions:
+     *  - weather
+     *  - performance
+     *  - health
+     *  - entertainment
+     */
+    val tags: List<String>? = null,
 )
