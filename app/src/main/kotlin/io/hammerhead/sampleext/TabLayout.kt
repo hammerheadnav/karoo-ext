@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -93,6 +94,7 @@ fun TabLayout(
                 Tab(
                     selected = selectedTabIndex == index,
                     onClick = { selectedTabIndex = index },
+                    modifier = Modifier.testTag("tab_${tab.name.lowercase()}"),
                     text = { Text(text = tab.name, fontSize = 12.sp) },
                 )
             }
@@ -134,6 +136,7 @@ fun ControlsTab(
         Button(
             onClick = playBeeps,
             colors = ButtonDefaults.textButtonColors(containerColor = Color.Green, contentColor = Color.Black),
+            modifier = Modifier.testTag("beep"),
         ) {
             Text("Beep")
         }
@@ -143,11 +146,15 @@ fun ControlsTab(
                 dispatchEffect(PerformHardwareAction.ControlCenterComboPress)
             },
             colors = ButtonDefaults.textButtonColors(containerColor = Color.Red, contentColor = Color.White),
+            modifier = Modifier.testTag("control_center"),
         ) {
             Text("Control Center")
         }
         Spacer(modifier = Modifier.height(12.dp))
-        Button(onClick = toggleHomeBackground) {
+        Button(
+            onClick = toggleHomeBackground,
+            modifier = Modifier.testTag("background"),
+        ) {
             Text(if (homeBackgroundSet) "Clear Background" else "Set Background")
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -158,6 +165,7 @@ fun ControlsTab(
                 antRequested = !antRequested
             },
             colors = ButtonDefaults.textButtonColors(containerColor = Color.Black, contentColor = Color.White),
+            modifier = Modifier.testTag("ant"),
         ) {
             Text(if (antRequested) "Release ANT" else "Request ANT")
         }
@@ -167,6 +175,7 @@ fun ControlsTab(
                 dispatchEffect(LaunchPinDrop(Symbol.POI("work", 40.1330043, -75.5182738, type = Symbol.POI.Types.SHOPPING, name = "Work")))
             },
             colors = ButtonDefaults.textButtonColors(containerColor = Color.Magenta, contentColor = Color.White),
+            modifier = Modifier.testTag("pin_drop"),
         ) {
             Text("Pin Drop")
         }
@@ -187,7 +196,7 @@ fun DataTab(mainData: MainData) {
         ExpandableData(
             buttonText = "Bikes",
             buttonColor = Color.Green,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier.align(Alignment.CenterHorizontally).testTag("bikes"),
         ) {
             mainData.bikes.map {
                 Text("${it.name}: ${it.odometer.fastRoundToInt()}m")
@@ -196,14 +205,14 @@ fun DataTab(mainData: MainData) {
         ExpandableData(
             buttonText = "Active page",
             buttonColor = Color.Blue,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier.align(Alignment.CenterHorizontally).testTag("active_page"),
         ) {
             Text(mainData.activePage.toString())
         }
         ExpandableData(
             buttonText = "Saved Devices",
             buttonColor = Color.DarkGray,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier.align(Alignment.CenterHorizontally).testTag("saved_devices"),
         ) {
             mainData.savedDevices.map {
                 val extDetails = Device.fromDeviceUid(it.id)?.let { "[ext=${it.first} id=${it.second}]" } ?: ""
@@ -230,7 +239,7 @@ fun NavigationTab(mainData: MainData) {
             ExpandableData(
                 buttonText = "Navigation elevation",
                 buttonColor = Color.Black,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
+                modifier = Modifier.align(Alignment.CenterHorizontally).testTag("navigation_elevation"),
             ) {
                 val decoded = PolylineUtils.decode(elevationPolyline, 1)
                 Graph(decoded.map { Pair(it.latitude(), it.longitude()) })
@@ -239,7 +248,7 @@ fun NavigationTab(mainData: MainData) {
         ExpandableData(
             buttonText = "Global POIs",
             buttonColor = Color.Magenta,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier.align(Alignment.CenterHorizontally).testTag("global_pois"),
         ) {
             mainData.globalPOIs.map {
                 Text("POI: ${it.name ?: ""} ${it.type}")
@@ -302,9 +311,12 @@ fun RequestsTab(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TextField(requestPayload, { requestPayload = it }, singleLine = true)
-        Button(onClick = {
-            makeHttpRequest(requestPayload)
-        }) {
+        Button(
+            onClick = {
+                makeHttpRequest(requestPayload)
+            },
+            modifier = Modifier.testTag("http_request"),
+        ) {
             Text("HTTP request")
         }
         httpStatus?.let {
@@ -324,6 +336,7 @@ fun RequestsTab(
                     ),
                 )
             },
+            modifier = Modifier.testTag("system_notification"),
         ) {
             Text("System Notification")
         }
