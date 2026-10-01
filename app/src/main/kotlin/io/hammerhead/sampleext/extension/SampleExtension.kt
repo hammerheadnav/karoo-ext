@@ -29,7 +29,9 @@ import com.mapbox.geojson.utils.PolylineUtils
 import com.mapbox.turf.TurfConstants
 import com.mapbox.turf.TurfMeasurement
 import dagger.hilt.android.AndroidEntryPoint
+import io.hammerhead.karooext.KarooEventException
 import io.hammerhead.karooext.KarooSystemService
+import io.hammerhead.karooext.events
 import io.hammerhead.karooext.extension.KarooExtension
 import io.hammerhead.karooext.internal.Emitter
 import io.hammerhead.karooext.models.DataType
@@ -56,6 +58,7 @@ import io.hammerhead.karooext.models.UserProfile
 import io.hammerhead.karooext.models.WriteEventMesg
 import io.hammerhead.karooext.models.WriteToRecordMesg
 import io.hammerhead.karooext.models.WriteToSessionMesg
+import io.hammerhead.karooext.streamData
 import io.hammerhead.sampleext.MainActivity
 import io.hammerhead.sampleext.R
 import kotlinx.coroutines.CoroutineScope
@@ -64,10 +67,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -154,9 +158,10 @@ class SampleExtension : KarooExtension("sample", "1.0") {
 
     override fun startMap(emitter: Emitter<MapEffect>) {
         val job = CoroutineScope(Dispatchers.IO).launch {
-            combine(karooSystem.consumerFlow<OnLocationChanged>(), karooSystem.consumerFlow<OnMapZoomLevel>()) { location, mapZoom ->
+            combine(karooSystem.events<OnLocationChanged>(), karooSystem.events<OnMapZoomLevel>()) { location, mapZoom ->
                 Pair(location, mapZoom)
             }
+                .catch { emitter.onError(it) }
                 .collect { (location, mapZoom) ->
                     val source = Point.fromLngLat(location.lng, location.lat)
                     val totalDistance = when {
@@ -204,11 +209,12 @@ class SampleExtension : KarooExtension("sample", "1.0") {
 
     override fun startFit(emitter: Emitter<FitEffect>) {
         val job = CoroutineScope(Dispatchers.IO).launch {
-            karooSystem.streamDataFlow(DataType.Type.ELAPSED_TIME)
+            karooSystem.streamData(DataType.Type.ELAPSED_TIME)
                 .mapNotNull { (it as? StreamState.Streaming)?.dataPoint?.singleValue?.div(1000) }
-                .combine(karooSystem.consumerFlow<RideState>()) { seconds, rideState ->
+                .combine(karooSystem.events<RideState>()) { seconds, rideState ->
                     Pair(seconds, rideState)
                 }
+                .catch { emitter.onError(it) }
                 .collect { (seconds, rideState) ->
                     // One to start and another one earned every 20 minutes (rounded to 0.1)
                     val doughnuts = 1 + (seconds / 120.0).roundToInt() / 10.0
@@ -303,8 +309,17 @@ class SampleExtension : KarooExtension("sample", "1.0") {
             }
             launch {
                 // Mark a lap and show an in-ride alert every mile/km
-                val userProfile = karooSystem.consumerFlow<UserProfile>().first()
-                karooSystem.streamDataFlow(DataType.Type.DISTANCE)
+                val userProfile = try {
+                    karooSystem.events<UserProfile>().firstOrNull()
+                } catch (e: KarooEventException) {
+                    Timber.w(e, "User profile failed")
+                    null
+                }
+                if (userProfile == null) {
+                    Timber.w("No user profile, skipping distance marker")
+                    return@launch
+                }
+                karooSystem.streamData(DataType.Type.DISTANCE)
                     .mapNotNull { (it as? StreamState.Streaming)?.dataPoint?.singleValue }
                     // meters to user's preferred unit system (mi or km)
                     .map {
@@ -317,6 +332,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                     .distinctUntilChanged()
                     // only emit on change (exclude initial value)
                     .drop(1)
+                    .catch { Timber.w(it, "Distance marker stopped") }
                     .collect {
                         karooSystem.dispatch(
                             InRideAlert(

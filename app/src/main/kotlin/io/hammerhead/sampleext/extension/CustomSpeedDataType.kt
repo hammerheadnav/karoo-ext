@@ -28,6 +28,7 @@ import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.UpdateGraphicConfig
 import io.hammerhead.karooext.models.ViewConfig
+import io.hammerhead.karooext.streamData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
@@ -45,7 +46,7 @@ class CustomSpeedDataType(
     override fun startStream(emitter: Emitter<StreamState>) {
         Timber.d("start speed stream")
         val job = CoroutineScope(Dispatchers.IO).launch {
-            karooSystem.streamDataFlow(DataType.Type.SPEED).collect {
+            karooSystem.streamData(DataType.Type.SPEED).collect {
                 when (it) {
                     is StreamState.Streaming -> {
                         // Transform speed data point into
@@ -81,7 +82,7 @@ class CustomSpeedDataType(
             awaitCancellation()
         }
         val viewJob = CoroutineScope(Dispatchers.IO).launch {
-            karooSystem.streamDataFlow(DataType.Type.SPEED).collect {
+            karooSystem.streamData(DataType.Type.SPEED).collect {
                 val speed = (it as? StreamState.Streaming)?.dataPoint?.singleValue?.toInt() ?: 0
                 Timber.d("Updating speed view ($emitter) with $speed")
                 val result = glance.compose(context, DpSize.Unspecified) {

@@ -22,6 +22,7 @@ import io.hammerhead.karooext.internal.Emitter
 import io.hammerhead.karooext.models.DataPoint
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.StreamState
+import io.hammerhead.karooext.streamData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -35,8 +36,8 @@ class PowerHrDataType(
     override fun startStream(emitter: Emitter<StreamState>) {
         Timber.d("start powerhr stream")
         val job = CoroutineScope(Dispatchers.IO).launch {
-            val hrFlow = karooSystem.streamDataFlow(DataType.Type.HEART_RATE)
-            val powerFlow = karooSystem.streamDataFlow(DataType.Type.POWER)
+            val hrFlow = karooSystem.streamData(DataType.Type.HEART_RATE)
+            val powerFlow = karooSystem.streamData(DataType.Type.POWER)
             combine(hrFlow, powerFlow) { hr, power ->
                 if (hr is StreamState.Streaming && power is StreamState.Streaming) {
                     val powerHr = hr.dataPoint.singleValue!!.toDouble() * power.dataPoint.singleValue!!.toDouble() / 100.0
