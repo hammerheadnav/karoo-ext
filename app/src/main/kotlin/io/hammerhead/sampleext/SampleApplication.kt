@@ -17,6 +17,7 @@
 package io.hammerhead.sampleext
 
 import android.app.Application
+import android.util.Log
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -25,7 +26,20 @@ class SampleApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        } else {
+            Timber.plant(ReleaseTree())
+        }
         Timber.d("Starting sample")
+    }
+
+    // Keep warnings and errors in release, drop debug/verbose
+    private class ReleaseTree : Timber.Tree() {
+        override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+            if (priority >= Log.WARN) {
+                Log.println(priority, tag ?: "sampleext", message)
+            }
+        }
     }
 }
