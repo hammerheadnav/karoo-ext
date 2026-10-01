@@ -355,7 +355,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                             try {
                                 val clazz = Class.forName(action).kotlin
                                 (clazz.objectInstance ?: clazz.createInstance()) as? KarooEffect
-                            } catch (e: Exception) {
+                            } catch (e: Throwable) {
                                 Timber.w(e, "Unknown action $action")
                                 null
                             }

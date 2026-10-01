@@ -20,5 +20,17 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class io.hammerhead.sampleext.extension.** { *; }
 -keep class io.hammerhead.karooext.** { *; }
+
+# Kotlin reflection (objectInstance/createInstance on Class.forName) reads Metadata
+-keep class kotlin.Metadata { *; }
+
+# Strip debug/verbose logging calls from release
+-assumenosideeffects class timber.log.Timber {
+    public static *** d(...);
+    public static *** v(...);
+}
+-assumenosideeffects class timber.log.Timber$Forest {
+    public *** d(...);
+    public *** v(...);
+}
