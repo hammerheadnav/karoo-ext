@@ -22,17 +22,17 @@ import androidx.glance.appwidget.ExperimentalGlanceRemoteViewsApi
 import androidx.glance.appwidget.GlanceRemoteViews
 import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.extension.DataTypeImpl
-import io.hammerhead.karooext.internal.Emitter
-import io.hammerhead.karooext.internal.ViewEmitter
+import io.hammerhead.karooext.extension.ViewFrame
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.UpdateGraphicConfig
 import io.hammerhead.karooext.models.ViewConfig
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.awaitCancellation
+import io.hammerhead.karooext.models.ViewEvent
+import io.hammerhead.karooext.streamData
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
 @OptIn(ExperimentalGlanceRemoteViewsApi::class)
@@ -42,58 +42,42 @@ class CustomSpeedDataType(
 ) : DataTypeImpl(extension, "custom-speed") {
     private val glance = GlanceRemoteViews()
 
-    override fun startStream(emitter: Emitter<StreamState>) {
-        Timber.d("start speed stream")
-        val job = CoroutineScope(Dispatchers.IO).launch {
-            karooSystem.streamDataFlow(DataType.Type.SPEED).collect {
-                when (it) {
-                    is StreamState.Streaming -> {
-                        // Transform speed data point into
-                        emitter.onNext(
-                            it.copy(
-                                dataPoint = it.dataPoint.copy(
-                                    dataTypeId = dataTypeId,
-                                    values = mapOf(DataType.Field.SINGLE to it.dataPoint.singleValue!!),
-                                ),
-                            ),
-                        )
-                    }
-                    else -> emitter.onNext(it)
+    override fun streamFlow(): Flow<StreamState> {
+        return karooSystem.streamData(DataType.Type.SPEED).map {
+            when (it) {
+                is StreamState.Streaming -> {
+                    // Transform speed data point into
+                    it.copy(
+                        dataPoint = it.dataPoint.copy(
+                            dataTypeId = dataTypeId,
+                            values = mapOf(DataType.Field.SINGLE to it.dataPoint.singleValue!!),
+                        ),
+                    )
                 }
+                else -> it
             }
-        }
-        emitter.setCancellable {
-            Timber.d("stop speed stream")
-            job.cancel()
         }
     }
 
-    override fun startView(context: Context, config: ViewConfig, emitter: ViewEmitter) {
-        Timber.d("Starting speed view with $emitter and config $config")
-        val configJob = CoroutineScope(Dispatchers.IO).launch {
-            // Show numeric speed data numerically
-            emitter.onNext(UpdateGraphicConfig(formatDataTypeId = DataType.Type.SPEED))
-            // Toggle header config forever
-            repeat(Int.MAX_VALUE) {
-                emitter.onNext(UpdateGraphicConfig(showHeader = it % 2 == 0))
-                delay(2000)
-            }
-            awaitCancellation()
+    override fun viewEvents(context: Context, config: ViewConfig): Flow<ViewEvent> = flow {
+        // Show numeric speed data numerically
+        emit(UpdateGraphicConfig(formatDataTypeId = DataType.Type.SPEED))
+        // Toggle header config forever
+        repeat(Int.MAX_VALUE) {
+            emit(UpdateGraphicConfig(showHeader = it % 2 == 0))
+            delay(2000)
         }
-        val viewJob = CoroutineScope(Dispatchers.IO).launch {
-            karooSystem.streamDataFlow(DataType.Type.SPEED).collect {
-                val speed = (it as? StreamState.Streaming)?.dataPoint?.singleValue?.toInt() ?: 0
-                Timber.d("Updating speed view ($emitter) with $speed")
-                val result = glance.compose(context, DpSize.Unspecified) {
+    }
+
+    override fun viewFlow(context: Context, config: ViewConfig): Flow<ViewFrame> {
+        return karooSystem.streamData(DataType.Type.SPEED).map {
+            val speed = (it as? StreamState.Streaming)?.dataPoint?.singleValue?.toInt() ?: 0
+            ViewFrame {
+                Timber.d("Rendering speed view with $speed")
+                glance.compose(context, DpSize.Unspecified) {
                     CustomSpeed(speed, config.alignment)
-                }
-                emitter.updateView(result.remoteViews)
+                }.remoteViews
             }
-        }
-        emitter.setCancellable {
-            Timber.d("Stopping speed view with $emitter")
-            configJob.cancel()
-            viewJob.cancel()
         }
     }
 }

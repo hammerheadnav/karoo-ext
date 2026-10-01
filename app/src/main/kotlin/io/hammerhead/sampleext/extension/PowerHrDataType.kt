@@ -18,44 +18,32 @@ package io.hammerhead.sampleext.extension
 
 import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.extension.DataTypeImpl
-import io.hammerhead.karooext.internal.Emitter
 import io.hammerhead.karooext.models.DataPoint
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.StreamState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import io.hammerhead.karooext.streamData
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class PowerHrDataType(
     private val karooSystem: KarooSystemService,
     extension: String,
 ) : DataTypeImpl(extension, "power-hr") {
-    override fun startStream(emitter: Emitter<StreamState>) {
-        Timber.d("start powerhr stream")
-        val job = CoroutineScope(Dispatchers.IO).launch {
-            val hrFlow = karooSystem.streamDataFlow(DataType.Type.HEART_RATE)
-            val powerFlow = karooSystem.streamDataFlow(DataType.Type.POWER)
-            combine(hrFlow, powerFlow) { hr, power ->
-                if (hr is StreamState.Streaming && power is StreamState.Streaming) {
-                    val powerHr = hr.dataPoint.singleValue!!.toDouble() * power.dataPoint.singleValue!!.toDouble() / 100.0
-                    StreamState.Streaming(
-                        DataPoint(
-                            dataTypeId,
-                            values = mapOf(DataType.Field.SINGLE to powerHr),
-                        ),
-                    )
-                } else {
-                    StreamState.NotAvailable
-                }
-            }.collect {
-                emitter.onNext(it)
+    override fun streamFlow(): Flow<StreamState> {
+        val hrFlow = karooSystem.streamData(DataType.Type.HEART_RATE)
+        val powerFlow = karooSystem.streamData(DataType.Type.POWER)
+        return combine(hrFlow, powerFlow) { hr, power ->
+            if (hr is StreamState.Streaming && power is StreamState.Streaming) {
+                val powerHr = hr.dataPoint.singleValue!!.toDouble() * power.dataPoint.singleValue!!.toDouble() / 100.0
+                StreamState.Streaming(
+                    DataPoint(
+                        dataTypeId,
+                        values = mapOf(DataType.Field.SINGLE to powerHr),
+                    ),
+                )
+            } else {
+                StreamState.NotAvailable
             }
-        }
-        emitter.setCancellable {
-            Timber.d("stop powerhr stream")
-            job.cancel()
         }
     }
 }

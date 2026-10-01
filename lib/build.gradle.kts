@@ -49,6 +49,11 @@ android {
         aidl = true
     }
 
+    // Lets view tests build Bundle/RemoteViews/Context on the JVM
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
     publishing {
         singleVariant("release") {
             withSourcesJar()
@@ -89,6 +94,7 @@ tasks.dokkaHtml.configure {
 }
 
 dependencies {
+    api(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.kotlinx.serialization.json)

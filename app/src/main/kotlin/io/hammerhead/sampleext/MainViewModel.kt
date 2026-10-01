@@ -21,7 +21,9 @@ package io.hammerhead.sampleext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.hammerhead.karooext.KarooEventException
 import io.hammerhead.karooext.KarooSystemService
+import io.hammerhead.karooext.events
 import io.hammerhead.karooext.models.ActiveRidePage
 import io.hammerhead.karooext.models.ActiveRideProfile
 import io.hammerhead.karooext.models.ApplyLauncherBackground
@@ -45,11 +47,10 @@ import io.hammerhead.karooext.models.Symbol
 import io.hammerhead.karooext.models.UserProfile
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -110,53 +111,53 @@ class MainViewModel @Inject constructor(
     fun makeHttpRequest(payload: String) {
         viewModelScope.launch {
             try {
-                callbackFlow {
-                    val listenerId = karooSystem.addConsumer(
-                        OnHttpResponse.MakeHttpRequest(
-                            "POST",
-                            "https://httpbin.org/anything",
-                            headers = mapOf(
-                                "Content-Type" to "text/plain",
-                            ),
-                            body = payload.toByteArray(),
-                            // Don't queue this
-                            waitForConnection = false,
+                karooSystem.events<OnHttpResponse>(
+                    OnHttpResponse.MakeHttpRequest(
+                        "POST",
+                        "https://httpbin.org/anything",
+                        headers = mapOf(
+                            "Content-Type" to "text/plain",
                         ),
-                    ) { event: OnHttpResponse ->
+                        body = payload.toByteArray(),
+                        // Don't queue this
+                        waitForConnection = false,
+                    ),
+                )
+                    .map { event ->
                         Timber.i("Http response event $event")
-                        val message = when (val state = event.state) {
+                        when (val state = event.state) {
                             is HttpResponseState.Complete -> {
                                 val resp = state.body?.decodeToString()?.let {
-                                    json.decodeFromString<HttpBinResponse>(it)
+                                    runCatching { json.decodeFromString<HttpBinResponse>(it) }.getOrNull()
                                 }
                                 "Status ${state.statusCode}: ${state.error ?: resp?.data}"
                             }
                             is HttpResponseState.InProgress -> "In Progress"
                             is HttpResponseState.Queued -> "Queued"
                         }
-                        trySend(message)
                     }
-                    awaitClose {
-                        karooSystem.removeConsumer(listenerId)
-                    }
-                }
                     .timeout(10.seconds)
                     .collect { message ->
                         mutableState.update { it.copy(httpStatus = message) }
                     }
             } catch (e: TimeoutCancellationException) {
                 mutableState.update { it.copy(httpStatus = null) }
+            } catch (e: KarooEventException) {
+                mutableState.update { it.copy(httpStatus = "Error: ${e.message}") }
             }
         }
     }
 
     private fun initializeEvents() {
         viewModelScope.launch {
+            karooSystem.connectionState.collect { connected ->
+                Timber.i("Karoo System connected=$connected")
+                mutableState.update { it.copy(connected = connected) }
+            }
+        }
+        viewModelScope.launch {
             suspendCancellableCoroutine { cont ->
-                karooSystem.connect { connected ->
-                    Timber.i("Karoo System connected=$connected")
-                    mutableState.update { it.copy(connected = connected) }
-                }
+                karooSystem.connect()
                 karooSystem.addConsumer(OnStreamState.StartStreaming(DataType.Type.POWER)) { event: OnStreamState ->
                     mutableState.update { it.copy(power = event.state) }
                 }
