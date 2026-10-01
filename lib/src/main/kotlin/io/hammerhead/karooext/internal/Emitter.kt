@@ -17,6 +17,7 @@
 package io.hammerhead.karooext.internal
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.widget.RemoteViews
 import io.hammerhead.karooext.BUNDLE_PACKAGE
 import io.hammerhead.karooext.BUNDLE_VALUE
@@ -26,6 +27,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * @suppress
@@ -108,6 +110,35 @@ interface Emitter<T> {
 }
 
 /**
+ * Rate limit shared by [ViewEmitter.updateView], split out so the decision can be
+ * tested on the JVM without building a [Bundle].
+ *
+ * @suppress
+ */
+internal class UpdateGate(private val clock: () -> Long) {
+    private val lastUpdate = AtomicLong(NEVER)
+
+    /**
+     * Returns true when the caller is allowed through. At most one of two
+     * concurrent callers can win.
+     */
+    fun tryAcquire(): Boolean {
+        val now = clock()
+        val last = lastUpdate.get()
+        // Intention is to limit to ~1Hz with 100ms for slop
+        if (last != NEVER && now - last < 900) {
+            return false
+        }
+        return lastUpdate.compareAndSet(last, now)
+    }
+
+    private companion object {
+        // elapsedRealtime() is non-negative, so -1 marks "no update yet" without underflow.
+        private const val NEVER = -1L
+    }
+}
+
+/**
  * Special [Emitter] that includes a function to update [RemoteViews] in addition
  * to [ViewEvent]s.
  *
@@ -117,17 +148,21 @@ class ViewEmitter(
     private val packageName: String,
     private val handler: IHandler,
     private val eventEmitter: Emitter<ViewEvent> = Emitter.create<ViewEvent>(packageName, handler),
+    internal val clock: () -> Long = { SystemClock.elapsedRealtime() },
 ) : Emitter<ViewEvent> by eventEmitter {
-    private var lastViewUpdate: Long = 0
+    private val updateGate = UpdateGate(clock)
+
+    constructor(packageName: String, handler: IHandler) : this(
+        packageName,
+        handler,
+        Emitter.create<ViewEvent>(packageName, handler),
+    )
 
     fun updateView(view: RemoteViews) {
-        val now = System.currentTimeMillis()
-        // Intention is to limit to ~1Hz with 100ms for slop
-        if (now - lastViewUpdate < 900) {
+        if (!updateGate.tryAcquire()) {
             Timber.w("ViewEmitter: ignoring updateView, too soon")
             return
         }
-        lastViewUpdate = now
         val bundle = Bundle()
         bundle.putParcelable("view", view)
         bundle.putString(BUNDLE_PACKAGE, packageName)
