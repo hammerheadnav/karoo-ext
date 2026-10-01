@@ -3,6 +3,7 @@ import android.widget.RemoteViews
 import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.extension.DataTypeImpl
 import io.hammerhead.karooext.extension.KarooExtension
+import io.hammerhead.karooext.extension.ViewFrame
 import io.hammerhead.karooext.internal.Emitter
 import io.hammerhead.karooext.internal.ViewEmitter
 import io.hammerhead.karooext.models.DataPoint
@@ -10,8 +11,10 @@ import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.UpdateGraphicConfig
 import io.hammerhead.karooext.models.ViewConfig
+import io.hammerhead.karooext.models.ViewEvent
 import io.hammerhead.karooext.streamData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 fun dataTypeImplUsage() {
@@ -47,6 +50,21 @@ fun visualDataTypeImplUsage(remoteViews: RemoteViews) {
             emitter.updateView(remoteViews)
             emitter.setCancellable {
                 println("cleanup")
+            }
+        }
+    }
+}
+
+fun flowVisualDataTypeImplUsage(karooSystem: KarooSystemService, render: (Double) -> RemoteViews) {
+    class SpeedView(extension: String) : DataTypeImpl(extension, "speed-view") {
+        override fun viewEvents(context: Context, config: ViewConfig): Flow<ViewEvent> =
+            flowOf(UpdateGraphicConfig(showHeader = false))
+
+        override fun viewFlow(context: Context, config: ViewConfig): Flow<ViewFrame> {
+            return karooSystem.streamData(DataType.Type.SPEED).map { state ->
+                val speed = (state as? StreamState.Streaming)?.dataPoint?.singleValue ?: 0.0
+                // Only called for frames that are actually sent
+                ViewFrame { render(speed) }
             }
         }
     }

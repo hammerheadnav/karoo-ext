@@ -28,12 +28,29 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
+/**
+ * A lazily rendered [RemoteViews] frame for a custom data type view.
+ *
+ * Returning [ViewFrame]s from [DataTypeImpl.viewFlow] defers rendering until a frame is actually
+ * sent, so frames dropped by throttling cost nothing. [render] suspends so Glance's
+ * `GlanceRemoteViews.compose` can be called directly.
+ *
+ * @since 1.2.0
+ */
+fun interface ViewFrame {
+    suspend fun render(): RemoteViews
+}
 
 /**
  * Base class for implementation of [DataType].
@@ -46,6 +63,7 @@ import timber.log.Timber
  * @sample [dataTypeImplUsage]
  * @sample [flowDataTypeImplUsage]
  * @sample [visualDataTypeImplUsage]
+ * @sample [flowVisualDataTypeImplUsage]
  */
 abstract class DataTypeImpl(
     val extension: String,
@@ -63,6 +81,28 @@ abstract class DataTypeImpl(
      * @since 1.2.0
      */
     open fun streamFlow(): Flow<StreamState>? = null
+
+    /**
+     * Flow-based alternative to emitting views in [startView].
+     *
+     * Return a [Flow] of [ViewFrame] and the lib renders and forwards the ones it sends, throttled
+     * to one update per second. A frame whose [ViewFrame.render] throws is skipped; an exception
+     * from the flow itself ends the view with an error. Collection is cancelled when the view
+     * stops. Return null to opt out.
+     *
+     * @since 1.2.0
+     */
+    open fun viewFlow(context: Context, config: ViewConfig): Flow<ViewFrame>? = null
+
+    /**
+     * Flow-based alternative to emitting [ViewEvent]s in [startView].
+     *
+     * Return a [Flow] of [ViewEvent] and the lib collects it into a [ViewEmitter]. Collection is
+     * cancelled when the view stops. Return null to opt out.
+     *
+     * @since 1.2.0
+     */
+    open fun viewEvents(context: Context, config: ViewConfig): Flow<ViewEvent>? = null
 
     /**
      * Start emitting [StreamState] events for this data type.
@@ -98,8 +138,73 @@ abstract class DataTypeImpl(
      * Start emitting [ViewEvent] events and [RemoteViews] for this data type's custom view.
      *
      * Start is called when a view is attached to a UI (ride app or pages app).
+     *
+     * By default collects [viewFlow] and [viewEvents] when provided. The view stays attached until
+     * it is stopped, even if both flows complete. Subclasses using those flows must not override
+     * this or call [Emitter.setCancellable] themselves, which replaces the lib's cancellation.
      */
-    open fun startView(context: Context, config: ViewConfig, emitter: ViewEmitter) {}
+    open fun startView(context: Context, config: ViewConfig, emitter: ViewEmitter) {
+        val frames = viewFlow(context, config)
+        val events = viewEvents(context, config)
+        if (frames == null && events == null) return
+        val scope = newScope()
+        emitter.setCancellable { scope.cancel() }
+        scope.launch {
+            try {
+                coroutineScope {
+                    frames?.let {
+                        launchCollector {
+                            it.conflate().collect { frame ->
+                                val view = renderFrame(frame)
+                                if (view != null) {
+                                    // A slow render can finish after stopView
+                                    currentCoroutineContext().ensureActive()
+                                    emitter.updateView(view)
+                                }
+                                delay(VIEW_UPDATE_SPACING_MS)
+                            }
+                        }
+                    }
+                    events?.let {
+                        launchCollector {
+                            it.collect { event -> emitNext(emitter, event) }
+                        }
+                    }
+                }
+                // A view stays attached until stopView, even once both flows finish
+                awaitCancellation()
+            } catch (e: CancellationException) {
+                currentCoroutineContext().ensureActive()
+                reportError(emitter, e)
+            } catch (e: Throwable) {
+                reportError(emitter, e)
+            }
+        }
+    }
+
+    // A child ending in a foreign CancellationException would otherwise just stop silently
+    private fun CoroutineScope.launchCollector(block: suspend () -> Unit) = launch {
+        try {
+            block()
+        } catch (e: CancellationException) {
+            currentCoroutineContext().ensureActive()
+            throw IllegalStateException("View flow cancelled", e)
+        }
+    }
+
+    // Render failures skip the frame; upstream, onNext and updateView failures end the view
+    private suspend fun renderFrame(frame: ViewFrame): RemoteViews? {
+        return try {
+            frame.render()
+        } catch (e: CancellationException) {
+            currentCoroutineContext().ensureActive()
+            Timber.e(e, "$TAG failed to render view")
+            null
+        } catch (e: Exception) {
+            Timber.e(e, "$TAG failed to render view")
+            null
+        }
+    }
 
     // Every launch catches Throwable, so no handler or supervisor is needed
     private fun newScope(): CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
@@ -121,5 +226,6 @@ abstract class DataTypeImpl(
 
     private companion object {
         const val TAG = "DataTypeImpl"
+        const val VIEW_UPDATE_SPACING_MS = 1_000L
     }
 }

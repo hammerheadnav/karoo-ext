@@ -49,6 +49,11 @@ android {
         aidl = true
     }
 
+    // Lets view tests build Bundle/RemoteViews/Context on the JVM
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
+
     publishing {
         singleVariant("release") {
             withSourcesJar()
