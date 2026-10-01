@@ -89,6 +89,7 @@ tasks.dokkaHtml.configure {
 }
 
 dependencies {
+    api(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.kotlinx.serialization.json)

@@ -43,6 +43,9 @@ import io.hammerhead.karooext.models.OnNavigationState
 import io.hammerhead.karooext.models.RideState
 import io.hammerhead.karooext.models.SavedDevices
 import io.hammerhead.karooext.models.UserProfile
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -55,7 +58,18 @@ import java.util.concurrent.ConcurrentHashMap
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 class KarooSystemService(private val context: Context) {
     private val listeners = ConcurrentHashMap<String, KarooSystemListener>()
+
+    @Volatile
     private var controller: IKarooSystem? = null
+
+    private val mutableConnectionState = MutableStateFlow(false)
+
+    /**
+     * Connection state of the Karoo System as a [StateFlow].
+     *
+     * @since 1.2.0
+     */
+    val connectionState: StateFlow<Boolean> = mutableConnectionState.asStateFlow()
 
     /**
      * @suppress
@@ -71,6 +85,7 @@ class KarooSystemService(private val context: Context) {
                 Timber.w("$TAG: error connecting ${e.message}")
             }
             this@KarooSystemService.controller = controller
+            mutableConnectionState.value = true
             listeners.forEach { (_, listener) ->
                 listener.register(controller)
             }
@@ -90,6 +105,7 @@ class KarooSystemService(private val context: Context) {
 
         private fun clearController() {
             this@KarooSystemService.controller = null
+            mutableConnectionState.value = false
             listeners.forEach { (_, listener) ->
                 listener.register(null)
             }
@@ -132,6 +148,7 @@ class KarooSystemService(private val context: Context) {
         }
         context.unbindService(serviceConnection)
         controller = null
+        mutableConnectionState.value = false
     }
 
     /**
