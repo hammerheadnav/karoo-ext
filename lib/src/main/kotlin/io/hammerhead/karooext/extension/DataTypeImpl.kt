@@ -24,6 +24,16 @@ import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.ViewConfig
 import io.hammerhead.karooext.models.ViewEvent
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 /**
  * Base class for implementation of [DataType].
@@ -34,6 +44,7 @@ import io.hammerhead.karooext.models.ViewEvent
  *
  * @see [KarooExtension.types]
  * @sample [dataTypeImplUsage]
+ * @sample [flowDataTypeImplUsage]
  * @sample [visualDataTypeImplUsage]
  */
 abstract class DataTypeImpl(
@@ -44,14 +55,44 @@ abstract class DataTypeImpl(
         get() = DataType.dataTypeId(extension, typeId)
 
     /**
+     * Flow-based alternative to [startStream].
+     *
+     * Return a [Flow] of [StreamState] and the lib collects it into an [Emitter]. Collection is
+     * cancelled when the stream stops. Return null to opt out.
+     *
+     * @since 1.2.0
+     */
+    open fun streamFlow(): Flow<StreamState>? = null
+
+    /**
      * Start emitting [StreamState] events for this data type.
      * This is required for use as a standard numeric view or if any data
      * from this data type needs to be consumed by the custom view or another data type.
      *
      * Streaming will start as soon as a UI element or another streaming data type
      * subscribes to this data type's stream.
+     *
+     * By default collects [streamFlow] when provided. Subclasses using [streamFlow] must not
+     * override this or call [Emitter.setCancellable] themselves, which replaces the lib's
+     * cancellation.
      */
-    open fun startStream(emitter: Emitter<StreamState>) {}
+    open fun startStream(emitter: Emitter<StreamState>) {
+        val flow = streamFlow() ?: return
+        val scope = newScope()
+        emitter.setCancellable { scope.cancel() }
+        scope.launch {
+            try {
+                flow.collect { emitNext(emitter, it) }
+                runCatching { emitter.onComplete() }
+                    .onFailure { Timber.e(it, "$TAG failed to complete stream") }
+            } catch (e: CancellationException) {
+                currentCoroutineContext().ensureActive()
+                reportError(emitter, e)
+            } catch (e: Throwable) {
+                reportError(emitter, e)
+            }
+        }
+    }
 
     /**
      * Start emitting [ViewEvent] events and [RemoteViews] for this data type's custom view.
@@ -59,4 +100,26 @@ abstract class DataTypeImpl(
      * Start is called when a view is attached to a UI (ride app or pages app).
      */
     open fun startView(context: Context, config: ViewConfig, emitter: ViewEmitter) {}
+
+    // Every launch catches Throwable, so no handler or supervisor is needed
+    private fun newScope(): CoroutineScope = CoroutineScope(Job() + Dispatchers.IO)
+
+    // Rethrow so collection stops; the caller reports the error once
+    private fun <T> emitNext(emitter: Emitter<T>, value: T) {
+        try {
+            emitter.onNext(value)
+        } catch (e: Exception) {
+            Timber.e(e, "$TAG failed to emit value")
+            throw e
+        }
+    }
+
+    private fun reportError(emitter: Emitter<*>, e: Throwable) {
+        runCatching { emitter.onError(e) }
+            .onFailure { Timber.e(it, "$TAG failed to emit error") }
+    }
+
+    private companion object {
+        const val TAG = "DataTypeImpl"
+    }
 }
