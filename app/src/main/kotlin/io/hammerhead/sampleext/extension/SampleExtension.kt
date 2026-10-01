@@ -58,9 +58,11 @@ import io.hammerhead.karooext.models.WriteToRecordMesg
 import io.hammerhead.karooext.models.WriteToSessionMesg
 import io.hammerhead.sampleext.MainActivity
 import io.hammerhead.sampleext.R
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.callbackFlow
@@ -91,13 +93,15 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     @Inject
     lateinit var bleManager: BleManager
 
-    private var serviceJob: Job? = null
+    private val scope = CoroutineScope(
+        SupervisorJob() + Dispatchers.IO + CoroutineExceptionHandler { _, e -> Timber.e(e, "Uncaught error in extension") },
+    )
     private val devices = ConcurrentHashMap<String, SampleDevice>()
 
     override val types by lazy {
         listOf(
-            PowerHrDataType(karooSystem, extension),
-            CustomSpeedDataType(karooSystem, extension),
+            PowerHrDataType(karooSystem, extension, scope),
+            CustomSpeedDataType(karooSystem, extension, scope),
             BespokeDataType(extension),
             DoubleHrDataType(extension),
         )
@@ -105,24 +109,24 @@ class SampleExtension : KarooExtension("sample", "1.0") {
 
     override fun startScan(emitter: Emitter<Device>) {
         // Find a new sources every 5 seconds
-        val job = CoroutineScope(Dispatchers.IO).launch {
+        val job = scope.launch {
             val staticSources = flow {
                 delay(1000)
                 repeat(Int.MAX_VALUE) {
-                    val hr = StaticHrSource(extension, 100 + it * 10)
+                    val hr = StaticHrSource(extension, 100 + it * 10, scope)
                     emit(hr)
                     delay(1000)
-                    val shift = IncrementalShiftingSource(extension, it)
+                    val shift = IncrementalShiftingSource(extension, it, scope)
                     emit(shift)
                     delay(1000)
-                    val bespoke = BespokeDataSource(extension, it)
+                    val bespoke = BespokeDataSource(extension, it, scope)
                     emit(bespoke)
                     delay(1000)
                 }
             }
             val bleSources = bleManager.scan(listOf(DoubleHrSensor.HRS_SERVICE_UUID)).map { (address, name) ->
                 Timber.i("BLE Scanned found $address: $name")
-                DoubleHrSensor(bleManager, extension, address, name)
+                DoubleHrSensor(bleManager, extension, address, name, scope)
             }
             merge(staticSources, bleSources).collect { device ->
                 devices.putIfAbsent(device.source.uid, device)
@@ -139,13 +143,13 @@ class SampleExtension : KarooExtension("sample", "1.0") {
         devices.getOrPut(uid) {
             val id = uid.substringAfterLast("-").toIntOrNull()
             if (uid.contains(IncrementalShiftingSource.PREFIX) && id != null) {
-                IncrementalShiftingSource(extension, id)
+                IncrementalShiftingSource(extension, id, scope)
             } else if (uid.contains(StaticHrSource.PREFIX) && id != null) {
-                StaticHrSource(extension, id)
+                StaticHrSource(extension, id, scope)
             } else if (uid.contains(BespokeDataSource.PREFIX) && id != null) {
-                BespokeDataSource(extension, id)
+                BespokeDataSource(extension, id, scope)
             } else if (uid.contains(DoubleHrSensor.PREFIX)) {
-                DoubleHrSensor(bleManager, extension, uid.substringAfterLast("-"), null)
+                DoubleHrSensor(bleManager, extension, uid.substringAfterLast("-"), null, scope)
             } else {
                 throw IllegalArgumentException("unknown type for $uid")
             }
@@ -153,7 +157,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     }
 
     override fun startMap(emitter: Emitter<MapEffect>) {
-        val job = CoroutineScope(Dispatchers.IO).launch {
+        val job = scope.launch {
             combine(karooSystem.consumerFlow<OnLocationChanged>(), karooSystem.consumerFlow<OnMapZoomLevel>()) { location, mapZoom ->
                 Pair(location, mapZoom)
             }
@@ -203,7 +207,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     }
 
     override fun startFit(emitter: Emitter<FitEffect>) {
-        val job = CoroutineScope(Dispatchers.IO).launch {
+        val job = scope.launch {
             karooSystem.streamDataFlow(DataType.Type.ELAPSED_TIME)
                 .mapNotNull { (it as? StreamState.Streaming)?.dataPoint?.singleValue?.div(1000) }
                 .combine(karooSystem.consumerFlow<RideState>()) { seconds, rideState ->
@@ -282,7 +286,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     override fun onCreate() {
         super.onCreate()
-        serviceJob = CoroutineScope(Dispatchers.IO).launch {
+        scope.launch {
             karooSystem.connect { connected ->
                 if (connected) {
                     karooSystem.dispatch(RequestBluetooth(extension))
@@ -369,8 +373,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
     }
 
     override fun onDestroy() {
-        serviceJob?.cancel()
-        serviceJob = null
+        scope.cancel()
         karooSystem.dispatch(ReleaseBluetooth(extension))
         karooSystem.disconnect()
         super.onDestroy()

@@ -30,9 +30,7 @@ import io.hammerhead.karooext.models.OnConnectionStatus
 import io.hammerhead.karooext.models.OnDataPoint
 import io.hammerhead.karooext.models.OnManufacturerInfo
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -53,9 +51,8 @@ class DoubleHrSensor(
     extension: String,
     private val address: String,
     private val name: String?,
+    private val scope: CoroutineScope,
 ) : SampleDevice {
-    private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-
     override val source by lazy {
         Device(
             extension,

@@ -26,7 +26,6 @@ import io.hammerhead.karooext.models.DeviceEvent
 import io.hammerhead.karooext.models.OnConnectionStatus
 import io.hammerhead.karooext.models.OnDataPoint
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -38,7 +37,7 @@ import kotlinx.coroutines.launch
  * This is an example of providing more than one data type for the device along with multiple
  * values in each data point.
  */
-class IncrementalShiftingSource(extension: String, private val id: Int) : SampleDevice {
+class IncrementalShiftingSource(extension: String, private val id: Int, private val scope: CoroutineScope) : SampleDevice {
     override val source by lazy {
         Device(
             extension,
@@ -58,7 +57,7 @@ class IncrementalShiftingSource(extension: String, private val id: Int) : Sample
      * @see [DeviceEvent]
      */
     override fun connect(emitter: Emitter<DeviceEvent>) {
-        val job = CoroutineScope(Dispatchers.IO).launch {
+        val job = scope.launch {
             // Update device is now connected
             emitter.onNext(OnConnectionStatus(ConnectionStatus.CONNECTED))
             // Start streaming data
