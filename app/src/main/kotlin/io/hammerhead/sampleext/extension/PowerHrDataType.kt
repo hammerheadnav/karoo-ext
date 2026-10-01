@@ -23,7 +23,6 @@ import io.hammerhead.karooext.models.DataPoint
 import io.hammerhead.karooext.models.DataType
 import io.hammerhead.karooext.models.StreamState
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -31,19 +30,21 @@ import timber.log.Timber
 class PowerHrDataType(
     private val karooSystem: KarooSystemService,
     extension: String,
+    private val scope: CoroutineScope,
 ) : DataTypeImpl(extension, "power-hr") {
     override fun startStream(emitter: Emitter<StreamState>) {
         Timber.d("start powerhr stream")
-        val job = CoroutineScope(Dispatchers.IO).launch {
+        val job = scope.launch {
             val hrFlow = karooSystem.streamDataFlow(DataType.Type.HEART_RATE)
             val powerFlow = karooSystem.streamDataFlow(DataType.Type.POWER)
             combine(hrFlow, powerFlow) { hr, power ->
-                if (hr is StreamState.Streaming && power is StreamState.Streaming) {
-                    val powerHr = hr.dataPoint.singleValue!!.toDouble() * power.dataPoint.singleValue!!.toDouble() / 100.0
+                val hrValue = (hr as? StreamState.Streaming)?.dataPoint?.singleValue
+                val powerValue = (power as? StreamState.Streaming)?.dataPoint?.singleValue
+                if (hrValue != null && powerValue != null) {
                     StreamState.Streaming(
                         DataPoint(
                             dataTypeId,
-                            values = mapOf(DataType.Field.SINGLE to powerHr),
+                            values = mapOf(DataType.Field.SINGLE to hrValue * powerValue / 100.0),
                         ),
                     )
                 } else {

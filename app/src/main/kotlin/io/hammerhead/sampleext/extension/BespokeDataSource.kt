@@ -25,7 +25,6 @@ import io.hammerhead.karooext.models.DeviceEvent
 import io.hammerhead.karooext.models.OnConnectionStatus
 import io.hammerhead.karooext.models.OnDataPoint
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,7 +35,7 @@ import kotlin.random.Random
  * outside the existing define sources in [DataType.Source] for a data type
  * that is defined by this extension.
  */
-class BespokeDataSource(extension: String, private val id: Int) : SampleDevice {
+class BespokeDataSource(extension: String, private val id: Int, private val scope: CoroutineScope) : SampleDevice {
     override val source by lazy {
         Device(
             extension,
@@ -52,7 +51,7 @@ class BespokeDataSource(extension: String, private val id: Int) : SampleDevice {
      * @see [DeviceEvent]
      */
     override fun connect(emitter: Emitter<DeviceEvent>) {
-        val job = CoroutineScope(Dispatchers.IO).launch {
+        val job = scope.launch {
             emitter.onNext(OnConnectionStatus(ConnectionStatus.CONNECTED))
             // Start streaming random data
             repeat(Int.MAX_VALUE) {

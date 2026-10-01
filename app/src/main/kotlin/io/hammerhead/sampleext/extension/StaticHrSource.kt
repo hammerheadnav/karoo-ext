@@ -29,7 +29,6 @@ import io.hammerhead.karooext.models.OnConnectionStatus
 import io.hammerhead.karooext.models.OnDataPoint
 import io.hammerhead.karooext.models.OnManufacturerInfo
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,7 +40,7 @@ import kotlinx.coroutines.launch
  * the ID should be used to actually connect/fetch data from a device based on that identifier
  * rather than just providing mock data in a loop.
  */
-class StaticHrSource(extension: String, private val hr: Int) : SampleDevice {
+class StaticHrSource(extension: String, private val hr: Int, private val scope: CoroutineScope) : SampleDevice {
     override val source by lazy {
         Device(
             extension,
@@ -57,7 +56,7 @@ class StaticHrSource(extension: String, private val hr: Int) : SampleDevice {
      * @see [DeviceEvent]
      */
     override fun connect(emitter: Emitter<DeviceEvent>) {
-        val job = CoroutineScope(Dispatchers.IO).launch {
+        val job = scope.launch {
             // 2s searching
             emitter.onNext(OnConnectionStatus(ConnectionStatus.SEARCHING))
             delay(2000)

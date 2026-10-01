@@ -29,7 +29,6 @@ import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.UpdateGraphicConfig
 import io.hammerhead.karooext.models.ViewConfig
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,24 +38,30 @@ import timber.log.Timber
 class CustomSpeedDataType(
     private val karooSystem: KarooSystemService,
     extension: String,
+    private val scope: CoroutineScope,
 ) : DataTypeImpl(extension, "custom-speed") {
     private val glance = GlanceRemoteViews()
 
     override fun startStream(emitter: Emitter<StreamState>) {
         Timber.d("start speed stream")
-        val job = CoroutineScope(Dispatchers.IO).launch {
+        val job = scope.launch {
             karooSystem.streamDataFlow(DataType.Type.SPEED).collect {
                 when (it) {
                     is StreamState.Streaming -> {
-                        // Transform speed data point into
-                        emitter.onNext(
-                            it.copy(
-                                dataPoint = it.dataPoint.copy(
-                                    dataTypeId = dataTypeId,
-                                    values = mapOf(DataType.Field.SINGLE to it.dataPoint.singleValue!!),
+                        val speed = it.dataPoint.singleValue
+                        if (speed == null) {
+                            emitter.onNext(StreamState.NotAvailable)
+                        } else {
+                            // Transform speed data point into
+                            emitter.onNext(
+                                it.copy(
+                                    dataPoint = it.dataPoint.copy(
+                                        dataTypeId = dataTypeId,
+                                        values = mapOf(DataType.Field.SINGLE to speed),
+                                    ),
                                 ),
-                            ),
-                        )
+                            )
+                        }
                     }
                     else -> emitter.onNext(it)
                 }
@@ -70,7 +75,7 @@ class CustomSpeedDataType(
 
     override fun startView(context: Context, config: ViewConfig, emitter: ViewEmitter) {
         Timber.d("Starting speed view with $emitter and config $config")
-        val configJob = CoroutineScope(Dispatchers.IO).launch {
+        val configJob = scope.launch {
             // Show numeric speed data numerically
             emitter.onNext(UpdateGraphicConfig(formatDataTypeId = DataType.Type.SPEED))
             // Toggle header config forever
@@ -80,7 +85,7 @@ class CustomSpeedDataType(
             }
             awaitCancellation()
         }
-        val viewJob = CoroutineScope(Dispatchers.IO).launch {
+        val viewJob = scope.launch {
             karooSystem.streamDataFlow(DataType.Type.SPEED).collect {
                 val speed = (it as? StreamState.Streaming)?.dataPoint?.singleValue?.toInt() ?: 0
                 Timber.d("Updating speed view ($emitter) with $speed")
