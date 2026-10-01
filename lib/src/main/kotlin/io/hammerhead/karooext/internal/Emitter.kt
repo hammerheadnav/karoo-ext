@@ -53,6 +53,11 @@ inline fun <reified T> T.bundleWithSerializable(packageName: String): Bundle {
 interface Emitter<T> {
     /**
      * Provide a new event to consumers.
+     *
+     * This is synchronous IPC and blocks the calling thread until the Karoo System finishes
+     * handling the event, so do not call it from the main thread. For high-frequency sources,
+     * conflate or rate-limit (for example with `Flow.conflate()`) instead of emitting every sample.
+     * Throws `RemoteException` (typically `DeadObjectException`) if the Karoo System process has died.
      */
     fun onNext(t: T)
 
@@ -120,6 +125,12 @@ class ViewEmitter(
 ) : Emitter<ViewEvent> by eventEmitter {
     private var lastViewUpdate: Long = 0
 
+    /**
+     * Update the view shown by the Karoo System.
+     *
+     * Like [Emitter.onNext], this is synchronous IPC that blocks the calling thread, and the
+     * [RemoteViews] are parceled on each update that passes the 1 Hz limit.
+     */
     fun updateView(view: RemoteViews) {
         val now = System.currentTimeMillis()
         // Intention is to limit to ~1Hz with 100ms for slop
