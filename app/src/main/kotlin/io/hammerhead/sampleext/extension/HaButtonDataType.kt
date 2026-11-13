@@ -199,11 +199,8 @@ class HaButtonDataType(
 
 fun callHaButton(button: HaButton, karooSystem: KarooSystemService, context: Context) {
     val config = AppConfig.load(context)
-    val url = "${config.baseUrl}/api/services/${button.domain}/${button.service}"
-    val headers = mapOf(
-        "Authorization" to "Bearer ${config.accessToken}",
-        "Content-Type" to "application/json",
-    )
+    val url = config.apiUrl("services/${button.domain}/${button.service}")
+    val headers = config.requestHeaders()
     val bodyJson = if (button.entityId != null) {
         """{"entity_id":"${button.entityId}"}"""
     } else {

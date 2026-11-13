@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Needed for the local "Set up from phone" server (HA calls go through the Karoo system) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name="io.hammerhead.sampleext.SampleApplication"
         android:icon="@drawable/ic_sample"

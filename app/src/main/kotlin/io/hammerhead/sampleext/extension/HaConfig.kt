@@ -34,10 +34,30 @@ data class ButtonConfig(
 
 fun ButtonConfig.toHaButton() = HaButton(actionId, displayName, domain, service, entityId)
 
+/** Full URL of a Home Assistant REST endpoint, e.g. `apiUrl("services/light/toggle")`. */
+fun AppConfig.apiUrl(path: String) = "${baseUrl.trim().trimEnd('/')}/api/$path"
+
+/** Headers sent with every Home Assistant request. */
+fun AppConfig.requestHeaders(): Map<String, String> = buildMap {
+    // No token: authentication may be injected by a proxy; an empty
+    // "Bearer " header would make Home Assistant reject the request.
+    if (accessToken.isNotBlank()) {
+        put("Authorization", "Bearer ${accessToken.trim()}")
+    }
+    put("Content-Type", "application/json")
+    // Optional extra header (e.g. for a reverse proxy / Cloudflare Access). Added last so it
+    // can deliberately override a default header.
+    if (customHeaderKey.isNotBlank()) {
+        put(customHeaderKey.trim(), customHeaderValue.trim())
+    }
+}
+
 @Serializable
 data class AppConfig(
     val baseUrl: String = BuildConfig.HA_BASE_URL,
     val accessToken: String = BuildConfig.HA_ACCESS_TOKEN,
+    val customHeaderKey: String = "",
+    val customHeaderValue: String = "",
     val buttons: List<ButtonConfig> = defaultButtons,
 ) {
     companion object {

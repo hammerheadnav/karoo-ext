@@ -1,0 +1,23 @@
+services:
+  karoo:
+    image: karoo-homeassistant-build:local
+    # Android build-tools (aapt2) for Linux are x86_64 only; emulated on Apple Silicon.
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: docker/karoo-build.Dockerfile
+      args:
+        KAROO_BUILD_UID: "${KAROO_BUILD_UID:-1000}"
+        KAROO_BUILD_GID: "${KAROO_BUILD_GID:-1000}"
+    environment:
+      # Credentials for the karoo-ext GitHub Packages repository declared in settings.gradle.kts
+      - USERNAME
+      - TOKEN
+    volumes:
+      - .:/workspace
+      - karoo-gradle:/home/builder/.gradle
+      - karoo-android:/home/builder/.android
+
+volumes:
+  karoo-gradle:
+  karoo-android:

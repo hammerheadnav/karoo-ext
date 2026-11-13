@@ -5,6 +5,22 @@ cycling computers.
 
 Like other Android libraries, it can be included as a gradle dependency to provide APIs for use in Kotlin and Java code.
 
+## Home Assistant extension settings
+
+The app's settings screen configures:
+
+- **HA Base URL** and **Home Assistant Token** – a long-lived access token created in your HA profile under
+  *Security*, sent as `Authorization: Bearer …`. It is always required by Home Assistant's REST API.
+- **Proxy header (optional)** – one extra header name/value sent with every request, e.g. a secret checked by a
+  reverse proxy or Cloudflare rule in front of HA. It does not replace the Home Assistant token. If the name is `Authorization`, it replaces the bearer header.
+- **Set up from phone** – avoids typing long tokens on the Karoo. With the Karoo on WiFi, tap the button and open the
+  shown `http://<karoo-ip>:<port>` address on a phone in the same network, enter the PIN and the values, then tap
+  **Save** on the Karoo. The page is plain HTTP on the local network; the server only runs while the dialog is open,
+  requires the one-time PIN, stops after 5 wrong PINs and never sends the stored secrets back to the browser.
+
+Client certificates (mTLS) are not supported: requests are executed by the Karoo system (`MakeHttpRequest`, possibly
+via the phone companion app), which opens the TLS connection itself, so the extension cannot provide a certificate.
+
 ## Community
 
 To join the conversation about Extensions on Karoo, get help from other developers, or post feature requests, visit [Hammerhead Extensions Developers](https://support.hammerhead.io/hc/en-us/community/topics/31298804001435-Hammerhead-Extensions-Developers).

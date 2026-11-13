@@ -4,6 +4,7 @@ set windows-shell := ["powershell.exe", "/c"]
 set shell := ["bash", "-c"]
 
 JAVA_HOME := "C:\\Program Files\\Java\\jdk-21.0.10"
+container := env("CONTAINER_ENGINE", if os_family() == "windows" { "podman" } else { `command -v docker >/dev/null && echo docker || echo podman` })
 
 devs:
     adb devices
@@ -17,6 +18,10 @@ make-spotless:
 
 build: make-spotless
     ./gradlew build
+
+# Build the debug APK in a container (no local JDK/Android SDK needed) -> app/build/outputs/apk/debug/app-debug.apk
+build-docker:
+    {{ container }} compose -f docker-compose.build.yml run --rm --build karoo :app:assembleDebug
 
 clean:
     ./gradlew clean
