@@ -84,12 +84,13 @@ class HaButtonDataType(
             ViewEmitterProvider { emitter },
         )
 
-        // Create RemoteViews with button that sends intent on click
-        val views = createButtonViews(context, false)
+        // In preview (page editing) mode no click handler may be attached: it would swallow the
+        // touch and Karoo would never see the long-press that opens the field editor.
+        val views = createButtonViews(context, false, interactive = !config.preview)
         emitter.updateView(views)
     }
 
-    private fun createButtonViews(context: Context, isConfirmation: Boolean): RemoteViews {
+    private fun createButtonViews(context: Context, isConfirmation: Boolean, interactive: Boolean = true): RemoteViews {
         val buttonText = if (isConfirmation) {
             "TAP AGAIN (5s)"
         } else {
@@ -122,7 +123,7 @@ class HaButtonDataType(
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
-            setOnClickPendingIntent(R.id.button_text, pendingIntent)
+            if (interactive) setOnClickPendingIntent(R.id.button_text, pendingIntent)
         }
     }
 

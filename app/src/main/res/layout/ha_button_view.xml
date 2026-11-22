@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Button xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- TextView (not Button): a Button is clickable by default and would swallow the long-press
+     Karoo uses to edit the field in preview mode. A click listener is only set when interactive. -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/button_text"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
+    android:gravity="center"
     android:textColor="@color/white"
     android:textSize="16sp"
     android:textStyle="bold" />

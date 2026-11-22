@@ -60,6 +60,7 @@ private val countdownRingDrawables = mapOf(
  *
  * @param buttonName Display name of the HA button (shown when idle).
  * @param receiverKey The key used in [HaButtonReceiver] for this data type (its typeId).
+ * @param interactive false in preview/page-edit mode: no click handler so Karoo receives the long-press.
  * @param remainingSeconds null = idle; 1–5 = countdown in progress.
  */
 @OptIn(ExperimentalGlanceRemoteViewsApi::class)
@@ -68,6 +69,7 @@ fun CountdownVisualView(
     buttonName: String,
     receiverKey: String,
     remainingSeconds: Int?,
+    interactive: Boolean = true,
 ) {
     val context = LocalContext.current
     val isConfirmation = remainingSeconds != null
@@ -88,7 +90,7 @@ fun CountdownVisualView(
         modifier = GlanceModifier
             .fillMaxSize()
             .background(ColorProvider(Color.Black))
-            .clickable(actionSendBroadcast(clickIntent))
+            .then(if (interactive) GlanceModifier.clickable(actionSendBroadcast(clickIntent)) else GlanceModifier)
             .padding(horizontal = 10.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center,
     ) {

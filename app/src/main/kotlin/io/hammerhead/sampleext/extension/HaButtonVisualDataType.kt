@@ -54,9 +54,12 @@ class HaButtonVisualDataType(
     private val glance = GlanceRemoteViews()
     private var isConfirmationPending = false
     private var confirmationTimeoutJob: Job? = null
+    private var interactive = true
 
     override fun startView(context: Context, config: ViewConfig, emitter: ViewEmitter) {
         Timber.d("Starting visual view for ${button.displayName} ($typeId)")
+        // No click handler in preview (page editing) mode, so Karoo gets the long-press to edit.
+        interactive = !config.preview
         HaButtonReceiver.registerDataType(typeId, this, ViewEmitterProvider { emitter })
         emitter.onNext(UpdateGraphicConfig(showHeader = false))
 
@@ -100,6 +103,7 @@ class HaButtonVisualDataType(
                 buttonName = button.displayName,
                 receiverKey = typeId,
                 remainingSeconds = remainingSeconds,
+                interactive = interactive,
             )
         }.remoteViews
 }
