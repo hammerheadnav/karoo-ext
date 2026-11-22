@@ -1,13 +1,13 @@
 [versions]
 activity = "1.9.3"
-agp = "8.12.0"
+agp = "8.13.2"
 dokka = "1.9.20"
-kotlin = "2.0.0"
+kotlin = "2.3.21"
 coreKtx = "1.13.1"
 coroutines = "1.8.0"
 lifecycle = "2.8.6"
 glance = "1.1.1"
-hilt = "2.52"
+hilt = "2.58"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -60,7 +60,7 @@ jetbrains-dokka-android = { module = "org.jetbrains.dokka:android-documentation-
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-google-devtools-ksp = { id = "com.google.devtools.ksp", version = "2.0.0-1.0.23" }
+google-devtools-ksp = { id = "com.google.devtools.ksp", version = "2.3.14" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

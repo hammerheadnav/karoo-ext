@@ -57,7 +57,7 @@ class HaButtonVisualDataType(
     private var interactive = true
 
     override fun startView(context: Context, config: ViewConfig, emitter: ViewEmitter) {
-        Timber.d("Starting visual view for ${button.displayName} ($typeId)")
+        Timber.d("Starting visual view for ${button.displayName} ($typeId), boundariesEnabled=${config.boundariesEnabled}")
         // No click handler in preview (page editing) mode, so Karoo gets the long-press to edit.
         interactive = !config.preview
         HaButtonReceiver.registerDataType(typeId, this, ViewEmitterProvider { emitter })

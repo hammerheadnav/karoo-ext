@@ -3,7 +3,7 @@ set dotenv-load := true
 set windows-shell := ["powershell.exe", "/c"]
 set shell := ["bash", "-c"]
 
-JAVA_HOME := "C:\\Program Files\\Java\\jdk-21.0.10"
+JAVA_HOME := "C:\\Program Files\\Java\\latest\\jdk-21"
 container := env("CONTAINER_ENGINE", if os_family() == "windows" { "podman" } else { `command -v docker >/dev/null && echo docker || echo podman` })
 
 devs:

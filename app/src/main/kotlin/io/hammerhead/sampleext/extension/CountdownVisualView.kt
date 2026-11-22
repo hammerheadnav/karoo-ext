@@ -54,9 +54,10 @@ private val countdownRingDrawables = mapOf(
 /**
  * Glance composable for the visual countdown button.
  *
- * Shows a blue background with the button name when idle. During the 5-second
- * confirmation countdown shows a dark background with a circular ring draining
- * from full (yellow) to empty (red) one second at a time.
+ * Shows a blue rounded pill with the button name when idle. During the 5-second
+ * confirmation countdown shows a dark rounded pill holding a circular ring draining
+ * from full (yellow) to empty (red) one second at a time. The area around the pill
+ * is white to match a native Karoo data field card.
  *
  * @param buttonName Display name of the HA button (shown when idle).
  * @param receiverKey The key used in [HaButtonReceiver] for this data type (its typeId).
@@ -85,34 +86,44 @@ fun CountdownVisualView(
         putExtra("confirmation", isConfirmation)
     }
 
-    // Outer box: full area, black background (matches Karoo display), handles click
+    // Outer box: full area, handles click. Karoo draws black behind extension views, so a
+    // transparent box shows black; paint it white like a native Karoo card. Not day/night:
+    // the Karoo system reports night mode even while its cards are white, so night colors misfire.
     Box(
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(ColorProvider(Color.Black))
             .then(if (interactive) GlanceModifier.clickable(actionSendBroadcast(clickIntent)) else GlanceModifier)
             .padding(horizontal = 10.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center,
     ) {
         if (ringDrawable != null) {
-            // Countdown active: "TAP AGAIN" text with a small ring below replacing the numeric countdown
-            Column(
-                horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
-                verticalAlignment = Alignment.Vertical.CenterVertically,
+            // Countdown active: dark pill (same shape as idle) so the white text and ring stay
+            // readable on any page background, with "TAP AGAIN" above a small draining ring
+            Box(
+                modifier = GlanceModifier
+                    .fillMaxSize()
+                    .background(ColorProvider(Color(0xFF212121)))
+                    .cornerRadius(12.dp),
+                contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text = "TAP AGAIN",
-                    style = TextStyle(
-                        color = ColorProvider(Color.White),
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                )
-                Image(
-                    provider = ImageProvider(ringDrawable),
-                    contentDescription = "$remainingSeconds seconds remaining",
-                    modifier = GlanceModifier.size(32.dp).padding(top = 4.dp),
-                )
+                Column(
+                    horizontalAlignment = Alignment.Horizontal.CenterHorizontally,
+                    verticalAlignment = Alignment.Vertical.CenterVertically,
+                ) {
+                    Text(
+                        text = "TAP AGAIN",
+                        style = TextStyle(
+                            color = ColorProvider(Color.White),
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold,
+                        ),
+                    )
+                    Image(
+                        provider = ImageProvider(ringDrawable),
+                        contentDescription = "$remainingSeconds seconds remaining",
+                        modifier = GlanceModifier.size(32.dp).padding(top = 4.dp),
+                    )
+                }
             }
         } else {
             // Idle: pill-shaped blue button with rounded corners, like native Karoo buttons
