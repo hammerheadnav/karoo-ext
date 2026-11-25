@@ -23,6 +23,7 @@
         displayName="@string/power_hr"
         graphical="false"
         icon="@drawable/ic_power_hr"
+        previewValue="150"
         typeId="power-hr" />
     <DataType
         description="@string/double_hr_description"
