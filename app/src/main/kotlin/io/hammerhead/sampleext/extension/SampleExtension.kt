@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 SRAM LLC.
+ * Copyright (c) 2026 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -213,13 +213,14 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                     // One to start and another one earned every 20 minutes (rounded to 0.1)
                     val doughnuts = 1 + (seconds / 120.0).roundToInt() / 10.0
                     val doughnutsField = FieldValue(doughnutsField, doughnuts)
+                    val workoutRpe = FieldValue(193 /* workout_rpe */, 70.0, 2 /* uint8 */)
                     when (rideState) {
                         is RideState.Idle -> {}
                         // When paused, write to SessionMesg so it's committed infrequently
                         // Last set will be saved at end of activity
                         is RideState.Paused -> {
                             Timber.d("Doughnuts session now $doughnuts")
-                            emitter.onNext(WriteToSessionMesg(doughnutsField))
+                            emitter.onNext(WriteToSessionMesg(listOf(doughnutsField, workoutRpe)))
                         }
                         // When recording, write doughnuts and power to record messages
                         is RideState.Recording -> {
