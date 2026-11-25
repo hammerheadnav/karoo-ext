@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 SRAM LLC.
+ * Copyright (c) 2026 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,11 +123,34 @@ data class FieldValue(
      * Associated developer field if non-standard
      */
     val developerField: DeveloperField?,
+    /**
+     * Base type of this data, required to write a standard field that is not defined in the FIT profile
+     * bundled with Karoo. Ignored for fields that Karoo already knows, which keep their profile-defined type.
+     *
+     * Standard fields unknown to Karoo and without a base type are not written.
+     *
+     * See the Garmin FIT SDK for constants.
+     *
+     * @since 1.1.10
+     */
+    val fitBaseTypeId: Short? = null,
 ) {
     /**
      * Create field value with standard field definition
      */
     constructor(fieldNum: Int, value: Double) : this(fieldNum, value, null)
+
+    /**
+     * Create field value with standard field definition and an explicit base type
+     *
+     * @since 1.1.10
+     */
+    constructor(fieldNum: Int, value: Double, fitBaseTypeId: Short) : this(fieldNum, value, null, fitBaseTypeId)
+
+    /**
+     * @suppress
+     */
+    constructor(fieldNum: Int, value: Double, developerField: DeveloperField?) : this(fieldNum, value, developerField, null)
 
     /**
      * Create field value for a custom-defined developer field
