@@ -226,7 +226,6 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                         is RideState.Recording -> {
                             Timber.d("Doughnuts now $doughnuts")
                             emitter.onNext(WriteToRecordMesg(doughnutsField))
-                            emitter.onNext(WriteToSessionMesg(workoutRpe))
 
                             // Power: saw-tooth [100, 200]
                             val fakePower = 100 + seconds.mod(200.0).minus(100).absoluteValue
