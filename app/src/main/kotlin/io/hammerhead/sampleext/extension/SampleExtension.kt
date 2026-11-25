@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 SRAM LLC.
+ * Copyright (c) 2026 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -173,6 +173,8 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                                     id = "away",
                                     lat = dest.latitude(),
                                     lng = dest.longitude(),
+                                    actionLabel = "Open",
+                                    actionIntent = "io.hammerhead.sampleext.MAIN",
                                 ),
                                 Symbol.Icon(
                                     id = "half",
