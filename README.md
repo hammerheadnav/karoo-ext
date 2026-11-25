@@ -148,6 +148,7 @@ Extension Info XML resource (`extension_info.xml`):
         description="@string/X"
         displayName="@string/X"
         graphical="true"
+        previewValue="7"
         icon="@drawable/X" />
     ...
     <DataType... />
