@@ -64,6 +64,12 @@ sealed interface Symbol {
          */
         val distancesAlongRoute: List<Double> = emptyList(),
         /**
+         * Optional description of the POI shown in the POI popup
+         *
+         * @since 1.1.10
+         */
+        val description: String? = null,
+        /**
          * Optional label of an extra button in the POI popup.
          *
          * The button is shown only when [actionIntent] is also set.

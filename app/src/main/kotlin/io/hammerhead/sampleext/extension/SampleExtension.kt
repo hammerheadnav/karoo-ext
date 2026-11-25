@@ -173,6 +173,7 @@ class SampleExtension : KarooExtension("sample", "1.0") {
                                     id = "away",
                                     lat = dest.latitude(),
                                     lng = dest.longitude(),
+                                    description = "Sample extension point",
                                     actionLabel = "Open",
                                     actionIntent = "io.hammerhead.sampleext.MAIN",
                                 ),
