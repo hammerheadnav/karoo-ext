@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 SRAM LLC.
+ * Copyright (c) 2026 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,36 @@ sealed interface Symbol {
          * @since 1.1.6
          */
         val distancesAlongRoute: List<Double> = emptyList(),
+        /**
+         * Optional description of the POI shown in the POI popup
+         *
+         * @since 1.1.10
+         */
+        val description: String? = null,
+        /**
+         * Optional label of an extra button in the POI popup.
+         *
+         * The button is shown only when [actionIntent] is also set.
+         *
+         * @since 1.1.10
+         */
+        val actionLabel: String? = null,
+        /**
+         * Optional intent action launched for the extension's package when the popup button is pressed.
+         *
+         * @since 1.1.10
+         */
+        val actionIntent: String? = null,
     ) : Symbol {
+        companion object {
+            /**
+             * Intent extra key holding the [id] of the POI whose popup action launched [actionIntent]
+             *
+             * @since 1.1.10
+             */
+            const val EXTRA_POI_ID = "poiId"
+        }
+
         /**
          * Supported string types for POI
          *
