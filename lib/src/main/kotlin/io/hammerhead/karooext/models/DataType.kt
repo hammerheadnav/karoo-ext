@@ -30,6 +30,7 @@ import android.graphics.drawable.Drawable
  *     description="@string/X"
  *     displayName="@string/X"
  *     graphical="true"
+ *     previewValue="7"
  *     icon="@drawable/X" />
  * ```
  *
@@ -41,7 +42,22 @@ data class DataType(
     val description: String,
     val graphical: Boolean,
     val icon: Drawable,
+    /**
+     * Sample value shown for a numeric (non-[graphical]) field in the profile editor
+     *
+     * @since 1.1.10
+     */
+    val previewValue: Double? = null,
 ) {
+    constructor(
+        extension: String,
+        typeId: String,
+        displayName: String,
+        description: String,
+        graphical: Boolean,
+        icon: Drawable,
+    ) : this(extension, typeId, displayName, description, graphical, icon, null)
+
     /**
      * Constants for source types
      */

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 SRAM LLC.
+ * Copyright (c) 2026 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -680,6 +680,32 @@ data class ActiveRidePage(
 ) : KarooEvent() {
     /**
      * Default params for [ActiveRidePage] event listener
+     */
+    @Serializable
+    data object Params : KarooEventParams()
+}
+
+/**
+ * Observe the rider's audio alert setting and whether a Bluetooth audio headset is connected
+ *
+ * A consumer will be provided with the current value and then subsequently called on changes.
+ *
+ * @since 1.1.10
+ */
+@Serializable
+data class OnAudioAlertSettings(
+    /**
+     * Whether audio alerts are enabled. When false, beeps from [PlayBeepPattern] will not sound.
+     */
+    val enabled: Boolean,
+    /**
+     * Whether a Bluetooth headset or audio device is connected (or connecting) for audio output.
+     * When true, beeps from [PlayBeepPattern] will not play.
+     */
+    val headsetConnected: Boolean,
+) : KarooEvent() {
+    /**
+     * Default params for [OnAudioAlertSettings] event listener
      */
     @Serializable
     data object Params : KarooEventParams()

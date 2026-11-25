@@ -3,10 +3,10 @@
   "packageName": "io.hammerhead.sampleext",
   "iconUrl": "https://github.com/hammerheadnav/karoo-ext/releases/latest/download/karoo-ext-sample.png",
   "latestApkUrl": "https://github.com/hammerheadnav/karoo-ext/releases/latest/download/karoo-ext-sample.apk",
-  "latestVersion": "2.4",
-  "latestVersionCode": 9,
+  "latestVersion": "2.6",
+  "latestVersionCode": 11,
   "developer": "Hammerhead",
   "description": "Hammerhead's Sample app from github.com/hammerheadnav/karoo-ext which demonstrates the capabilities of Karoo Extensions.\nIt won't provide much use to riders but can be a quick way to get started developing for Karoo.",
-  "releaseNotes": "Implemented bonus actions.",
+  "releaseNotes": "Add new things from 1.1.10.",
   "tags": ["entertainment"]
 }
