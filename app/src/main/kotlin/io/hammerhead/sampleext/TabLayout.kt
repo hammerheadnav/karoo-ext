@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 SRAM LLC.
+ * Copyright (c) 2026 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -193,6 +193,13 @@ fun DataTab(mainData: MainData) {
         Text(text = "Ride State: ${mainData.rideState}")
         Text(text = "Power: ${(mainData.power as? StreamState.Streaming)?.dataPoint?.singleValue ?: "--"}")
         Text(text = "Active profile: ${mainData.rideProfile}")
+        Text(
+            text = "Audio alerts: " + when (mainData.audioAlertsEnabled) {
+                true -> "enabled"
+                false -> "disabled"
+                null -> "--"
+            },
+        )
         ExpandableData(
             buttonText = "Bikes",
             buttonColor = Color.Green,

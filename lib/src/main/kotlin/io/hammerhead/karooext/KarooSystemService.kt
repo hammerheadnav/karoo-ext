@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2025 SRAM LLC.
+ * Copyright (c) 2026 SRAM LLC.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import io.hammerhead.karooext.models.KarooEvent
 import io.hammerhead.karooext.models.KarooEventParams
 import io.hammerhead.karooext.models.KarooInfo
 import io.hammerhead.karooext.models.Lap
+import io.hammerhead.karooext.models.OnAudioAlertSettings
 import io.hammerhead.karooext.models.OnGlobalPOIs
 import io.hammerhead.karooext.models.OnLocationChanged
 import io.hammerhead.karooext.models.OnMapZoomLevel
@@ -242,6 +243,7 @@ class KarooSystemService(private val context: Context) {
             Bikes::class -> Bikes.Params
             ActiveRideProfile::class -> ActiveRideProfile.Params
             ActiveRidePage::class -> ActiveRidePage.Params
+            OnAudioAlertSettings::class -> OnAudioAlertSettings.Params
             else -> throw IllegalArgumentException("No default KarooEventParams for ${T::class}")
         }
         return addConsumer<T>(params, onError, onComplete, onEvent)
