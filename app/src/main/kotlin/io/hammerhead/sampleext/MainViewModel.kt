@@ -76,7 +76,7 @@ data class MainData(
     val bikes: List<Bikes.Bike> = emptyList(),
     val rideProfile: RideProfile? = null,
     val activePage: RideProfile.Page? = null,
-    val audioAlertsEnabled: Boolean? = null,
+    val audioAlerts: OnAudioAlertSettings? = null,
 )
 
 val json = Json {
@@ -184,7 +184,7 @@ class MainViewModel @Inject constructor(
                     mutableState.update { it.copy(activePage = event.page) }
                 }
                 karooSystem.addConsumer { event: OnAudioAlertSettings ->
-                    mutableState.update { it.copy(audioAlertsEnabled = event.enabled) }
+                    mutableState.update { it.copy(audioAlerts = event) }
                 }
                 karooSystem.addConsumer { zoom: OnMapZoomLevel ->
                     Timber.i("Map zoom $zoom")

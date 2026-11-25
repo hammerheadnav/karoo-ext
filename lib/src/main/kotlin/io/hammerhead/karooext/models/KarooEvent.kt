@@ -686,7 +686,7 @@ data class ActiveRidePage(
 }
 
 /**
- * Observe the rider's audio alert setting
+ * Observe the rider's audio alert setting and whether a Bluetooth audio headset is connected
  *
  * A consumer will be provided with the current value and then subsequently called on changes.
  *
@@ -698,6 +698,11 @@ data class OnAudioAlertSettings(
      * Whether audio alerts are enabled. When false, beeps from [PlayBeepPattern] will not sound.
      */
     val enabled: Boolean,
+    /**
+     * Whether a Bluetooth headset or audio device is connected (or connecting) for audio output.
+     * When true, beeps from [PlayBeepPattern] will not play.
+     */
+    val headsetConnected: Boolean,
 ) : KarooEvent() {
     /**
      * Default params for [OnAudioAlertSettings] event listener

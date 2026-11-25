@@ -194,9 +194,16 @@ fun DataTab(mainData: MainData) {
         Text(text = "Power: ${(mainData.power as? StreamState.Streaming)?.dataPoint?.singleValue ?: "--"}")
         Text(text = "Active profile: ${mainData.rideProfile}")
         Text(
-            text = "Audio alerts: " + when (mainData.audioAlertsEnabled) {
+            text = "Audio alerts: " + when (mainData.audioAlerts?.enabled) {
                 true -> "enabled"
                 false -> "disabled"
+                null -> "--"
+            },
+        )
+        Text(
+            text = "Headset: " + when (mainData.audioAlerts?.headsetConnected) {
+                true -> "connected"
+                false -> "disconnected"
                 null -> "--"
             },
         )
